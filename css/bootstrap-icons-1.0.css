@@ -1,0 +1,25 @@
+/* SIZES */
+
+/* font awesome */
+.fa.icon-xs, .far.icon-xs, .fas.icon-xs, .fab.icon-xs { font-size: 10px; }
+.fa.icon-sm, .far.icon-sm, .fas.icon-sm, .fab.icon-sm { font-size: 16px; }
+.fa.icon-md, .far.icon-md, .fas.icon-md, .fab.icon-md { font-size: 22px; }
+.fa.icon-lg, .far.icon-lg, .fas.icon-lg, .fab.icon-lg { font-size: 32px; }
+.fa.icon-xl, .far.icon-xl, .fas.icon-xl, .fab.icon-xl { font-size: 48px; }
+.fa.icon-hg, .far.icon-hg, .fas.icon-hg, .fab.icon-hg { font-size: 128px; }
+
+/* bootstrap glyphicons */
+.glyphicon.icon-xs { font-size: 10px; }
+.glyphicon.icon-sm { font-size: 16px; }
+.glyphicon.icon-md { font-size: 22px; }
+.glyphicon.icon-lg { font-size: 32px; }
+.glyphicon.icon-xl { font-size: 48px; }
+.glyphicon.icon-hg { font-size: 128px; }
+
+/* google material icons */
+.material-icons.icon-xs { font-size: 16px; }
+.material-icons.icon-sm { font-size: 24px; }
+.material-icons.icon-md { font-size: 32px; }
+.material-icons.icon-lg { font-size: 48px; }
+.material-icons.icon-xl { font-size: 72px; }
+.material-icons.icon-hg { font-size: 196px; }

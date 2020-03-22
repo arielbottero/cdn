@@ -1,0 +1,27 @@
+<!DOCTYPE html  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+ 		<title>Textarea Fullscreen</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+		<script type="text/javascript" src="//cdn.hytcom.net/js/jquery-2.1.3.min.js"></script>
+		<script type="text/javascript" src="//cdn.hytcom.net/js/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="//cdn.hytcom.net/js/jquery-extend.js"></script>
+		<script type="text/javascript" src="textareafullscreen.js"></script>
+		<link rel="stylesheet" href="textareafullscreen.css" />
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$("#demo").textareafullscreen({
+					overlay: true, // Overlay
+					maxWidth: '80%', // Max width
+					maxHeight: '80%' // Max height
+				});
+			});
+		</script>
+	</head>
+
+	<body>
+		<h1>Textarea Fullscreen</h1>
+		<textarea id="demo"></textarea>
+	</body>
+</html>

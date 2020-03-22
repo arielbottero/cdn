@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg 
+	xmlns="http://www.w3.org/2000/svg" 
+	xml:space="preserve" 
+	width="3033px" 
+	height="1474px" 
+	version="1.1" 
+	style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+	viewBox="0 0 3033 1474"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+>
+	<defs>
+		<style type="text/css">
+			<![CDATA[
+				.camera {fill:#000000;fill-rule:nonzero}
+				.key {fill:#AB0000}
+			]]>
+		</style>
+	</defs>
+	<g id="lockimg">
+		<path class="camera" d="M277 1474c-76,0 -146,-31 -196,-81 -50,-50 -81,-120 -81,-196l0 -773c0,-77 31,-146 81,-196 50,-50 120,-81 196,-81l0 0 0 -30c0,-34 27,-61 60,-61l236 0c34,0 61,27 61,61l0 30 520 0 877 0c76,0 145,31 196,81 25,25 45,56 59,89 13,31 -2,66 -32,79l-28 12c-31,13 -67,-2 -80,-33 -6,-15 -15,-28 -27,-40 -22,-23 -54,-37 -88,-37l-569 0c-182,-151 -395,-129 -494,-51 -33,14 -63,31 -90,51l-601 0c-35,0 -66,14 -89,37 -22,23 -37,54 -37,89l0 773c0,35 15,66 37,89 23,22 54,37 89,37 33,0 60,27 60,60l0 30c0,34 -27,61 -60,61z"/>
+		<path class="key" d="M724 1033c-380,-380 -109,-1033 428,-1033 293,0 541,210 594,492 401,0 802,0 1202,0 47,0 85,38 85,85l0 42c0,47 -38,85 -85,85l0 264c0,47 -38,85 -85,85l-42 0c-47,0 -85,-38 -85,-85l0 -264 -137 0 0 204c0,46 -38,84 -85,84l-42 0c-47,0 -85,-38 -85,-84l0 -204 -638 0c-80,482 -676,678 -1025,329zm706 -706c-247,-247 -671,-71 -671,278 0,349 424,525 671,278 153,-154 153,-402 0,-556z"/>
+	</g>
+</svg>

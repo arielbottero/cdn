@@ -1,0 +1,71 @@
+.table-sorter thead tr .header {
+	cursor: pointer;
+	white-space: nowrap;
+}
+
+.table-sorter thead tr .header::after {
+	content: " \f0dc";
+    display: inline-block;
+    font-family: "Font Awesome 5 Pro", "Font Awesome 5 Free";
+    font-feature-settings: normal;
+    font-kerning: auto;
+    font-language-override: normal;
+    font-size: inherit;
+    font-size-adjust: none;
+    font-stretch: normal;
+    font-style: normal;
+    font-synthesis: weight style;
+    font-variant: normal;
+    font-weight: 900;
+    line-height: 1;
+	margin-left: 5px;
+	opacity: 0.4;
+    text-rendering: auto;
+	vertical-align: middle;
+	word-wrap: normal;
+}
+
+.table-sorter thead tr .headerSortUp::after {
+	content: " \f0de";
+    display: inline-block;
+    font-family: "Font Awesome 5 Pro", "Font Awesome 5 Free";
+    font-feature-settings: normal;
+    font-kerning: auto;
+    font-language-override: normal;
+    font-size: inherit;
+    font-size-adjust: none;
+    font-stretch: normal;
+    font-style: normal;
+    font-synthesis: weight style;
+    font-variant: normal;
+    font-weight: 900;
+    line-height: 1;
+	margin-left: 5px;
+	opacity: 1;
+    text-rendering: auto;
+	vertical-align: middle;
+	word-wrap: normal;
+}
+
+.table-sorter thead tr .headerSortDown::after {
+	color: inherit;
+	content: " \f0dd";
+    display: inline-block;
+    font-family: "Font Awesome 5 Pro", "Font Awesome 5 Free";
+    font-feature-settings: normal;
+    font-kerning: auto;
+    font-language-override: normal;
+    font-size: inherit;
+    font-size-adjust: none;
+    font-stretch: normal;
+    font-style: normal;
+    font-synthesis: weight style;
+    font-variant: normal;
+    font-weight: 900;
+    line-height: 1;
+	margin-left: 5px;
+	opacity: 1;
+    text-rendering: auto;
+	vertical-align: middle;
+	word-wrap: normal;
+}

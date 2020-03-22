@@ -1,0 +1,44 @@
+.attacher-target {
+	background: #EEEEEE;
+	border: 2px dashed #BBBBBB;
+	color: #555555;
+	cursor: pointer;
+	font-size: 14px;
+	height: 112px;
+	line-height: 89px;
+	padding: 6px 12px;
+	text-align: center;
+}
+
+.attacher-previews {
+	display: none;
+	text-align: center;
+}
+	.attacher-previews::after, .attacher-previews::before {
+		clear: both;
+		content: " ";
+		display: table;
+	}
+
+	.attacher-preview {
+		border-left: solid 1px #DDDDDD;
+		border-top: solid 1px #DDDDDD;
+		box-shadow: 4px 4px 5px #BBBBBB;
+		display: inline-block;
+		margin: 10px;
+		padding: 10px;
+		text-align: center;
+		width: 200px;
+	}
+		.attacher-preview img {
+			width: 100%;
+		}
+
+		.attacher-remove {
+			color: #888888;
+			cursor: pointer;
+			float: right;
+			font-size: 20px;
+			font-weight: bold;
+			line-height: 24px;
+		}

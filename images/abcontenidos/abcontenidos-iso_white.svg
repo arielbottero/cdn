@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg 
+	xmlns="http://www.w3.org/2000/svg" 
+	xml:space="preserve" 
+	width="3508px" 
+	height="4961px" 
+	version="1.1" 
+	style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+	viewBox="0 0 3508 4961"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+>
+	<defs>
+		<style type="text/css">
+			<![CDATA[
+				.tag {fill:#FFFFFF; fill-rule:nonzero}
+				.tagslash {fill:#AB0000}
+			]]>
+		</style>
+	</defs>
+	<g id="abcontenidos">
+		<path class="tag" d="M3198 877l-2072 1483 1598 989 -587 0 -1572 -989 2094 -1483 539 0zm-2843 2909l1103 -790 292 183 -856 607 -539 0zm1481 -1060l591 -423 -597 -370 267 -191 891 561 -856 606 -296 -183zm-417 -1048l-590 -365 586 0 275 173 -271 192z"/>
+		<polygon class="tagslash" points="2088,2314 1780,2123 1465,2349 1773,2540 "/>
+	</g>
+</svg>

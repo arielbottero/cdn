@@ -1,0 +1,78 @@
+@media print {
+	/* GENERAL ===================================================================*/
+	* { font-size: 12pt !important; }
+
+	body { overflow: visible !important; }
+
+	h1, .h1 { font-size: 24pt !important; }
+	h2, .h2 { font-size: 22pt !important; }
+	h3, .h3 { font-size: 20pt !important; }
+	h4, .h4 { font-size: 18pt !important; }
+
+	#wrapper { padding-top: 0px !important; }
+	
+	/* elimina el FLEX cuando el contenido no este dentro de un div.print-flex */
+	div:not(.print-flex) > .row, 
+	div:not(.print-flex) > .row > div {
+		display: block !important;
+	}
+
+	/* HELPERS ===================================================================*/
+	.breakpage {
+		page-break-after: always;
+	}
+
+
+	/* TABLAS ====================================================================*/
+	#doccontent {
+		padding: 20px;
+		border: solid 2px #000000 !important;
+		width: 100% !important;
+	}
+		#doccontent .table tbody tr td {
+			border-top: solid 1px #000000 !important;
+			border-right: solid 1px #000000 !important;
+			border-bottom: solid 1px #000000 !important;
+			border-left: solid 1px #000000 !important;
+			padding: 8px !important;
+		}
+
+		#doccontent .table tbody tr th {
+			background-color: #DDDDDD;
+			border-top: solid 1px #000000 !important;
+			border-bottom: solid 2px #000000 !important;
+			border-right: double 3px #000000 !important;
+			border-left: solid 1px #000000 !important;
+			color: #000000 !important;
+			padding: 8px !important;
+		}
+
+		#doccontent .table thead tr th,
+		#doccontent .table tfoot tr th {
+			background-color: #DDDDDD !important;
+			border-top: solid 1px #000000 !important;
+			border-right: solid 1px #000000 !important;
+			border-bottom: double 3px #000000 !important;
+			border-left: solid 1px #000000 !important;
+			color: #000000 !important;
+			padding: 8px !important;
+		}
+
+		#doccontent .table tfoot { display: table-row-group !important; }
+
+		#doccontent .table-thin tr th, 
+		#doccontent .table-thin tr td {
+			padding: 2px 4px !important;
+		}
+
+		#doccontent .table-sorter thead tr .header::after {
+			display: none;
+		}
+
+	/* SOMBRAS ===================================================================*/
+	.sw-xs, .shadow-xs { box-shadow: none !important; }
+	.sw-sm, .shadow-sm { box-shadow: none !important; }
+	.sw-md, .shadow-md { box-shadow: none !important; }
+	.sw-lg, .shadow-lg { box-shadow: none !important; }
+	.sw-xl, .shadow-xl { box-shadow: none !important; }
+}

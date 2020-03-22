@@ -1,0 +1,22 @@
+.table-filter .bootstrap-datetimepicker-widget table th,
+.table-filter .bootstrap-datetimepicker-widget table td,
+.table-filter thead > tr.filters > td > div {
+	padding: 0px 2px;
+}
+
+.table-filter thead > tr.filters input {
+	font-weight: normal;
+	font-size: small;
+}
+
+.table-filter thead > tr.filters select,
+.table-filter thead > tr.filters .bootstrap-select {
+	font-weight: normal;
+	font-size: small;
+	width: 100% !important;
+}
+
+.table-filter .filter-date,
+.table-filter .filter-daterange {
+	min-width: 120px;
+}

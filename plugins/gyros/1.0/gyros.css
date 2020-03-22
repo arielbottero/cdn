@@ -1,0 +1,52 @@
+.gyros {
+    margin: 0 auto;
+    position: relative;
+}
+
+.gyros::before {
+    content: "";
+    display: block;
+    padding-top: 100%;
+}
+
+.gyros-circular {
+    animation: 2s linear 0s normal none infinite running gyros-rotate;
+    bottom: 0;
+    height: 100%;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+	stroke: #000000;
+    top: 0;
+    transform-origin: center center 0;
+    width: 100%;
+}
+
+.gyros-path {
+    animation: 1.5s ease-in-out 0s normal none infinite running gyros-dash, 6s ease-in-out 0s normal none infinite running;
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+    stroke-linecap: round;
+}
+
+@keyframes gyros-rotate {
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes gyros-dash {
+	0% {
+		stroke-dasharray: 1, 200;
+		stroke-dashoffset: 0;
+	}
+	50% {
+		stroke-dasharray: 89, 200;
+		stroke-dashoffset: -35px;
+	}
+	100% {
+		stroke-dasharray: 89, 200;
+		stroke-dashoffset: -124px;
+	}
+}

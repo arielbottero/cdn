@@ -1,0 +1,46 @@
+<!DOCTYPE html  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+ 		<title>squire</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+		
+		<script type="text/javascript" src="//cdn.hytcom.net/js/jquery-2.1.3.min.js"></script>
+		<script type="text/javascript" src="//cdn.hytcom.net/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="//cdn.hytcom.net/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="//cdn.hytcom.net/css/font-awesome.min.css" />
+
+		<script type="text/javascript" src="squire.js"></script>
+		<script type="text/javascript" src="squireUI.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				squireUI($("#lite"), {
+					ui: "lite",
+					tags:"<br /><br ><p></p><a></a><b></b><i></i><ul></ul><ol></ol><li></li>"
+				});
+				squireUI($("#simple"), {
+					ui: "simple",
+					tags:"<br /><br ><p></p><a></a><b></b><i></i><ul></ul><ol></ol><li></li>"
+				});
+				squireUI($("#complete"), {
+					ui: "complete",
+					color: "#AB0000",
+					smallbar: true,
+					tags:"<br /><br ><p></p><a></a><b></b><i></i><ul></ul><ol></ol><li></li>"
+				});
+			});
+		</script>
+	</head>
+
+	<body>
+		<div class="container">
+			<br /><br />
+			<textarea id="lite"></textarea>
+			<br /><br />
+			<textarea id="simple"></textarea>
+			<br /><br />
+			<textarea id="complete"></textarea>
+			<br /><br />
+		</div>
+	</body>
+</html>

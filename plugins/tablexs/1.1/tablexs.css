@@ -1,0 +1,25 @@
+@media (max-width: 767px) {
+	.modal .table-xs-menu {
+		float: none !important;
+		position: inherit !important;
+		border: 0 !important;
+		display: block !important;
+		box-shadow: none !important;
+	}
+
+	.modal .table-xs-menu .dropdown-item {
+		margin: 0 !important;
+		border-radius: 0px !important;
+		font-size: 22px !important;
+		line-height: 1.33333 !important;
+		padding: 15px 10px !important;
+		display: inline-block !important;
+		font-weight: 400 !important;
+		text-align: center !important;
+		white-space: nowrap !important;
+		vertical-align: middle !important;
+		user-select: none !important;
+		border: 1px solid transparent !important;
+		transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out !important;
+	}
+}

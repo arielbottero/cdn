@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="4252px" height="2939px" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+		viewBox="0 0 4252 2939"
+		xmlns:xlink="http://www.w3.org/1999/xlink">
+	<defs>
+		<style type="text/css">
+			<![CDATA[
+				.face {fill:#FFFFFF;fill-rule:nonzero}
+				.cloud {fill:#AB0000;fill-rule:nonzero}
+			]]>
+		</style>
+	</defs>
+	<g id="nubelita">
+		<path class="cloud" d="M175 1459c89,-126 210,-228 350,-297 -70,-809 761,-1400 1504,-1068 111,50 213,118 300,200 530,-113 1044,249 1119,783 759,107 1076,1041 530,1587 -278,278 -702,354 -1059,186 -251,118 -542,118 -793,0 -251,118 -543,118 -794,0 -613,289 -1332,-158 -1332,-847 0,-203 65,-391 175,-544z"/>
+		<path class="face" d="M1603 1568c128,0 234,320 757,320 324,0 416,-191 509,-191 92,0 130,112 43,196 -215,206 -534,246 -819,180 -141,-32 -256,-95 -369,-172 -67,-46 -207,-151 -207,-233 0,-58 26,-100 86,-100zm430 -349c187,0 212,317 -10,317 -197,0 -198,-317 10,-317zm557 -43c160,0 222,252 55,321 -171,72 -285,-149 -173,-272 31,-34 72,-49 118,-49z"/>
+	</g>
+</svg>

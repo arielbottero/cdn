@@ -1,0 +1,270 @@
+@media print {
+	.p-brd-none { border: none !important; }
+	.p-brd-xs { border-width: 1px !important; }
+	.p-brd-sm { border-width: 2px !important; }
+	.p-brd-md { border-width: 4px !important; }
+	.p-brd-lg { border-width: 6px !important; }
+	.p-brd-xl { border-width: 10px !important; }
+	.p-brd-hg { border-width: 20px !important; }
+
+	.p-margin-none { margin: 0px !important; }
+	.p-margin-xs { margin: 5px !important; }
+	.p-margin-sm { margin: 15px !important; }
+	.p-margin-md { margin: 30px !important; }
+	.p-margin-lg { margin: 50px !important; }
+	.p-margin-xl { margin: 90px !important; }
+	.p-margin-hg { margin: 180px !important; }
+	
+	.p-padding-none { padding: 0px !important; }
+	.p-padding-xs { padding: 5px !important; }
+	.p-padding-sm { padding: 12px !important; }
+	.p-padding-md { padding: 24px !important; }
+	.p-padding-lg { padding: 36px !important; }
+	.p-padding-xl { padding: 64px !important; }
+	.p-padding-hg { padding: 128px !important; }
+	
+	.p-shadow-none { box-shadow: none !important; }
+
+	h1, .h1 { font-size: 21pt !important; }
+	h2, .h2 { font-size: 18pt !important; }
+	h3, .h3 { font-size: 16pt !important; }
+	h4, .h4 { font-size: 14pt !important; }
+	h5, .h5 { font-size: 11pt !important; }
+	h6, .h6 { font-size: 10pt !important; }
+
+	.p-table-thin th, 
+	.p-table-thin td {
+		padding: 2px 4px !important;
+	}
+
+	.p-text-xs, .p-text-xs th, .p-text-xs td { font-size: 7pt !important; }
+	.p-text-sm, .p-text-sm th, .p-text-sm td  { font-size: 9pt !important; }
+	.p-text-md, .p-text-md th, .p-text-md td  { font-size: 11pt !important; }
+	.p-text-lg, .p-text-lg th, .p-text-lg td  { font-size: 14pt !important; }
+	.p-text-xl, .p-text-xl th, .p-text-xl td  { font-size: 16pt !important; }
+	.p-text-hg, .p-text-hg th, .p-text-hg td  { font-size: 24pt !important; }
+	.p-text-wow, .p-text-wow th, .p-text-wow td  { font-size: 36pt !important; }
+
+	.p-col-1, .p-col-2, .p-col-3, .p-col-4, .p-col-5, .p-col-6, .p-col-7, .p-col-8, .p-col-9, .p-col-10, .p-col-11, .p-col-12 {
+		float: left !important;
+		position: relative !important;
+		min-height: 1px !important;
+		padding-left: 15px !important;
+		padding-right: 15px !important;
+	}
+
+	.p-col-12 {
+		width: 100% !important;
+	}
+	.p-col-11 {
+		width: 91.66666667% !important;
+	}
+	.p-col-10 {
+		width: 83.33333333% !important;
+	}
+	.p-col-9 {
+		width: 75% !important;
+	}
+	.p-col-8 {
+		width: 66.66666667% !important;
+	}
+	.p-col-7 {
+		width: 58.33333333% !important;
+	}
+	.p-col-6 {
+		width: 50% !important;
+	}
+	.p-col-5 {
+		width: 41.66666667% !important;
+	}
+	.p-col-4 {
+		width: 33.33333333% !important;
+	}
+	.p-col-3 {
+		width: 25% !important;
+	}
+	.p-col-2 {
+		width: 16.66666667% !important;
+	}
+	.p-col-1 {
+		width: 8.33333333% !important;
+	}
+	.p-col-pull-12 {
+		right: 100% !important;
+	}
+	.p-col-pull-11 {
+		right: 91.66666667% !important;
+	}
+	.p-col-pull-10 {
+		right: 83.33333333% !important;
+	}
+	.p-col-pull-9 {
+		right: 75% !important;
+	}
+	.p-col-pull-8 {
+		right: 66.66666667% !important;
+	}
+	.p-col-pull-7 {
+		right: 58.33333333% !important;
+	}
+	.p-col-pull-6 {
+		right: 50% !important;
+	}
+	.p-col-pull-5 {
+		right: 41.66666667% !important;
+	}
+	.p-col-pull-4 {
+		right: 33.33333333% !important;
+	}
+	.p-col-pull-3 {
+		right: 25% !important;
+	}
+	.p-col-pull-2 {
+		right: 16.66666667% !important;
+	}
+	.p-col-pull-1 {
+		right: 8.33333333% !important;
+	}
+	.p-col-pull-0 {
+		right: auto !important;
+	}
+	.p-col-push-12 {
+		left: 100% !important;
+	}
+	.p-col-push-11 {
+		left: 91.66666667% !important;
+	}
+	.p-col-push-10 {
+		left: 83.33333333% !important;
+	}
+	.p-col-push-9 {
+		left: 75% !important;
+	}
+	.p-col-push-8 {
+		left: 66.66666667% !important;
+	}
+	.p-col-push-7 {
+		left: 58.33333333% !important;
+	}
+	.p-col-push-6 {
+		left: 50% !important;
+	}
+	.p-col-push-5 {
+		left: 41.66666667% !important;
+	}
+	.p-col-push-4 {
+		left: 33.33333333% !important;
+	}
+	.p-col-push-3 {
+		left: 25% !important;
+	}
+	.p-col-push-2 {
+		left: 16.66666667% !important;
+	}
+	.p-col-push-1 {
+		left: 8.33333333% !important;
+	}
+	.p-col-push-0 {
+		left: auto !important;
+	}
+	.p-col-offset-12 {
+		margin-left: 100% !important;
+	}
+	.p-col-offset-11 {
+		margin-left: 91.66666667% !important;
+	}
+	.p-col-offset-10 {
+		margin-left: 83.33333333% !important;
+	}
+	.p-col-offset-9 {
+		margin-left: 75% !important;
+	}
+	.p-col-offset-8 {
+		margin-left: 66.66666667% !important;
+	}
+	.p-col-offset-7 {
+		margin-left: 58.33333333% !important;
+	}
+	.p-col-offset-6 {
+		margin-left: 50% !important;
+	}
+	.p-col-offset-5 {
+		margin-left: 41.66666667% !important;
+	}
+	.p-col-offset-4 {
+		margin-left: 33.33333333% !important;
+	}
+	.p-col-offset-3 {
+		margin-left: 25% !important;
+	}
+	.p-col-offset-2 {
+		margin-left: 16.66666667% !important;
+	}
+	.p-col-offset-1 {
+		margin-left: 8.33333333% !important;
+	}
+	.p-col-offset-0 {
+		margin-left: 0% !important;
+	}
+
+	/* Always insert a page break after the element */
+	.always-page-break-after,
+	.always-pba {
+		page-break-after: always !important;
+	}
+
+	/* Avoid page break after the element (if possible) */
+	.avoid-page-break-after,
+	.avoid-pba {
+		page-break-after: avoid !important;
+	}
+
+	/* Insert page breaks after the element so that the next page is formatted as a left page */
+	.left-page-break-after,
+	.left-pba {
+		page-break-after: left !important;
+	}
+
+	/* Insert page breaks after the element so that the next page is formatted as a right page */
+	.right-page-break-after,
+	.right-pba {
+		page-break-after: right !important;
+	}
+
+	/* Always insert a page break before the element */
+	.always-page-break-before,
+	.always-pbb {
+		page-break-before: always !important;
+	}
+
+	/* Avoid page break before the element (if possible) */
+	.avoid-page-break-before,
+	.avoid-pbb {
+		page-break-before: avoid !important;
+	}
+
+	/* Insert page breaks before the element so that the next page is formatted as a left page */
+	.left-page-break-before,
+	.left-pbb {
+		page-break-before: left !important;
+	}
+
+	/* Insert page breaks before the element so that the next page is formatted as a right page */
+	.right-page-break-before,
+	.right-pbb {
+		page-break-before: right !important;
+	}
+
+	/* Avoid page break inside the element (if possible) */
+	.avoid-page-break-inside,
+	.avoid-pbi {
+		page-break-inside: avoid !important;
+		width: 3 !important;
+	}
+
+	a:link:after,
+	a:visited:after,
+	a[href]:after {
+        content: "" !important;
+    }
+}

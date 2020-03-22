@@ -1,0 +1,26 @@
+<!DOCTYPE html  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+ 		<title>gyros</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+		<script type="text/javascript" src="//cdn.hytcom.net/js/jquery-2.1.3.min.js"></script>
+		<script type="text/javascript" src="gyros.js"></script>
+		<link rel="stylesheet" href="gyros.css" />
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$("#sp1").gyros();
+				$("#sp2").gyros({
+					top: 100,
+					stroke: 5,
+					width: "150px"
+				});
+			});
+		</script>
+	</head>
+
+	<body>
+		<div id="sp1"></div>
+		<div id="sp2"></div>
+	</body>
+</html>

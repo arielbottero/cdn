@@ -1,0 +1,74 @@
+/* HELPERS ===================================================================*/
+.breakpage {
+	page-break-after: always;
+}
+
+/* HEADERS ===================================================================*/
+.report-header * {
+	color: #444444;
+	font-size: 14px;
+}
+
+.report-header h1,
+.report-header .h1 {
+	font-size: 26px;
+}
+
+.report-header h2,
+.report-header .h2 {
+	font-size: 22px;
+}
+
+/* TABLAS ====================================================================*/
+.report-body * {
+	color: #444444 !important;
+}
+
+.report-body {
+	padding: 20px;
+}
+
+.report-body .table-report {
+	border: solid 2px #888890 !important;
+	width: 100% !important;
+}
+
+.report-body .table-report tbody tr td {
+	border-left: solid 1px #888890 !important;
+	border-right: solid 1px #888890 !important;
+	border-bottom: solid 1px #888890 !important;
+	color: #444444 !important;
+	padding: 8px !important;
+}
+
+.report-body .table-report tbody tr th {
+	background-color: #E0E0E0;
+	border-top: none !important;
+	border-bottom: solid 2px #888890 !important;
+	border-right: solid 2px #888890 !important;
+	color: #000000 !important;
+	padding: 8px !important;
+}
+
+.report-body .table-report thead tr th,
+.report-body .table-report tfoot tr th {
+	background-color: #E0E0E0 !important;
+	border-top: solid 1px #888890 !important;
+	border-bottom: solid 2px #888890 !important;
+	border-right: solid 1px #888890 !important;
+	color: #444444 !important;
+	font-size: 1.3em !important;
+	padding: 8px !important;
+	text-align: center !important;
+}
+
+.report-body .table-thin tr th, 
+.report-body .table-thin tr td {
+	padding: 2px 4px !important;
+}
+
+.sw-xs, .shadow-xs { box-shadow: none !important; }
+.sw-sm, .shadow-sm { box-shadow: none !important; }
+.sw-md, .shadow-md { box-shadow: none !important; }
+.sw-lg, .shadow-lg { box-shadow: none !important; }
+.sw-xl, .shadow-xl { box-shadow: none !important; }

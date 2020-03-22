@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg 
+xmlns="http://www.w3.org/2000/svg" 
+xml:space="preserve" 
+width="829px" 
+height="999px" 
+version="1.1" 
+style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 328 395"
+xmlns:xlink="http://www.w3.org/1999/xlink"
+>
+	<defs>
+		<style type="text/css">
+			<![CDATA[
+				.eyes {fill:#FFFFFF}
+				.lens {fill:#000000}
+			]]>
+		</style>
+	</defs>
+	<g id="qareful">
+		<path class="eyes" d="M144 87c-31,0 -57,25 -57,57 0,32 26,57 57,57 32,0 57,-25 57,-57 0,-32 -25,-57 -57,-57z"/>
+		<path class="lens" d="M78 212c-18,-17 -28,-41 -28,-66l0 0c0,-1 -2,-17 6,-37 14,-35 48,-59 86,-59l0 0c53,-1 96,40 97,92l0 0c0,39 -22,73 -57,89l0 0c-35,15 -76,7 -104,-19zm168 34l78 112c6,9 4,21 -5,28l-8 5c-9,7 -21,4 -28,-5l-78 -111c-73,34 -161,1 -193,-74 -7,-16 -12,-35 -12,-55l0 0 0 0c-1,-79 62,-145 142,-146 103,-2 175,103 135,199 -7,18 -18,34 -31,47z"/>
+	</g>
+</svg>

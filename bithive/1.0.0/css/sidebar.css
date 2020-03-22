@@ -1,0 +1,166 @@
+nav.sidebar {
+    background-color: #FFFFFF;
+    display: block !important;
+	height: auto;
+    min-height: 100vh;
+	max-width: 300px;
+	margin-left: -301px;
+    margin-bottom: 0px;
+    padding: 0px !important;
+    position: absolute !important;
+    top: 0px;
+	width: 300px;
+    z-index: 9999;
+	-webkit-transition: margin 200ms ease-out;
+	-moz-transition: margin 200ms ease-out;
+	-o-transition: margin 200ms ease-out;
+	transition: margin 200ms ease-out;
+}
+
+nav.sidebar-hover {
+	margin-left: 0px !important;
+}
+
+nav.sidebar.navbar.sidebar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {
+	margin-left: 0px;
+}
+
+nav .open > a, 
+nav .open > a:hover, 
+nav .open > a:focus { background-color: transparent; }
+
+nav.sidebar:hover {
+	margin-left: 0px;
+}
+
+nav .sidebar-avatar {
+	border-radius: 80%;
+	height: 60px;
+	width: 60px;
+}
+
+nav .sidebar-brand {
+	width: 100%;
+}
+
+nav ul.sidebar-nav {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+nav ul.sidebar-nav li {
+    position: relative; 
+    line-height: 20px;
+    display: inline-block;
+    width: 100%;
+}
+
+nav ul.sidebar-nav li:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    height: 100%;
+    width: 3px;
+    background-color: #ECECEC;
+}
+
+nav ul.sidebar-nav li:hover:before,
+nav ul.sidebar-nav li.open:hover:before {
+    width: 100%;
+}
+
+nav ul.sidebar-nav li i {
+    margin-right: 10px;    
+}
+
+nav ul.sidebar-nav li a {
+    display: block;
+    color: #222222;
+    text-decoration: none;
+    padding: 10px 15px 10px 20px;    
+}
+
+nav ul.sidebar-nav li a:hover,
+nav ul.sidebar-nav li a:active,
+nav ul.sidebar-nav li a:focus,
+nav ul.sidebar-nav li.open a:hover,
+nav ul.sidebar-nav li.open a:active,
+nav ul.sidebar-nav li.open a:focus{
+    color: #000000;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+nav ul.sidebar-nav .dropdown-menu {
+    position: relative;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    border-radius: 0;
+    border: none;
+    background-color: #DDDDDD;
+    box-shadow: none;
+}
+	nav ul.sidebar-nav .dropdown-menu > ul {
+		padding-left: 0px !important;
+	}
+        nav ul.sidebar-nav .dropdown-menu a {
+            padding-left: 40px !important;
+        }
+
+nav ul.sidebar-nav .divider {
+	height: 1px;
+	margin: 0;
+	overflow: hidden;
+	background-color: #BBBBC0;
+	width: 100%;
+}
+
+nav.sidebar-avatar {
+	border-radius: 80%;
+	height: 60px;
+	width: 60px;
+}
+
+nav ul.sidebar-nav .sidebar-subsection {
+	border-bottom: solid 1px #676A6C;
+	padding: 15px 10px 10px;
+	margin-left: 10px;
+	font-weight: bold;
+}
+
+/*-------------------------------*/
+/*       Hamburger-Cross         */
+/*-------------------------------*/
+.hamburger {
+	cursor: pointer;
+	position: absolute;
+	left: 10px;
+	top: 5px;
+}
+
+/*-------------------------------*/
+/*            Overlay            */
+/*-------------------------------*/
+.sidebar-overlay {
+    position: fixed;
+    display: block;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,.8);
+	z-index: 9998;
+	width: 0px;
+    height: 0px;
+}
+
+nav.sidebar-hover + .sidebar-overlay {
+	display: block;
+    width: 100vw;
+    height: 100vh;
+}

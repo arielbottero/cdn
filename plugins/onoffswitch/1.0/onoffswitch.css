@@ -1,0 +1,68 @@
+.form-onoffswitch-container {
+	display: block;
+	min-height: 33px;
+}
+
+	.form-onoffswitch-container .form-onoffswitch-button {
+		display: inline-block;
+	}
+
+	.form-onoffswitch-container .form-onoffswitch-text {
+		display: inline-block;
+		margin-left: 5px;
+		position: relative;
+		top: -6.5px;
+	}
+
+.form-onoffswitch {
+	position: relative;
+	width: 38px;
+	-webkit-user-select: none;
+	-moz-user-select:none;
+	-ms-user-select: none;
+}
+
+.form-onoffswitch-checkbox {
+	display: none;
+}
+
+.form-onoffswitch-label {
+	background-color: #BBBBBB;
+	border: 1px solid #CCCCCC;
+	border-radius: 20px;
+	cursor: pointer;
+	display: block;
+	height: 20px;
+	line-height: 20px;
+	overflow: hidden;
+	padding: 0;
+	transition: background-color 0.2s ease-in;
+	margin: 0;
+}
+
+.form-onoffswitch-label:before {
+	background: #FFFFFF;
+	border: 2px solid #CCCCCC;
+	border-radius: 20px;
+	bottom: 0;
+	content: "";
+	display: block;
+	margin: 0px;
+	position: absolute;
+	right: 18px;
+	top: 0;
+	transition: all 0.2s ease 0s;
+	width: 20px;
+}
+
+.form-onoffswitch-checkbox:checked + .form-onoffswitch-label {
+	background-color: #337AB7;
+}
+
+.form-onoffswitch-checkbox:checked + .form-onoffswitch-label, .form-onoffswitch-checkbox:checked + .form-onoffswitch-label:before {
+	border-color: #337AB7;
+}
+
+.form-onoffswitch-checkbox:checked + .form-onoffswitch-label:before {
+	right: 0px;
+}
