@@ -515,8 +515,14 @@ jQuery.extend({
 					var target = $(this).attr("target") || $(this).data("target") || null;
 					var values = null;
 					var query = $(this).data("values") || null;
+					var confirm = $(this).data("confirm") || false;
 					if(query) { values = (typeof query == "string") ? jQuery.parseURL(query) : query; }
-					jQuery.bithive.postLink(href, values, target);
+
+					if(confirm) {
+						jQuery.bithive.confirm(confirm, function(){ jQuery.bithive.postLink(href, values, target); });
+					} else {
+						jQuery.bithive.postLink(href, values, target);
+					}
 				});
 			});
 
