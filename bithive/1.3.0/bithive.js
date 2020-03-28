@@ -73,18 +73,18 @@ jQuery.extend({
 		run: function(code, args) {
 			if(typeof window[code]=="function") {
 				if(typeof args == "undefined") {
-					window[code]();
+					return window[code]();
 				} else {
-					window[code](args);
+					return window[code](args);
 				}
 			} else if(typeof jQuery.bithive[code]=="function") {
 				if(typeof args == "undefined") {
-					jQuery.bithive[code]();
+					return jQuery.bithive[code]();
 				} else {
-					jQuery.bithive[code](args);
+					return jQuery.bithive[code](args);
 				}
 			} else {
-				eval(code);
+				return eval(code);
 			}
 		},
 
@@ -511,17 +511,24 @@ jQuery.extend({
 			// genera un link post basado en un href y un json
 			jQuery.bithive.eachElement(".link-post", elem, itself, function() {
 				$(this).click(function(e) {
-					var href = $(this).attr("href") || $(this).data("href");
-					var target = $(this).attr("target") || $(this).data("target") || null;
-					var values = null;
-					var query = $(this).data("values") || null;
-					var confirm = $(this).data("confirm") || false;
-					if(query) { values = (typeof query == "string") ? jQuery.parseURL(query) : query; }
-
-					if(confirm) {
-						jQuery.bithive.confirm(confirm, function(){ jQuery.bithive.postLink(href, values, target); });
-					} else {
-						jQuery.bithive.postLink(href, values, target);
+					let btn = $(this);
+					e.preventDefault();
+					var href = $(this).data("href") || false;
+					if(href!==false) {
+						var target = $(this).attr("target") || $(this).data("target") || null;
+						var query = $(this).data("values") || false;
+						if(query===false) {
+							var url = document.createElement("a");
+							url.href = href;
+							query = url.search;
+						}
+						var confirm = $(this).data("confirm") || false;
+						var values = (!query) ? false : (typeof query == "string") ? jQuery.parseURL(query) : query;
+						if(confirm) {
+							jQuery.bithive.confirm(confirm, function(){ jQuery.bithive.postLink(btn, href, values, target); });
+						} else {
+							jQuery.bithive.postLink(btn, href, values, target);
+						}
 					}
 				});
 			});
@@ -1845,7 +1852,14 @@ jQuery.extend({
 			});
 		},
 
+		// msg: mensaje para el usuario o funcion que retorna o false, si retorna false se aborta el confirm
+		// after: funcion que se ejecuta en caso afirmativo
 		confirm: function(msg, after) {
+			if(typeof msg=="function" || typeof window[msg]=="function") {
+				msg = jQuery.bithive.run(msg);
+			}
+
+			if(msg===false) { return false; }
 			BootstrapDialog.confirm({
 				draggable: true,
 				title: "Confirmar",
@@ -1901,10 +1915,10 @@ jQuery.extend({
 			if(!alvin) { return false; }
 
 			// unmask ---
-			$(".mask-decimal", form, false, function() { $(this).val($(this).val().replace(/,/g, "")); });
-			$(".mask-money", form, false, function() { $(this).val($(this).val().replace(/,/g, "")); });
-			$(".mask-cuit", form, false, function() { $(this).val($(this).val().replace(/\-/g, "")); });
-			$(".mask-dni", form, false, function() { $(this).val($(this).val().replace(/\./g, "")); });
+			$(".mask-decimal").each(function() { $(this).val($(this).val().replace(/,/g, "")); });
+			$(".mask-money").each(function() { $(this).val($(this).val().replace(/,/g, "")); });
+			$(".mask-cuit").each(function() { $(this).val($(this).val().replace(/\-/g, "")); });
+			$(".mask-dni").each(function() { $(this).val($(this).val().replace(/\./g, "")); });
 
 			// attacher resizer
 			$(".form-attachresizer", form, false, function() { $(this).prop("attachresizer").toField(); });
@@ -2100,6 +2114,7 @@ jQuery.extend({
 			var subclass = subformButton.data("class") || "";
 
 			if(elem.nodeName.toLowerCase()=="select") {
+				subformButton.prop("subFormType", "select");
 				subformButton.change(function(e, data, parentForm) {
 					let target = $(targetSelector);
 					target.html("");
@@ -2109,6 +2124,7 @@ jQuery.extend({
 					}
 				});
 			} else if(subformButton.hasClass("form-number")) {
+				subformButton.prop("subFormType", "number");
 				subformButton.closest(".bootstrap-touchspin").css("max-width", "100px");
 				subformButton.prop("subforms", 0);
 				subformButton.change(function(e, data, parentForm, subSource) {
@@ -2145,6 +2161,7 @@ jQuery.extend({
 					}
 				});
 			} else {
+				subformButton.prop("subFormType", "button");
 				subformButton.click(function(e, data, parentForm, subSource) {
 					let target = $(targetSelector);
 					let src = (subSource && subSource!==true) ? subSource : source;
@@ -2158,18 +2175,25 @@ jQuery.extend({
 				});
 			}
 
+			var trigger = "click";
+			if(subformButton.prop("subFormType")!="button") { trigger = "change"; }
 			if(subformButton.hasAttr("data-value")) {
 				var div = $("<div>").html($("<div>").gyros({width:"40px", stroke:2}));
 				var info = jQuery.base64.atob(subformButton.data("value"));
 				info = decodeURIComponent(escape(info));
 				info = JSON.parse(info);
 				$.each(info, function() {
-					subformButton.trigger("click", [this]);
+					if(subformButton.prop("subFormType")=="number") { subformButton.val(parseInt(subformButton.val())+1); }
+					subformButton.trigger(trigger, [this]);
 				});
 			} else {
 				if(preload>0) {
-					for(var x=0; x<preload; x++) {
-						subformButton.trigger("click");
+					if(subformButton.prop("subFormType")=="number") {
+						subformButton.val(preload).trigger(trigger)
+					} else {
+						for(var x=0; x<preload; x++) {
+							subformButton.trigger(trigger);
+						}
 					}
 				}
 			}
@@ -2178,7 +2202,7 @@ jQuery.extend({
 
 		SubFormTrigger: function(e, data, parentForm, source, subformButton, target, subclass) {
 			var div = $("<div>").attr("id", "subform-"+jQuery.uid()).addClass("subform-form clearfix "+subclass).html($("<div>").gyros({width:"40px", stroke:2}));
-			let subFormIdValue = subformButton.data("subid") || jQuery.uid();
+			let subFormIdValue = jQuery.uid();
 			if(subformButton.data("extend")) { subFormIdValue = subformButton.prop("subFormFieldId"); }
 			div.prop("subform-target", target);
 			div.prop("subFormIdVal", subFormIdValue);
@@ -2464,6 +2488,7 @@ jQuery.extend({
 						if(afteradd) { jQuery.bithive.onload(function(){ jQuery.bithive.run(afteradd, div); }, div); }
 					}
 				} else {
+					jQuery.bithive.SubFormFillData([div, data]);
 					if(afteradd) { jQuery.bithive.onload(function(){ jQuery.bithive.run(afteradd, div); }, div); }
 				}
 			});
@@ -2878,17 +2903,60 @@ jQuery.extend({
 			});
 		},
 
-		postLink: function(href, values, target) {
-			if(typeof target == "undefined") { var target = "_blank"; }
-			var form = $("<form>").attr({"method": "post", "target": target, "action": href}).appendTo("body");
+		postLink: function(btn, href, values, target) {
+			var formData = new FormData();
 			if(values) {
 				jQuery.each(values, function(key, value) {
-					form.append($("<input>").attr({"type":"hidden", "name":key}).val(value));
+					formData.append(key, value);
 				});
 			}
-			form[0].submit(function() {
-				form.remove(); 
-				return true
+
+			var gyros = $("<div>").gyros({top: "-10px", width:"60px", stroke:2});
+			btn.after(gyros).hide();
+
+			$.ajax({
+				type: "POST",
+				url: href,
+				data: formData,
+				contentType: false,
+				cache: false,
+				processData: false,
+				success: function(response) {
+					try {
+						var parsed = JSON.parse(response);
+					} catch(e) {
+						if(e instanceof SyntaxError) {
+							if(typeof response == "string" && (response.substr(0, 7).toLowerCase()=="http://" || response.substr(0, 8).toLowerCase()=="https://")) {
+								window.location.href = response;
+							} else if(response.substr(0, 15)=="[[TUTOR-DEBUG]]") {
+								// tutor debug
+								jQuery.bithive.SendFormMessages(btn, gyros, response, "debug");
+							} else if(response.substr(0, 15)=="[[TUTOR-ALERT]]") {
+								// tutor alert
+								jQuery.bithive.SendFormMessages(btn, gyros, response, "alert");
+							} else {
+								// nogal error | php error
+								jQuery.bithive.SendFormMessages(btn, gyros, response, "error");
+							}
+						}
+						return true;
+					}
+				},
+				error: function(response) {
+					BootstrapDialog.show({
+						draggable: true,
+						type: BootstrapDialog.TYPE_WARNING,
+						buttons: [{
+							label: "aceptar",
+							cssClass: "btn-warning",
+							action: function(dialog) {
+								dialog.close();
+							}
+						}],
+						title: "Advertencia!",
+						message: response,
+					});
+				}
 			});
 		},
 
