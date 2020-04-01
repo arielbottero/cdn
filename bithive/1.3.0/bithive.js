@@ -1601,7 +1601,9 @@ jQuery.extend({
 						step: step,
 						prefix: prefix,
 						postfix: postfix,
-						verticalbuttons: true
+						verticalbuttons: true,
+						buttonup_class: "btn",
+						buttondown_class: "btn"
 					});
 				});
 			}
