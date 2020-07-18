@@ -91,7 +91,6 @@
 				e.preventDefault();
 				return false;
 			});
-			
 			attacher.form = target.closest("form");
 			attacher.form.prop("attacher", attacher);
 			var attachers = (attacher.form.prop("attachers")) ? attacher.form.prop("attachers") : [];

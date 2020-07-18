@@ -32,6 +32,17 @@
 	.xs-o-100 { opacity: 1 !important; filter: alpha(opacity=100) !important; }
 
 	/* SIZES =========================================================================================*/
+	.xs-w-25 { width:25% !important; }
+	.xs-w-50 { width:50% !important; }
+	.xs-w-75 { width:75% !important; }
+	.xs-w-100 { width:100% !important; }
+	.xs-w-auto { width:auto !important; }
+	.xs-h-25 { height:25% !important; }
+	.xs-h-50 { height:50% !important; }
+	.xs-h-75 { height:75% !important; }
+	.xs-h-100 { height:100% !important; }
+	.xs-h-auto { height:auto !important; }
+
 	.xs-max-width-xs { max-width: 576px !important; }
 	.xs-max-width-sm { max-width: 768px !important; }
 	.xs-max-width-md { max-width: 992px !important; }
@@ -80,6 +91,9 @@
 	.xs-m-xl { margin: 60px !important; }
 	.xs-m-hg { margin: 120px !important; }
 	.xs-m-ww { margin: 180px !important; }
+
+	.xs-mx-auto { margin-left: auto !important; margin-right: auto !important; }
+	.xs-my-auto { margin-top: auto !important; margin-bottom: auto !important; }
 
 	/* valores de margin individuales*/
 	/* .xs-m[lado]-[tamaño] */
@@ -290,9 +304,16 @@
 	.xs-pr-o { padding-top: 0px !important; padding-bottom: 0px !important; padding-left: 0px !important; }
 
 	/* TEXT ==========================================================================================*/
+	.xs-text-justify { text-align: justify !important; }
+	.xs-text-nowrap { white-space: nowrap !important; }
+	.xs-text-truncate { overflow: hidden; text-overflow:ellipsis; white-space:nowrap; }
+	.xs-text-left { text-align: left !important; }
+	.xs-text-right { text-align: right !important; }
+	.xs-text-center { text-align: center !important; }
+
 	.xs-text-tt,
 	.xs-text-monospace {
-		font-family: "Courier New", Courier, monospace !important;
+		font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Courier New", Courier, monospace !important;
 	}
 
 	.xs-overflow-auto {
@@ -1008,7 +1029,8 @@
 
 	/* POSICION ======================================================================================*/
 	.xs-p-absolute { position: absolute !important; }
-	.xs-p-fixed { position: fixed !important; }
+	.xs-p-fixed-top { position: fixed !important; top: 0px !important; }
+	.xs-p-fixed-bottom { position: fixed !important; bottom: 0px !important;  }
 	.xs-p-inherit { position: inherit !important; }
 	.xs-p-initial { position: initial !important; }
 	.xs-p-relative { position: relative !important; }
@@ -1023,6 +1045,19 @@
 	.xs-p-sticky-ww { position: sticky !important; top: 180px !important;  z-index: 10; }
 
 
+	/* DISPLAY =======================================================================================*/
+	.xs-clearfix::after { display:block; clear:both; content:""; }
+	.xs-d-none { display: none !important; }
+	.xs-d-inline { display: inline !important; }
+	.xs-d-inline-block { display: inline-block !important; }
+	.xs-d-block { display: block !important; }
+	.xs-d-table { display: table !important; }
+	.xs-d-table-row { display: table-row !important; }
+	.xs-d-table-cell { display: table-cell !important; }
+	.xs-d-flex { display: -ms-flexbox !important; display: flex !important; }
+	.xs-d-inline-flex { display:-ms-inline-flexbox !important; display:inline-flex !important; }
+
+
 	/* CURSORES ======================================================================================*/
 	.xs-c-default { cursor: default !important; }
 	.xs-c-help { cursor: help !important; }
@@ -1035,6 +1070,29 @@
 	.xs-c-zoom-out { cursor: zoom-out !important; }
 
 	/* ALIGNMENT AND FLOAT ===========================================================================*/
+	.xs-justify-content-start { -ms-flex-pack: start !important; justify-content: flex-start !important; } 
+	.xs-justify-content-end { -ms-flex-pack: end !important; justify-content: flex-end !important; } 
+	.xs-justify-content-center { -ms-flex-pack: center !important; justify-content: center !important; } 
+	.xs-justify-content-between { -ms-flex-pack: justify !important; justify-content: space-between !important; } 
+	.xs-justify-content-around { -ms-flex-pack: distribute !important; justify-content: space-around !important; } 
+	.xs-align-items-start { -ms-flex-align: start !important; align-items: flex-start !important; } 
+	.xs-align-items-end { -ms-flex-align: end !important; align-items: flex-end !important; } 
+	.xs-align-items-center { -ms-flex-align: center !important; align-items: center !important; } 
+	.xs-align-items-baseline { -ms-flex-align: baseline !important; align-items: baseline !important; } 
+	.xs-align-items-stretch { -ms-flex-align: stretch !important; align-items: stretch !important; } 
+	.xs-align-content-start { -ms-flex-line-pack: start !important; align-content: flex-start !important; } 
+	.xs-align-content-end { -ms-flex-line-pack: end !important; align-content: flex-end !important; } 
+	.xs-align-content-center { -ms-flex-line-pack: center !important; align-content: center !important; } 
+	.xs-align-content-between { -ms-flex-line-pack: justify !important; align-content: space-between !important; } 
+	.xs-align-content-around { -ms-flex-line-pack: distribute !important; align-content: space-around !important; } 
+	.xs-align-content-stretch { -ms-flex-line-pack: stretch !important; align-content: stretch !important; } 
+	.xs-align-self-auto { -ms-flex-item-align: auto !important; align-self: auto !important; } 
+	.xs-align-self-start { -ms-flex-item-align: start !important; align-self: flex-start !important; } 
+	.xs-align-self-end { -ms-flex-item-align: end !important; align-self: flex-end !important; } 
+	.xs-align-self-center { -ms-flex-item-align: center !important; align-self: center !important; } 
+	.xs-align-self-baseline { -ms-flex-item-align: baseline !important; align-self: baseline !important; } 
+	.xs-align-self-stretch { -ms-flex-item-align: stretch !important; align-self: stretch !important; }
+
 	.xs-abs-top-left { position: absolute; top: 0% !important; left: 0% !important; z-index: 1000 !important; }
 	.xs-abs-top-center { position: absolute; top: 0% !important; left: 50% !important; z-index: 1000 !important; transform: translateX(-50%) !important; }
 	.xs-abs-top-right { position: absolute; top: 0% !important; right: 0% !important; z-index: 1000 !important; }

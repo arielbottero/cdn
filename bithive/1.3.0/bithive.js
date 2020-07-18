@@ -1,13 +1,68 @@
 jQuery.extend({
 	bithive : {
 		version: "1.3.0",
-		ctxmenu: {top:0, left:0},
+		ctxmenu: {menu: null, top:0, left:0},
 		httpRequests: 0,
 		onLoadCounter: 0,
 
+		lang: {
+			alertTitle: "Atención!",
+			confirmTitle: "Confirmar",
+			confirmQuestion: "Confirmar?",
+			confirmMsgDelete: "Eliminar el registro?",
+			confirmPassword: "Ingrese su Contraseña",
+			buttonOk: "Aceptar",
+			buttonCancel: "Cancelar",
+			buttonClose: "Cerrar",
+			buttonAdd: "Agregar",
+			clipboardSuccess: "Datos copiados al portapapeles",
+			valueYes: "SI",
+			valueNo: "NO",
+			subFormLimitMsg: "Límite de registros alcanzado",
+			buttonsSetDays: [
+				{ "label":"Do", "value":"0" },
+				{ "label":"Lu", "value":"1" },
+				{ "label":"Ma", "value":"2" },
+				{ "label":"Mi", "value":"3" },
+				{ "label":"Ju", "value":"4" },
+				{ "label":"Vi", "value":"5" },
+				{ "label":"Sa", "value":"6" }
+			],
+			buttonsSetMonths: [
+				{ "label":"Ene", "value":"1" },
+				{ "label":"Feb", "value":"2" },
+				{ "label":"Mar", "value":"3" },
+				{ "label":"Abr", "value":"4" },
+				{ "label":"May", "value":"5" },
+				{ "label":"Jun", "value":"6" },
+				{ "label":"Jul", "value":"7" },
+				{ "label":"Ago", "value":"8" },
+				{ "label":"Sep", "value":"9" },
+				{ "label":"Oct", "value":"10" },
+				{ "label":"Nov", "value":"11" },
+				{ "label":"Dic", "value":"12" }
+			],
+			datePickerTooltips: {
+				today: "Hoy",
+				clear: "Limpiar",
+				close: "Cerrar",
+				selectMonth: "Selecionar Mes",
+				prevMonth: "Anterior Mes",
+				nextMonth: "Siguiente Mes",
+				selectYear: "Selecionar Año",
+				prevYear: "Anterior Año",
+				nextYear: "Siguiente Año",
+				selectDecade: "Selecionar Decada",
+				prevDecade: "Anterior Década",
+				nextDecade: "Siguiente Década",
+				prevCentury: "Anterior Siglo",
+				nextCentury: "Siguiente Siglo"
+			}
+		},
+
 		RequestCounter: function(n) {
-			if(n) { jQuery.bithive.httpRequests += n; }
-			return (jQuery.bithive.httpRequests<=0) ? true : false;
+			if(n) { $.bithive.httpRequests += n; }
+			return ($.bithive.httpRequests<=0) ? true : false;
 		},
 
 		ApplyCounter: function(elem, n) {
@@ -26,7 +81,7 @@ jQuery.extend({
 
 			if(func) {
 				let int = setInterval(function(){
-					if(jQuery.bithive.ApplyCounter(elem)) {
+					if($.bithive.ApplyCounter(elem)) {
 						clearInterval(elem.prop("AfterApply"));
 						func();
 					}
@@ -34,16 +89,16 @@ jQuery.extend({
 				elem.prop("AfterApply", int);
 			}
 
-			jQuery.bithive.onload();
+			$.bithive.onload();
 		},
 
 		RunOnLoad: function(elem) {
 			if(elem.prop("OnLoadInterval")) { return false; }
-			jQuery.bithive.onLoadCounter++;
+			$.bithive.onLoadCounter++;
 			let int = setInterval(function(){
-				if(jQuery.bithive.RequestCounter() && jQuery.bithive.ApplyCounter(elem)) {
-					if(elem.prop("tagName")=="BODY" && jQuery.bithive.onLoadCounter>1) { return false; }
-					jQuery.bithive.onLoadCounter--;
+				if($.bithive.RequestCounter() && $.bithive.ApplyCounter(elem)) {
+					if(elem.prop("tagName")=="BODY" && $.bithive.onLoadCounter>1) { return false; }
+					$.bithive.onLoadCounter--;
 					clearInterval(elem.prop("OnLoadInterval"));
 					elem.prop("OnLoadInterval", false);
 
@@ -67,7 +122,7 @@ jQuery.extend({
 				functions.push(method);
 				elem.prop("OnLoadFunctions", functions);
 			}
-			jQuery.bithive.RunOnLoad(elem);
+			$.bithive.RunOnLoad(elem);
 		},
 
 		run: function(code, args) {
@@ -77,11 +132,11 @@ jQuery.extend({
 				} else {
 					return window[code](args);
 				}
-			} else if(typeof jQuery.bithive[code]=="function") {
+			} else if(typeof $.bithive[code]=="function") {
 				if(typeof args == "undefined") {
-					return jQuery.bithive[code]();
+					return $.bithive[code]();
 				} else {
-					return jQuery.bithive[code](args);
+					return $.bithive[code](args);
 				}
 			} else {
 				return eval(code);
@@ -94,9 +149,9 @@ jQuery.extend({
 
 		eachElement: function(selector, elem, itself, func) {
 			if(!elem) { var elem = $("body"); }
-			let objs = jQuery.bithive.getElement(selector, elem, itself);
-			jQuery.bithive.ApplyCounter(elem, 1);
-			jQuery.each(objs, func).promise().done(function(){ jQuery.bithive.ApplyCounter(elem, -1); });
+			let objs = $.bithive.getElement(selector, elem, itself);
+			$.bithive.ApplyCounter(elem, 1);
+			jQuery.each(objs, func).promise().done(function(){ $.bithive.ApplyCounter(elem, -1); });
 		},
 
 		isSmallScreen: function() {
@@ -107,14 +162,28 @@ jQuery.extend({
 			if(!elem) { var elem = $("body"); }
 			if(typeof itself == "undefined") { var itself = false; }
 
+			// TITLE -------------------------------------------------------------------------------
+			$("title").html($("title").text().replace(/(<([^>]+)>)/ig,""));
+
 			// ACTION BUTTONS ----------------------------------------------------------------------
+			// btn-back
+			$.bithive.eachElement(".btn-back", elem, itself, function() {
+				if(window.history.length > 1) {
+					$(this).click(function() { window.history.back(); });
+				} else {
+					$(this).val($.bithive.lang.buttonClose);
+					$(this).text($.bithive.lang.buttonClose);
+					$(this).click(function() { window.close(); });
+				}
+			});
+
 			// btn-print
 			$(".btn-print").addClass("no-print").click(function(e) {
-				jQuery.bithive.print();
+				$.bithive.print();
 			});
 
 			// btn-insert
-			jQuery.bithive.eachElement(".btn-insert", elem, itself, function() {
+			$.bithive.eachElement(".btn-insert", elem, itself, function() {
 				$(this).click(function(e) {
 					if(!$(this).attr("onclick")) {
 						e.preventDefault();
@@ -125,7 +194,7 @@ jQuery.extend({
 			});
 
 			// btn-update
-			jQuery.bithive.eachElement(".btn-update", elem, itself, function() {
+			$.bithive.eachElement(".btn-update", elem, itself, function() {
 				$(this).click(function(e) {
 					if(!$(this).attr("onclick")) {
 						e.preventDefault();
@@ -140,54 +209,49 @@ jQuery.extend({
 			});
 
 			// btn-delete
-			jQuery.bithive.eachElement(".btn-delete", elem, itself, function() {
+			$.bithive.eachElement(".btn-delete", elem, itself, function() {
 				$(this).click(function(e) {
 					if(!$(this).attr("onclick")) {
 						e.preventDefault();
-						var imya = $(this).data("imya") || null;
+						let imya = $(this).data("imya") || null;
 						if(imya!==null) {
-							var href = ($(this).data("href")) ? $(this).data("href") : "delete";
+							let href = ($(this).data("href")) ? $(this).data("href") : "delete";
+							let secure = ($(this).hasAttr("data-secure")) ? true : false;
 							if(href.indexOf("?")<0) { href += "?"; }
-							BootstrapDialog.confirm({
-								draggable: true,
-								title: "Confirmar",
-								message: "Eliminar el registro?",
-								type: BootstrapDialog.TYPE_DANGER,
-								btnCancelLabel: "cancelar",
-								btnOKLabel: "aceptar",
-								btnOKClass: "btn-danger",
-								callback: function(result) {
-									if(result) {
-										$.get(href+"imya="+imya, function(response) {
-											if(parseInt(response)==response) {
-												self.location.reload();
-											} else {
-												BootstrapDialog.show({
-													draggable: true,
-													type: BootstrapDialog.TYPE_WARNING,
-													buttons: [{
-														label: "aceptar",
-														cssClass: "btn-warning",
-														action: function(dialog) {
-															dialog.close();
-														}
-													}],
-													title: "Advertencia!",
-													message: response,
-												});
-											}
-										});
-									}
+
+							$.bithive.confirm($.bithive.lang.confirmMsgDelete, function(dialog){
+								let formData = new FormData();
+								formData.append("imya", imya);
+
+								let fkpass = $(".text-pwd", $("#"+dialog.options.id));
+								if(fkpass.length) {
+									formData.append("pwd", fkpass.prop("realvalue"));
 								}
-							});
+					
+								$.ajax({
+									type: "POST",
+									url: href,
+									data: formData,
+									contentType: false,
+									cache: false,
+									processData: false,
+									success: function(response) {
+										if(parseInt(response)==response) {
+											self.location.reload();
+										} else {
+											$.bithive.ResponseHandler(response);
+										}
+									}
+								});
+							}, secure);
 						}
 					}
 				});
 			});
 			
 			// TABS ------------------------------------------------------------
-			// jQuery.bithive.eachElement("nav-tabs a", elem, itself, function() {
-			jQuery.bithive.eachElement("nav-tabs a", elem, itself, function() {
+			// $.bithive.eachElement("nav-tabs a", elem, itself, function() {
+			$.bithive.eachElement("nav-tabs a", elem, itself, function() {
 				$(this).click(function(e) {
 					e.preventDefault();
 					$(this).tab("show");
@@ -195,58 +259,58 @@ jQuery.extend({
 			});
 
 			if(jQuery().tabs) {
-				jQuery.bithive.eachElement("ul.nav-tabs", elem, itself, function() {
+				$.bithive.eachElement("ul.nav-tabs", elem, itself, function() {
 					$(this).tabs();
 				});
 			}
 
 			// STEPS -----------------------------------------------------------
 			if(jQuery().steps) {
-				jQuery.bithive.eachElement(".form-steps", elem, itself, function() {
+				$.bithive.eachElement(".form-steps", elem, itself, function() {
 					$(this).steps();
 				});
 			}
 
 			// CONTEXTMENU -----------------------------------------------------
-			jQuery.bithive.eachElement(".ctxmenu", elem, itself, function() {
+			$.bithive.eachElement(".ctxmenu", elem, itself, function() {
 				var launcher = $(this);
 				var ctxmenu = $(launcher.data("ctxmenu")) || $(".dropdown-menu", launcher);
 				var onevent = launcher.data("ctxmenu-event") || "contextmenu";
 				launcher.on(onevent, function(e) {
-					$.bithive.ctxmenu.top = e.pageY;
-					$.bithive.ctxmenu.left = e.pageX;
+					if($.bithive.ctxmenu.menu) {
+						$(".dropdown-menu", $.bithive.ctxmenu.menu).removeClass("show").hide();
+						$.bithive.ctxmenu.menu.removeClass("show").hide();
+					}
+
+					$.bithive.ctxmenu.menu = ctxmenu;
+					$.bithive.ctxmenu.top = e.clientY;
+					$.bithive.ctxmenu.left = e.clientX;
 					ctxmenu.prop("launcher", $(this));
 					ctxmenu.css({
 						display: "block",
+						position: "fixed",
 						top: ($.bithive.ctxmenu.top - 10),
-						left: ($.bithive.ctxmenu.left - 90)
+						left: ($.bithive.ctxmenu.left - 10)
 					}).addClass("show");
 					
 					return false;
 				});
 
 				$("a", ctxmenu).not(".dropdown-toggle").on("click", function() {
-					$(this).parent().removeClass("show").hide();
-				});
-
-				$(document).click(function (e) {
-					if($(e.target).closest(ctxmenu).length === 0) {
-						$(".dropdown-menu", ctxmenu).removeClass("show").hide();
-						ctxmenu.removeClass("show").hide();
-					}
+					ctxmenu.removeClass("show").hide();
 				});
 			});
 			
 			// SUBMENU ---------------------------------------------------------
-			jQuery.bithive.eachElement(".dropdown-submenu .dropdown-toggle", elem, itself, function(){
+			$.bithive.eachElement(".dropdown-submenu .dropdown-toggle", elem, itself, function(){
 				$(this).click(function(e) {
 					var submenu = $(this).next();
-
 					$(".dropdown-submenu", submenu.parent()).removeClass("show");
 
 					submenu.css({
 						top: "0px",
-						left: "100%"
+						left: "100%",
+						bottom: "auto"
 					}).toggleClass("show");
 
 					var offset = submenu.offset();
@@ -263,12 +327,12 @@ jQuery.extend({
 
 			// CLIPBOARD -------------------------------------------------------
 			if(jQuery().clipboard) {
-				jQuery.bithive.eachElement("[clipboard-target]", elem, itself, function(){
+				$.bithive.eachElement("[clipboard-target]", elem, itself, function(){
 					$(this).click(function(e) {
 						var clip = $(this);
 						var target = clip.attr("clipboard-target");
-						var message = clip.attr("clipboard-message") || "datos copiados al portapapeles";
-						var clasess = clip.attr("clipboard-clasess") || "btn btn-success btn-md margin-md margin-only-top";
+						var message = clip.attr("clipboard-message") || $.bithive.lang.clipboardSuccess;
+						var clasess = clip.attr("clipboard-clasess") || "btn btn-success btn-md mt-md";
 						$(".no-print", target).hideShow();
 						$(this).clipboard({
 							target: target,
@@ -284,12 +348,12 @@ jQuery.extend({
 					});
 				});
 
-				jQuery.bithive.eachElement("[clipboard-text]", elem, itself, function(){
+				$.bithive.eachElement("[clipboard-text]", elem, itself, function(){
 					$(this).click(function(e) {
 						var clip = $(this);
 						var text = clip.attr("clipboard-text");
-						var message = clip.attr("clipboard-message") || "datos copiados al portapapeles";
-						var clasess = clip.attr("clipboard-clasess") || "btn btn-success btn-md margin-md margin-only-top";
+						var message = clip.attr("clipboard-message") || $.bithive.lang.clipboardSuccess;
+						var clasess = clip.attr("clipboard-clasess") || "btn btn-success btn-md mt-md";
 						$(this).clipboard({
 							mode: false,
 							text: text,
@@ -305,49 +369,49 @@ jQuery.extend({
 
 			// FORMATS ---------------------------------------------------------
 			// booleans
-			jQuery.bithive.eachElement(".format-boolean", elem, itself, function() {
-				var options = ($(this).hasAttr("format-custom")) ? $(this).attr("format-custom").split(";") : ["SI","NO"];
+			$.bithive.eachElement(".format-boolean", elem, itself, function() {
+				var options = ($(this).hasAttr("format-custom")) ? $(this).attr("format-custom").split(";") : [$.bithive.lang.valueYes,$.bithive.lang.valueNo];
 				$(this).html(($(this).html()=="1" || $(this).html()=="true") ? options[0] : options[1]);
 			});
 
 			// case [ format-custom: {value:label;value:label;value:label} ]
-			jQuery.bithive.eachElement(".format-case", elem, itself, function() {
-				var options = ($(this).hasAttr("format-custom")) ? jQuery.parseJSON($(this).attr("format-custom")) : ["NO","SI"];
+			$.bithive.eachElement(".format-case", elem, itself, function() {
+				var options = ($(this).hasAttr("format-custom")) ? jQuery.parseJSON($(this).attr("format-custom")) : [$.bithive.lang.valueNo,$.bithive.lang.valueYes];
 				$(this).html(options[$(this).html()]);
 			});
 
 			// dates
 			if(jQuery().dateformat) {
-				jQuery.bithive.eachElement(".format-date", elem, itself, function() { $(this).dateformat("dd/mm/yyyy"); });
-				jQuery.bithive.eachElement(".format-month", elem, itself, function() { $(this).dateformat("mm/yyyy"); });
-				jQuery.bithive.eachElement(".format-time", elem, itself, function() { $(this).dateformat("HH:ii:ss"); });
-				jQuery.bithive.eachElement(".format-hour", elem, itself, function() { $(this).dateformat("HH:ii"); });
-				jQuery.bithive.eachElement(".format-datetime", elem, itself, function() { $(this).dateformat("dd/mm/yyyy HH:ii:ss"); });
-				jQuery.bithive.eachElement(".format-cusdate", elem, itself, function(){ $(this).dateformat($(this).attr("format-custom")); });
+				$.bithive.eachElement(".format-date", elem, itself, function() { $(this).dateformat("dd/mm/yyyy"); });
+				$.bithive.eachElement(".format-month", elem, itself, function() { $(this).dateformat("mm/yyyy"); });
+				$.bithive.eachElement(".format-time", elem, itself, function() { $(this).dateformat("HH:ii:ss"); });
+				$.bithive.eachElement(".format-hour", elem, itself, function() { $(this).dateformat("HH:ii"); });
+				$.bithive.eachElement(".format-datetime", elem, itself, function() { $(this).dateformat("dd/mm/yyyy HH:ii:ss"); });
+				$.bithive.eachElement(".format-cusdate", elem, itself, function(){ $(this).dateformat($(this).attr("format-custom")); });
 			}
 
 			// numbres
 			if((typeof wNumb != "undefined") && jQuery().numberformat) {
-				jQuery.bithive.eachElement(".format-number", elem, itself, function() {
+				$.bithive.eachElement(".format-number", elem, itself, function() {
 					$(this).numberformat({"decimal":0});
 				});
 
-				jQuery.bithive.eachElement(".format-money", elem, itself, function() {
+				$.bithive.eachElement(".format-money", elem, itself, function() {
 					var curclass = jQuery.uid();
 					var currency = $(this).attr("format-custom") || "";
 					$(this).addClass("text-right "+curclass).numberformat({"format":"money"});
 					$('<style>.format-money.'+curclass+':before{content:"'+currency+'"}</style>').appendTo("head");
 				});
 
-				jQuery.bithive.eachElement(".format-decimal", elem, itself, function() {
+				$.bithive.eachElement(".format-decimal", elem, itself, function() {
 					var decimal = $(this).attr("format-custom") || 2;
 					$(this).addClass("text-right").numberformat({"format":"decimal", "decimal":decimal});
 				});
 
-				jQuery.bithive.eachElement(".format-percent", elem, itself, function() { $(this).numberformat("percent"); });
+				$.bithive.eachElement(".format-percent", elem, itself, function() { $(this).numberformat("percent"); });
 			}
 
-			jQuery.bithive.eachElement(".format-zerofill", elem, itself, function(){
+			$.bithive.eachElement(".format-zerofill", elem, itself, function(){
 				var zeros = parseInt($(this).attr("format-custom")) || 5;
 				var zerospad = new Array(1 + zeros).join("0");
 				$(this).text((zerospad + $(this).text()).slice(-zerospad.length));
@@ -355,7 +419,7 @@ jQuery.extend({
 			
 			// DIALOGS ---------------------------------------------------------
 			if(typeof BootstrapDialog != "undefined") {
-				jQuery.bithive.eachElement(".dialog-content", elem, itself, function() {
+				$.bithive.eachElement(".dialog-content", elem, itself, function() {
 					$(this).click(function(e) {
 						e.preventDefault();
 						var options		= $(this).hyphened("dialog");
@@ -363,6 +427,7 @@ jQuery.extend({
 						var classes		= (options.class) ? " "+options.class : " ";
 						var size		= (options.size) ? "dialog-"+options.size : "";
 						var title		= options.title || "&nbsp;";
+						var closable	= (typeof options.closable == "undefined") ? true : options.closable;
 						var content		= options.content;
 						var btnClose	= (options.close) ? [{ label: options.close, cssClass: "btn-primary pull-center", action: function(dialogItself){ dialogItself.close(); }}] : null;
 						
@@ -372,21 +437,22 @@ jQuery.extend({
 						var dialogOptions = {
 							draggable: true,
 							title: title,
+							closable: closable,
 							message: $("<div></div>").id(id).addClass("container-fluid"+classes).html($(content).html()),
 							cssClass: size,
 							onshow: function(dialogRef){
-								if(options.before) { jQuery.bithive.run(options.before); }
+								if(options.before) { $.bithive.run(options.before); }
 							},
 							onshown: function(dialogRef){
 								var body = $("#"+id);
 								var dialogLinkInterval = setInterval(function() {
 									if(dialogLinkLoaded) {
-										jQuery.bithive.apply(body);
+										$.bithive.apply(body);
 										$("[dialog-close]", body).click(function(){ dialogRef.close(); });
 										clearInterval(dialogLinkInterval);
 									}
 								}, 100);
-								if(options.after) { jQuery.bithive.run(options.after); }
+								if(options.after) { $.bithive.run(options.after); }
 							}
 						};
 						
@@ -395,7 +461,7 @@ jQuery.extend({
 					});
 				});
 
-				jQuery.bithive.eachElement(".dialog-link", elem, itself, function() {
+				$.bithive.eachElement(".dialog-link", elem, itself, function() {
 					$(this).click(function(e) {
 						e.preventDefault();
 						var launcher	= $(this);
@@ -404,26 +470,28 @@ jQuery.extend({
 						var classes		= (options.class) ? " "+options.class : " ";
 						var size		= (options.size) ? "dialog-"+options.size : "";
 						var title		= options.title || "&nbsp;";
+						var closable	= (typeof options.closable == "undefined") ? true : options.closable;
 						var btnClose	= (options.close) ? [{ label: options.close, cssClass: "btn-primary pull-center", action: function(dialogItself){ dialogItself.close(); }}] : null;
 						
 						// los elementos de la respuesta que tengan el atributo dialog-close, cerraran el dialogo
-						
+
 						var dialogLinkLoaded = false;
 						var dialogOptions = {
 							draggable: true,
 							title: title,
+							closable: closable,
 							message: $("<div></div>").id(id).addClass("container-fluid"+classes).load(options.href, function(){ dialogLinkLoaded = true; }),
 							cssClass: size,
 							onshow: function(dialogRef){
-								if(options.before) { jQuery.bithive.run(options.before, launcher); }
+								if(options.before) { $.bithive.run(options.before, launcher); }
 							},
 							onshown: function(dialogRef){
 								var body = $("#"+id);
 								var dialogLinkInterval = setInterval(function() {
 									if(dialogLinkLoaded) {
-										jQuery.bithive.apply(body);
+										$.bithive.apply(body);
 										$("[dialog-close]", body).click(function(){ dialogRef.close(); });
-										if(options.after) { jQuery.bithive.run(options.after, launcher); }
+										if(options.after) { $.bithive.run(options.after, launcher); }
 										clearInterval(dialogLinkInterval);
 									}
 								}, 100);
@@ -436,11 +504,11 @@ jQuery.extend({
 				});
 
 				// genera un dialogo de confirmacion
-				jQuery.bithive.eachElement(".dialog-confirm", elem, itself, function() {
+				$.bithive.eachElement(".dialog-confirm", elem, itself, function() {
 					$(this).click(function(e) {
 						var options = {
-							title: 		"Confirmar", // titulo de la ventana
-							message:	"Confirma?", // mensaje
+							title: 		$.bithive.lang.confirmTitle, // titulo de la ventana
+							message:	$.bithive.lang.confirmQuestion, // mensaje
 							js:			null,		 // codigo JS que ejecutará en caso afirmativo. Si esta presente NO se ejecutara href
 							href:		null,		 // URL que ejecutará en caso afirmativo. Si esta presente NO se ejecutara js
 													// ---
@@ -457,9 +525,9 @@ jQuery.extend({
 							title: options.title,
 							message: options.message,
 							type: BootstrapDialog.TYPE_DANGER,
-							btnCancelLabel: "cancelar",
+							btnCancelLabel: $.bithive.lang.buttonCancel,
 							btnCancelClass: "btn-default",
-							btnOKLabel: "aceptar",
+							btnOKLabel: $.bithive.lang.buttonOk,
 							btnOKClass: "btn-danger",
 							callback: function(result) {
 								if(result) {
@@ -470,19 +538,19 @@ jQuery.extend({
 											if(options.hrefafter) {
 												$.get(options.href, function(response) {
 													$(options.target).load(options.hrefafter, function() {
-														jQuery.bithive.apply($(options.target));
+														$.bithive.apply($(options.target));
 													});
 												});
 											} else {
 												$(options.target).load(options.href, function() {
-													jQuery.bithive.apply($(options.target));
+													$.bithive.apply($(options.target));
 												});
 											}
 										} else {
 											self.location.href = options.href;
 										}
 									} else {
-										setTimeout(function() { jQuery.bithive.run(options.after); }, 100);
+										setTimeout(function() { $.bithive.run(options.after); }, 100);
 									}
 								}
 							}
@@ -493,23 +561,23 @@ jQuery.extend({
 			
 			// LINKS -----------------------------------------------------------
 			// abre un link en un target
-			jQuery.bithive.eachElement(".link-in", elem, itself, function() {
+			$.bithive.eachElement(".link-in", elem, itself, function() {
 				$(this).click(function(e) {
 					e.preventDefault();
 					var href = $(this).attr("href") || $(this).data("href");
 					var target = $(this).attr("target") || $(this).data("target");
 					var after = $(this).data("after");
 					$(target).load(href, function() {
-						jQuery.bithive.apply($(target));
+						$.bithive.apply($(target));
 						if(after) {
-							jQuery.bithive.run(after);
+							$.bithive.run(after);
 						}
 					});
 				});
 			});
 
 			// genera un link post basado en un href y un json
-			jQuery.bithive.eachElement(".link-post", elem, itself, function() {
+			$.bithive.eachElement(".link-post", elem, itself, function() {
 				$(this).click(function(e) {
 					let btn = $(this);
 					e.preventDefault();
@@ -525,16 +593,16 @@ jQuery.extend({
 						var confirm = $(this).data("confirm") || false;
 						var values = (!query) ? false : (typeof query == "string") ? jQuery.parseURL(query) : query;
 						if(confirm) {
-							jQuery.bithive.confirm(confirm, function(){ jQuery.bithive.postLink(btn, href, values, target); });
+							$.bithive.confirm(confirm, function(){ $.bithive.postLink(btn, href, values, target); });
 						} else {
-							jQuery.bithive.postLink(btn, href, values, target);
+							$.bithive.postLink(btn, href, values, target);
 						}
 					}
 				});
 			});
 
 			// convierte un fa icon en un toggler de estados
-			jQuery.bithive.eachElement("i.link-toggler", elem, itself, function() {
+			$.bithive.eachElement("i.link-toggler", elem, itself, function() {
 				$(this)
 					.addClass(function(){
 						return (parseInt($(this).attr("toggler-value"))===1) ? "fas fa-dot-circle text-green" : "fas fa-dot-circle text-red";
@@ -572,11 +640,11 @@ jQuery.extend({
 				var cols = $(this).closest("table").find("tr:first th,td").length;
 				$(this).attr("colspan", cols);
 			});
-			
+
 			// filtros
 			if(jQuery().tablefilter) {
 				// utilizar data-filter="none" en los th que no deben tener la opcion
-				jQuery.bithive.eachElement("table.table-filter", elem, itself, function(){
+				$.bithive.eachElement("table.table-filter", elem, itself, function(){
 					$(this).tablefilter({
 						afterFilter: function(table) {
 							table.trigger("runtotals");
@@ -585,7 +653,7 @@ jQuery.extend({
 				});
 				
 				// filtros ocultos al inicio
-				jQuery.bithive.eachElement("table.table-filter-hidden", elem, itself, function(){
+				$.bithive.eachElement("table.table-filter-hidden", elem, itself, function(){
 					$(this).tablefilter({
 						afterFilter: function(table) {
 							table.trigger("runtotals");
@@ -598,7 +666,7 @@ jQuery.extend({
 			// orden
 			if(jQuery().tablesorter) {
 				// utilizar data-sorter="none" en los th que no deben tener la opcion
-				jQuery.bithive.eachElement("table.table-sorter", elem, itself, function(){
+				$.bithive.eachElement("table.table-sorter", elem, itself, function(){
 					var x = 0;
 					var options = {"headers":{}};
 					$("thead th", $(this)).each(function(){
@@ -615,20 +683,84 @@ jQuery.extend({
 			// totales
 			if(jQuery().tabletotal) {
 				// utilizar data-total="none" en los th que no deben tener la opcion
-				jQuery.bithive.eachElement("table.table-total", elem, itself, function(){
+				$.bithive.eachElement("table.table-total", elem, itself, function(){
+					var before = $(this).data("total-before") || false;
+					var after = $(this).data("total-after") || false;
+					var row = $(this).data("total-row") || false;
 					$(this).tabletotal({
 						cssClass: "table-xs-row",
+						before: function(table) {
+							if(after && typeof window[before]==="function") { window[before](table); }
+						},
 						after: function(table) {
-							jQuery.bithive.apply($("thead", table));
-							jQuery.bithive.apply($("tfoot", table));
+							$.bithive.apply($("thead", table), true);
+							$.bithive.apply($("tfoot", table), true);
+							if(after && typeof window[after]==="function") { window[after](table); }
+						},
+						row: function(tr) {
+							if(row && typeof window[row]==="function") {  window[row](tr); }
 						}
 					});
 				});
 			}
 
+			// table scroll
+			$.bithive.eachElement("table.table-scroll", elem, itself, function(){
+				let fixed = $(this).data("scroll-fixed") || "400px"; 
+				$(this).prop("tableScroll", true);
+				$("tbody", $(this)).css({
+					"width": "100%",
+					"height": "calc( 100vh - "+fixed+")",
+					"overflow-y": "auto",
+					"overflow-x": "hidden"
+				});
+
+				$(this).on("resize", function() {
+					let table = $(this);
+					if(jQuery().slimScroll) {
+						let slim = $(".slimScrollDiv", table);
+						if(slim.length) {
+							$("tbody", slim).insertBefore(slim);
+							slim.remove();
+						}
+					}
+
+					$("thead, tbody, tfoot", table).removeClass("d-block");
+					var cells = table.find("tbody tr:first").children();
+
+					table.find("thead tr").children().css("min-width", "");
+					cells.css("min-width", "");
+					table.find("tfoot tr").children().css("min-width", "");
+					let cols = cells.map(function() {
+						return $(this).innerWidth();
+					}).get();
+
+					cells.each(function(i, v) {
+						$(v).css("min-width", cols[i]);
+					}).promise().done(function(){
+						table.find("thead tr").children().each(function(i, v) {
+							$(v).css("min-width", cols[i]);
+						}).promise().done(function(){
+							table.find("tfoot tr").children().each(function(i, v) {
+								$(v).css("min-width", cols[i]);
+							}).promise().done(function(){
+								$("thead, tbody, tfoot", table).addClass("d-block");
+								if(jQuery().slimScroll) {
+									$("tbody", table).slimScroll({
+										"height": $("tbody", table).height()+"px",
+										"alwaysVisible": true,
+										"railOpacity": .1
+									});
+								}
+							});
+						});
+					});
+				}).trigger("resize");
+			});
+
 			// tabla para pantallas chicas
 			if(jQuery().tablexs) {
-				jQuery.bithive.eachElement("table.table-xs", elem, itself, function(){
+				$.bithive.eachElement("table.table-xs", elem, itself, function(){
 					var table = $(this);
 					table.tablexs();
 
@@ -639,7 +771,7 @@ jQuery.extend({
 							$("<a>", {class:"btn btn-white m-sm mr-n"})
 								.html('<i class="fa fa-filter icon-xs">')	
 								.click(function(){
-									if(!jQuery.bithive.isSmallScreen() || row.prop("xs-filter")) { return true; }
+									if(!$.bithive.isSmallScreen() || row.prop("xs-filter")) { return true; }
 									BootstrapDialog.show({
 										title: "Filtros",
 										animate: true,
@@ -691,7 +823,7 @@ jQuery.extend({
 
 			// table to excel
 			if(jQuery().table2excel) {
-				jQuery.bithive.eachElement(".table2excel", elem, itself, function(){
+				$.bithive.eachElement(".table2excel", elem, itself, function(){
 					var table = $($(this).data("table"));
 					$(this).click(function(e) {
 						var filename = new String($(this).data("filename"));
@@ -748,7 +880,7 @@ jQuery.extend({
 			}
 
 			// table-columns
-			jQuery.bithive.eachElement("[data-columns]", elem, itself, function() {
+			$.bithive.eachElement("[data-columns]", elem, itself, function() {
 				var btn = $(this);
 				var columns = $(btn.data("columns"));
 				if(typeof columns[0]=="undefined") { btn.remove(); return false; }
@@ -769,16 +901,21 @@ jQuery.extend({
 							var cell = $(this);
 							if(cell.hasClass("d-none")) {
 								cell.fadeIn("fast", function(){ cell.removeClass("d-none"); });
-								if(!jQuery.bithive.isSmallScreen() && cell.prop("xs-hidden")) {
+								if(!$.bithive.isSmallScreen() && cell.prop("xs-hidden")) {
 									cell.addClass("d-lg-table-cell");
 								}
 							} else {
 								cell.fadeOut("fast", function(){ cell.addClass("d-none"); });
-								if(!jQuery.bithive.isSmallScreen() && cell.prop("xs-hidden")) {
+								if(!$.bithive.isSmallScreen() && cell.prop("xs-hidden")) {
 									cell.removeClass("d-lg-table-cell");
 								}
 							}
+						}).promise().done(function(){
+							if(table.prop("tableScroll")) {
+								table.trigger("resize");
+							}
 						});
+
 					}).on("init", function(){
 						var isHidden = true;
 						$("th:nth-child("+(parseInt($(this).attr("idx"))+1)+"), td:nth-child("+(parseInt($(this).attr("idx"))+1)+")", table).each(function(k,v){
@@ -791,7 +928,7 @@ jQuery.extend({
 							}
 
 							if(cell.hasClass("d-lg-table-cell")) {
-								if(!jQuery.bithive.isSmallScreen()) {
+								if(!$.bithive.isSmallScreen()) {
 									cell.removeClass("d-none");
 									isHidden = false;
 								}
@@ -815,10 +952,31 @@ jQuery.extend({
 			});
 
 			/* tooltips */
+			$(".form-view .form-group").each(function(){
+				$(this).click(function(){
+					let elem = $(this);
+					elem
+						.removeAttr("title")
+						.tooltip({
+							"trigger": "manual",
+							"html": true,
+							"placement": "auto", 
+							"title": function() { return $(".form-control", $(this)).val() || $(".form-select button", $(this)).attr("title"); }
+						})
+						.tooltip("show")
+					;
+					
+					setTimeout(function(){
+						elem.tooltip("dispose");
+					}, 1500);
+				});
+			});
+
+			/* tooltips */
 			$("[data-toggle='tooltip']").each(function(){
 				$(this).tooltip({
 					"html": true,
-					"placement": "auto"
+					"placement": "auto" 
 				});
 			});
 		},
@@ -828,11 +986,7 @@ jQuery.extend({
 			if(!form) { var form = $("body"); }
 			if(typeof itself == "undefined") { var itself = false; }
 
-			jQuery.bithive.eachElement(".no-notes", form, itself, function() {
-				$("> small", $(this)).remove();
-			});
-
-			jQuery.bithive.eachElement("[data-clear]", form, itself, function() {
+			$.bithive.eachElement("[data-clear]", form, itself, function() {
 				var regex = new RegExp("["+$(this).data("clear")+"]", "g");
 				$(this).on("focus change keyup paste", function() {
 					var val = $(this).val();
@@ -841,7 +995,7 @@ jQuery.extend({
 				});
 			});
 
-			jQuery.bithive.eachElement("[data-checker]", form, itself, function() {
+			$.bithive.eachElement("[data-checker]", form, itself, function() {
 				$(this).on("change paste", function() {
 					var field = $(this);
 					var val = field.val();
@@ -860,7 +1014,7 @@ jQuery.extend({
 					}).gyros({width:gyroside+"px", stroke:2});
 					field.after(gyros);
 
-					jQuery.bithive.RequestCounter(1);
+					$.bithive.RequestCounter(1);
 					jQuery.ajax({
 						url: src,
 						dataType: "json",
@@ -869,57 +1023,33 @@ jQuery.extend({
 							gyros.remove();
 							if(response.success=="1") {
 								if(response.message) {
-									msg = msgok.replace("***", response.message);
-									BootstrapDialog.show({
-										draggable: true,
-										type: BootstrapDialog.TYPE_WARNING,
-										buttons: [{
-											label: "aceptar",
-											cssClass: "btn-warning",
-											action: function(dialog) {
-												dialog.close();
-												field.val("");
-												field.focus();
-											}
-										}],
-										title: "Confirmación",
-										message: msg,
+									$.bithive.confirm(msgok.replace("***", response.message), function(){
+										field.val("");
+										field.focus();
 									});
 								}
 
 								if(response.values) {
-									jQuery.bithive.jsonFiller(response.values, document);
+									$.bithive.jsonFiller(response.values, document);
 								}
 							} else {
 								if(response.message) {
-									msg = msgko.replace("***", response.message);
-									BootstrapDialog.show({
-										draggable: true,
-										type: BootstrapDialog.TYPE_WARNING,
-										buttons: [{
-											label: "aceptar",
-											cssClass: "btn-warning",
-											action: function(dialog) {
-												dialog.close();
-												field.val("");
-												field.focus();
-											}
-										}],
-										title: "Advertencia",
-										message: msg,
+									$.bithive.confirm(msgko.replace("***", response.message), function(){
+										field.val("");
+										field.focus();
 									});
 								}
 							}
 						},
 						complete: function(response) {
-							jQuery.bithive.RequestCounter(-1);
+							$.bithive.RequestCounter(-1);
 						}
 					});
 				});
 			});
 
 			// ATTACHER --------------------------------------------------------
-			jQuery.bithive.eachElement(".form-attacher", form, itself, function() {
+			$.bithive.eachElement(".form-attacher", form, itself, function() {
 				var field = $(this);
 				var types = ["jpg","jpge","png","gif"];
 				if(field.data("types")!="") { types = field.data("types").split(","); }
@@ -948,13 +1078,13 @@ jQuery.extend({
 
 			// ATTACHER RESIZER ------------------------------------------------
 			if(jQuery().attachresizer) {
-				jQuery.bithive.eachElement(".form-attachresizer", form, itself, function() {
+				$.bithive.eachElement(".form-attachresizer", form, itself, function() {
 					let name = ($(this).hasAttr("data-name")) ? $(this).data("name") : "attachresizer";
 					$(this).attr("name", name).attachresizer();
 				});
 			}
 
-			jQuery.bithive.eachElement(".custom-file-input", form, itself, function() {
+			$.bithive.eachElement(".custom-file-input", form, itself, function() {
 				$(this).on("change", function() {
 					// var fileName = $(this).val().split("\\").pop();
 					let fileName = $(this).val();
@@ -963,7 +1093,7 @@ jQuery.extend({
 			});			
 
 			// AUTOCOMPLETE ----------------------------------------------------
-			jQuery.bithive.eachElement("input.form-autocomplete", form, itself, function() {
+			$.bithive.eachElement("input.form-autocomplete", form, itself, function() {
 				var field = $(this);
 				var target = field.data("target") || null;
 				var template = field.data("template") || null;
@@ -985,7 +1115,8 @@ jQuery.extend({
 
 					var uid = jQuery.uid()+"_";
 					field.attr({
-						"name": uid+field.attr("name")
+						"name": uid+field.attr("name"),
+						"data-lnk-id": fieldId
 					});
 
 					target = fieldId;
@@ -997,7 +1128,7 @@ jQuery.extend({
 					source = eval(src);
 				} else {
 					source = function(request, response) {
-						$.getJSON(jQuery.bithive.RefToVal(src) + "&q=" +encodeURIComponent(request.term), response);
+						$.getJSON($.bithive.RefToVal(src) + "&q=" +encodeURIComponent(request.term), response);
 					};
 				}
 
@@ -1012,10 +1143,10 @@ jQuery.extend({
 							field.val("");
 							target.val("");
 							var urladd = jQuery.base64.atob(addsource);
-							urladd = jQuery.bithive.RefToVal(urladd);
-							jQuery.bithive.addNewValue(urladd, addtext, target, field);
+							urladd = $.bithive.RefToVal(urladd);
+							$.bithive.addNewValue(urladd, addtext, target, field);
 						} else {
-							setTimeout(function() { field.val(ui.item.label); },10);
+							setTimeout(function() { field.val(ui.item.label).attr("title", ui.item.label); },10);
 							var target = $("#"+field.prop("autocomplete-target"));
 							target.val(ui.item.value);
 
@@ -1025,21 +1156,21 @@ jQuery.extend({
 									url: jQuery.base64.atob(lnksrc) + ui.item.value,
 									dataType: "json",
 									success: function(data) {
-										var values = jQuery.bithive.OptionsValues(lnktarget);
+										var values = $.bithive.OptionsValues(lnktarget);
 										if(lnktarget.hasClass("checkbox")) {
-											jQuery.bithive.mkchecks("checkbox", lnktarget, data, values);
+											$.bithive.mkchecks("checkbox", lnktarget, data, values);
 										} else if(lnktarget.hasClass("radio")) {
-											jQuery.bithive.mkchecks("radio", lnktarget, data, values);
+											$.bithive.mkchecks("radio", lnktarget, data, values);
 										} else {
 											$("#"+lnktarget.prop("gyrosid")).remove();
 											lnktarget.show();
-											jQuery.bithive.mkSelectOptions(lnktarget, data, values);
+											$.bithive.mkSelectOptions(lnktarget, data, values);
 										}
 									}
 								});
 							}
 
-							if(after) { jQuery.bithive.run(after, [field, ui.item, false]); } // [elemento, objeto(value option), is_update]
+							if(after) { $.bithive.run(after, [field, ui.item, false]); } // [elemento, objeto(value option), is_update]
 						}
 					},
 					response: function(event, ui) {
@@ -1074,29 +1205,29 @@ jQuery.extend({
 							$.each(source, function(key, item) {
 								if(item.value==current) {
 									target.val(current);
-									field.val(item.label);
-									if(after) { jQuery.bithive.run(after, [field, item, true]); }
+									field.val(item.label).attr("title", item.label);
+									if(after) { $.bithive.run(after, [field, item, true]); }
 									return false;
 								}
 							});
 						} else {
-							jQuery.bithive.RequestCounter(1);
+							$.bithive.RequestCounter(1);
 							jQuery.ajax({
-								url: jQuery.bithive.RefToVal(src),
+								url: $.bithive.RefToVal(src),
 								dataType: "json",
 								data: { i:1, q: field.val() },
 								success: function(data) {
 									$.each(data, function(key, item) {
 										if(item.value==current) {
 											target.val(current);
-											field.val(item.label);
-											if(after) { jQuery.bithive.run(after, [field, item, true]); }
+											field.val(item.label).attr("title", item.label);
+											if(after) { $.bithive.run(after, [field, item, true]); }
 											return false;
 										}
 									});
 								},
 								complete: function(response) {
-									jQuery.bithive.RequestCounter(-1);
+									$.bithive.RequestCounter(-1);
 								}
 							});
 						}
@@ -1107,7 +1238,7 @@ jQuery.extend({
 					template = jQuery.base64.atob(template);
 					field.autocomplete("instance")._renderItem = function(ul, item) {
 						let li = $("<li>").append(template);
-						jQuery.bithive.KeysFromData(li, item);
+						$.bithive.KeysFromData(li, item);
 						return li.appendTo(ul);
 					};
 				}
@@ -1116,7 +1247,7 @@ jQuery.extend({
 
 			// CHECKBOX/RADIO ----------------------------------------------------------------------
 			// tilda todos los checkboxes visibles (destilda TODOS) que tengan la clase pasada en data-checkall
-			jQuery.bithive.eachElement("[data-checkall]", form, itself, function() {
+			$.bithive.eachElement("[data-checkall]", form, itself, function() {
 				var checkall = $(this);
 				checkall.prop("isChecked", false);
 				checkall.click(function() {
@@ -1132,30 +1263,30 @@ jQuery.extend({
 			});
 			
 			
-			jQuery.bithive.eachElement("div.checkbox[data-source]", form, itself, function() {
+			$.bithive.eachElement("div.checkbox[data-source]", form, itself, function() {
 				var field = $(this);
 				var source = jQuery.base64.atob(field.data("source"));
 				if(source!="") {
 					field.html($("<div>").css("width", "30px").gyros({width:"30px", stroke:2}));
-					jQuery.bithive.mkchecks("checkbox",field,source, jQuery.bithive.OptionsValues(field));
+					$.bithive.mkchecks("checkbox",field,source, $.bithive.OptionsValues(field));
 				}
 			});
 			
-			jQuery.bithive.eachElement("div.onoffswitch[data-source]", form, itself, function() {
+			$.bithive.eachElement("div.onoffswitch[data-source]", form, itself, function() {
 				var field = $(this);
 				var source = jQuery.base64.atob(field.data("source"));
 				if(source!="") {
 					field.html($("<div>").css("width", "30px").gyros({width:"30px", stroke:2}));
-					jQuery.bithive.mkchecks("onoffswitch",field,source, jQuery.bithive.OptionsValues(field));
+					$.bithive.mkchecks("onoffswitch",field,source, $.bithive.OptionsValues(field));
 				}
 			});
 			
-			jQuery.bithive.eachElement("div.radio[data-source]", form, itself, function() {
+			$.bithive.eachElement("div.radio[data-source]", form, itself, function() {
 				var field = $(this);
 				var source = jQuery.base64.atob(field.data("source"));
 				if(source!="") {
 					field.html($("<div>").css("width", "30px").gyros({width:"30px", stroke:2}));
-					jQuery.bithive.mkchecks("radio",field,source, jQuery.bithive.OptionsValues(field));
+					$.bithive.mkchecks("radio",field,source, $.bithive.OptionsValues(field));
 				}
 			});
 
@@ -1166,54 +1297,79 @@ jQuery.extend({
 			}
 
 			// HTML CONTAINER ----------------------------------------------------------------------
-			jQuery.bithive.eachElement(".form-html", form, itself, function() {
+			$.bithive.eachElement(".form-html", form, itself, function() {
 				var url = $(this).data("url");
 				if(url!="") {
 					$(this).load(url, function() {
-						jQuery.bithive.apply($(this));
+						$.bithive.apply($(this));
 					});
+				}
+			});
+
+			// MULTIPLE INPUT-----------------------------------------------------------------------
+			$(".form-minput").each(function(){
+				let el = $(this);
+				if(!el.prop("minput")) {
+					el.prop("minput", true);
+					let name		= el.attr("name");
+					let len			= (el.hasAttr("minput-len")) ? el.attr("minput-len").split(",") : 2; // largo de cada campo separado por  ,
+					let cols		= (el.hasAttr("minput-class")) ? el.attr("minput-class").split(",") : "col"; // clases css separadas por ,
+					let splitter	= el.attr("minput-splitter") || "-"; // divisor del valor guardado
+					let after		= el.attr("minput-after") || null; // function (el)
+					
+					let val			= el.val();
+					let vals		= val.split(splitter);
+
+					let div = $("<div>", {class:"form-inline w-100"});
+					for(let x in cols) {
+						div.append(function() {
+							let newel = el.clone()
+								.removeClass("form-minput")
+								.addClass((typeof cols=="object") ? cols[x] : cols)
+								.attr("name", "minput_"+name+"_"+x)
+								.attr("maxlength", len[x])
+							;
+							if(vals && vals[x]) { newel.val(vals[x]); }
+
+							newel.on("change", function(){
+								if(after) {
+									let val = window[after]($(this));
+									$(this).val(val);
+								}
+
+								let value = [];
+								$("[name^='minput_"+name+"_']").each(function(){
+									value.push($(this).val());
+								});
+
+								el.val(value.join(splitter));
+							})
+							return newel;
+						});
+						
+					}
+					el.attr("type", "hidden").after(div);
 				}
 			});
 
 			// SETS --------------------------------------------------------------------------------
 			if(jQuery().buttonsSet) {
-				jQuery.bithive.eachElement(".form-buttonsset", form, itself, function() {
+				$.bithive.eachElement(".form-buttonsset", form, itself, function() {
 					var field = $("input", $(this));
 					var source = $.base64.atob(field.data("source")) || "";
-					jQuery.bithive.mkOptions(source, function(src, args) {
+					$.bithive.mkOptions(source, function(src, args) {
 						if(src!=="") {
 							$(args[0]).buttonsSet(src);
 						}
 					}, [this]);
 				});
 
-				jQuery.bithive.eachElement(".form-daysofweek", form, itself, function() {
-					$(this).buttonsSet([
-						{ "label":"Do", "value":"0" },
-						{ "label":"Lu", "value":"1" },
-						{ "label":"Ma", "value":"2" },
-						{ "label":"Mi", "value":"3" },
-						{ "label":"Ju", "value":"4" },
-						{ "label":"Vi", "value":"5" },
-						{ "label":"Sa", "value":"6" }
-					]);
+				$.bithive.eachElement(".form-daysofweek", form, itself, function() {
+					$(this).buttonsSet($.bithive.lang.buttonsSetDays);
 				});
 
-				jQuery.bithive.eachElement(".form-months", form, itself, function() {
-					$(this).buttonsSet([
-						{ "label":"Ene", "value":"1" },
-						{ "label":"Feb", "value":"2" },
-						{ "label":"Mar", "value":"3" },
-						{ "label":"Abr", "value":"4" },
-						{ "label":"May", "value":"5" },
-						{ "label":"Jun", "value":"6" },
-						{ "label":"Jul", "value":"7" },
-						{ "label":"Ago", "value":"8" },
-						{ "label":"Sep", "value":"9" },
-						{ "label":"Oct", "value":"10" },
-						{ "label":"Nov", "value":"11" },
-						{ "label":"Dic", "value":"12" }
-					]);
+				$.bithive.eachElement(".form-months", form, itself, function() {
+					$(this).buttonsSet(buttonsSetMonths);
 				});
 			}
 
@@ -1228,24 +1384,9 @@ jQuery.extend({
 					"datetimepicker" : "DD/MM/YYYY HH:mm:ss"
 				};
 				
-				var tooltips = {
-					today: "Hoy",
-					clear: "Limpiar",
-					close: "Cerrar",
-					selectMonth: "Selecionar Mes",
-					prevMonth: "Anterior Mes",
-					nextMonth: "Siguiente Mes",
-					selectYear: "Selecionar Año",
-					prevYear: "Anterior Año",
-					nextYear: "Siguiente Año",
-					selectDecade: "Selecionar Decada",
-					prevDecade: "Anterior Década",
-					nextDecade: "Siguiente Década",
-					prevCentury: "Anterior Siglo",
-					nextCentury: "Siguiente Siglo"
-				};
+				var tooltips = $.bithive.lang.datePickerTooltips;
 				
-				jQuery.bithive.eachElement("input.form-date", form, itself, function() {
+				$.bithive.eachElement("input.form-date", form, itself, function() {
 					var field = $(this);
 					var date = field.val() || null;
 					if(date) {
@@ -1340,7 +1481,7 @@ jQuery.extend({
 					}
 				});
 
-				jQuery.bithive.eachElement("div.form-date", form, itself, function() {
+				$.bithive.eachElement("div.form-date", form, itself, function() {
 					var range = $(this);
 					var inputs = $("input", range);
 					var type = range.data("type");
@@ -1430,36 +1571,63 @@ jQuery.extend({
 			}
 
 			// FILES -------------------------------------------------------------------------------
-			jQuery.bithive.eachElement("input[type='file']", form, itself, function() {
+			$.bithive.eachElement("input[type='file']", form, itself, function() {
 				$(this).closest("form").attr("enctype", "multipart/form-data");
 			});
 
 
 			// MASKS -------------------------------------------------------------------------------
-			// al actualizar, actualizar unmask en SendForm
+			// al actualizar, actualizar unmask en SendForm y reMask on debug
 			if(jQuery().mask) {
-				jQuery.bithive.eachElement(".mask-decimal", form, itself, function() {
+				$.bithive.eachElement(".mask-decimal", form, itself, function() {
 					let value = $(this).val();
-					if(value!="" && value.indexOf(".")<0) { $(this).val(value+".0000"); }
-					$(this).mask("#,##0.0000", {reverse: true, placeholder: "0.0000"}).addClass("text-right");
+					$.bithive.InputMask($(this), {
+						mask: "#.##0,0000", 
+						options: {reverse: true, placeholder: "0,0000"}, 
+						unmask: function(el) {
+							let val = parseFloat(el.val().replace(/\./g, "").replace(/\,/g, ".")).toFixed(4);
+							if(isNaN(val)) { val = 0; }
+							return val;
+						},
+						preparemask: function(el) {
+							let val = el.val(); 
+							if(val!="" && val.indexOf(".")<0) { val+=".0000"; }
+							return parseFloat(val).toFixed(4);
+						}
+				}).addClass("text-right");
 				});
-				jQuery.bithive.eachElement(".mask-money", form, itself, function() {
-					let value = $(this).val();
-					if(value!="" && value.indexOf(".")<0) { $(this).val(value+".00"); }
-					$(this).mask("#,##0.00", {reverse: true, placeholder: "0.00"}).addClass("text-right");
+
+				// money
+				$.bithive.eachElement(".mask-money", form, itself, function() {
+					$.bithive.InputMask($(this), {
+						mask: "#.##0,00",
+						options: {reverse: true, placeholder: "0,00"},
+						unmask: function(el) {
+							let val = parseFloat(el.val().replace(/\./g, "").replace(/\,/g, ".")).toFixed(2);
+							if(isNaN(val)) { val = 0; }
+							return val;
+						},
+						preparemask: function(el) {
+							let val = el.val(); 
+							if(val!="" && val.indexOf(".")<0) { val+=".00"; }
+							return parseFloat(val).toFixed(2);
+						}
+					}).addClass("text-right");
 				});
-				jQuery.bithive.eachElement(".mask-cuit", form, itself, function() { $(this).mask("00-00000000-0", {placeholder: "__-________-_"}); });
-				jQuery.bithive.eachElement(".mask-dni", form, itself, function() { $(this).mask("Z0.000.000",{translation: {placeholder: "__.___.___", "Z": {pattern: /[0-9]/, optional: true}}}); });
-				jQuery.bithive.eachElement(".mask-ip", form, itself, function() { $(this).mask("0ZZ.0ZZ.0ZZ.0ZZ", {placeholder: "_._._._", translation: {"Z": {pattern: /[0-9]/, optional: true}}}); });
-				jQuery.bithive.eachElement(".mask-cbu", form, itself, function() { $(this).mask("0000000000000000000000") });
-				jQuery.bithive.eachElement(".mask-phone", form, itself, function() { $(this).mask("0000 0000", {placeholder: "____ ____"}); });
-				jQuery.bithive.eachElement(".mask-phone_area", form, itself, function() { $(this).mask("(00) 0000 0000", {placeholder: "(__) ____ ____"}); });
-				jQuery.bithive.eachElement(".mask-cellphone", form, itself, function() { $(this).mask("15 0000 0000", {placeholder: "15 ____ ____"}); });
-				jQuery.bithive.eachElement(".mask-cellphone_area", form, itself, function() { $(this).mask("(00) 15 0000 0000", {placeholder: "(__) 15 ____ ____"}); });
+
+				$.bithive.eachElement(".mask-cuit", form, itself, function() { $.bithive.InputMask($(this), {mask:"00-00000000-0", unmask:[["-", ""]], options:{placeholder: "__-________-_"}}); });
+				$.bithive.eachElement(".mask-invoice", form, itself, function() { $.bithive.InputMask($(this), {mask:"00000-00000000", options:{placeholder: "00000-00000000"}}); });
+				$.bithive.eachElement(".mask-dni", form, itself, function() { $.bithive.InputMask($(this), {mask:"Z0.000.000", unmask:[["\\.", ""]], options:{translation: {placeholder: "__.___.___", "Z": {pattern: /[0-9]/, optional: true}}}}); });
+				$.bithive.eachElement(".mask-ip", form, itself, function() { $.bithive.InputMask($(this), {mask:"0ZZ.0ZZ.0ZZ.0ZZ", options:{placeholder: "_._._._", translation: {"Z": {pattern: /[0-9]/, optional: true}}}}); });
+				$.bithive.eachElement(".mask-cbu", form, itself, function() { $.bithive.InputMask($(this), {mask:"0000000000000000000000"})});
+				$.bithive.eachElement(".mask-phone", form, itself, function() { $.bithive.InputMask($(this), {mask:"0000 0000", options:{placeholder: "____ ____"}}); });
+				$.bithive.eachElement(".mask-phone_area", form, itself, function() { $.bithive.InputMask($(this), {mask:"(00) 0000 0000", options:{placeholder: "(__) ____ ____"}}); });
+				$.bithive.eachElement(".mask-cellphone", form, itself, function() { $.bithive.InputMask($(this), {mask:"15 0000 0000", options:{placeholder: "15 ____ ____"}}); });
+				$.bithive.eachElement(".mask-cellphone_area", form, itself, function() { $.bithive.InputMask($(this), {mask:"(00) 15 0000 0000", options:{placeholder: "(__) 15 ____ ____"}}); });
 			};
 
 			// RELATION ----------------------------------------------------------------------------
-			jQuery.bithive.eachElement(".form-relation", form, itself, function() {
+			$.bithive.eachElement(".form-relation", form, itself, function() {
 				var relid		= $(this).data("id") || "";
 				var source		= $(this).data("source");
 				var href		= $(this).data("value");
@@ -1511,7 +1679,7 @@ jQuery.extend({
 									}
 
 									$("[data-relation='close']", modal).click(function(e) { dialog.close(); });
-									jQuery.bithive.apply(targetElement);
+									$.bithive.apply(targetElement);
 								});
 							}).trigger("relation");
 
@@ -1525,14 +1693,14 @@ jQuery.extend({
 												$("<input>", {
 													"type": "button",
 													"class": "btn btn-primary form-submit",
-													"value": "Guardar"
+													"value": $.bithive.lang.buttonOk
 												})
 											)
 											.append(
 												$("<input>", {
 													"type": "button",
 													"class": "btn margin-md margin-only-left",
-													"value": "Cancelar"
+													"value": $.bithive.lang.buttonCancel
 												}).attr("data-relation", "close")
 											)
 									)
@@ -1548,7 +1716,7 @@ jQuery.extend({
 												$("<input>", {
 													"type": "button",
 													"class": "btn btn-primary",
-													"value": "Cerrar"
+													"value": $.bithive.lang.buttonClose
 												}).attr("data-relation", "close")
 											)
 									)
@@ -1557,21 +1725,21 @@ jQuery.extend({
 							}
 
 							$("[data-relation='close']", modal).click(function(e) { dialog.close(); });
-							jQuery.bithive.apply(modal);
+							$.bithive.apply(modal);
 						})
 					});
 				});
 				
 				if(href!="" && href!=true && !skipfirst) {
 					targetElement.load(href, function() {
-						jQuery.bithive.apply(targetElement);
+						$.bithive.apply(targetElement);
 					});
 				}
 			});
 
 			// NUMBER PICKER -----------------------------------------------------------------------
 			if(jQuery().TouchSpin) {
-				jQuery.bithive.eachElement("input.form-number", form, itself, function() {
+				$.bithive.eachElement("input.form-number", form, itself, function() {
 					var min = $(this).data("min");
 					if(typeof min=="undefined" || min==="") { min = -1000000000; }
 
@@ -1608,8 +1776,8 @@ jQuery.extend({
 				});
 			}
 
-			// PASSWORD ----------------------------------------------------------------------------
-			jQuery.bithive.eachElement(".showpass", form, itself, function() {
+			// PASSWORDS ---------------------------------------------------------------------------
+			$.bithive.eachElement(".showpass", form, itself, function() {
 				$(this).click(function() {
 					var pass = $("input", $(this).parent());
 					if(pass.attr("type")=="password") {
@@ -1623,8 +1791,29 @@ jQuery.extend({
 				});
 			});
 
+			$.bithive.eachElement("input.text-pwd, textarea.text-pwd", form, itself, function() {
+				$(this)
+					.prop("realvalue", $(this).val())
+					.on("keyup", function(){
+						let real = $(this).prop("realvalue");
+						let fake = $(this).val();
+
+						if((real.length+1)<=fake.length) {
+							let chars = fake.substr(real.length, (fake.length-real.length));
+							real += chars;
+						} else {
+							real = real.substr(0, fake.length);
+						}
+
+						$(this).val(fake.replace(/(.)/g, "•"));
+						$(this).prop("realvalue", real);
+					})
+					.trigger("change")
+				;
+			});
+
 			// INPUT COPY --------------------------------------------------------------------------
-			jQuery.bithive.eachElement("input.control-copy", form, itself, function() {
+			$.bithive.eachElement("input.control-copy", form, itself, function() {
 				let input = $(this);
 				$("<div>", {class:"input-group-append c-pointer"}).html(
 					$("<div>", {class:"input-group-text"}).html(
@@ -1637,24 +1826,30 @@ jQuery.extend({
 						text: input.val(),
 						success_after: function(e) { e.clearSelection(); },
 						success_notify: {
-							message: "copiado"
+							message: $.bithive.lang.clipboardSuccess
 						}
 					});
 				});
 			});
 
 			// SELECT ------------------------------------------------------------------------------
-			jQuery.bithive.eachElement("select.form-select[data-source]", form, itself, function() {
+			$.bithive.eachElement("select.form-select[data-source]", form, itself, function() {
 				var field = $(this);
-				var source = jQuery.base64.atob(field.data("source"));
+				var source = jQuery.base64.atob(field.data("source")) || "";
 				if(source!="") {
-					jQuery.bithive.mkselect(field, source, jQuery.bithive.OptionsValues(field));
+					$.bithive.mkselect(field, source, $.bithive.OptionsValues(field));
+				} else {
+					let vals = $.bithive.OptionsValues(field);
+					for(let x in vals) {
+						$("option[value='"+vals[x]+"']", field).prop("selected", true);
+					}
+					$.bithive.BootstrapSelect(field);
 				}
 			});
 
 			// SLIDER ------------------------------------------------------------------------------
 			if(jQuery().slider) {
-				jQuery.bithive.eachElement("div.form-slider", form, itself, function() {
+				$.bithive.eachElement("div.form-slider", form, itself, function() {
 					var target = $(this).data("target");
 					var field = $("[name='"+target+"']", $(this).parent());
 					var handle = $(".ui-slider-handle", $(this).parent());
@@ -1694,8 +1889,8 @@ jQuery.extend({
 			}
 			
 			// SUBFORM -----------------------------------------------------------------------------
-			jQuery.bithive.eachElement(".form-subform", form, itself, function() {
-				jQuery.bithive.SubForms(this);
+			$.bithive.eachElement(".form-subform", form, itself, function() {
+				$.bithive.SubForms(this);
 			});
 
 			$(".form-submit", form).click(function(e) {
@@ -1704,37 +1899,37 @@ jQuery.extend({
 
 				if($(this).hasClass("form-confirm")) {
 					var message = btn.data("confirm");
-					if(message=="1" || message=="true") { message = "Confirma?"; }
-					message = jQuery.bithive.RefToVal(message);
+					if(message=="1" || message=="true") { message =$.bithive.lang.confirmQuestion; }
+					message = $.bithive.RefToVal(message);
 					BootstrapDialog.confirm({
 						draggable: true,
-						title: "Confirmar",
+						title: $.bithive.lang.confirmTitle,
 						message: message,
 						type: BootstrapDialog.TYPE_DANGER,
-						btnCancelLabel: "cancelar",
+						btnCancelLabel: $.bithive.lang.buttonCancel,
 						btnCancelClass: "btn-default",
-						btnOKLabel: "aceptar",
+						btnOKLabel: $.bithive.lang.buttonOk,
 						btnOKClass: "btn-danger",
 						callback: function(result) {
 							if(result) {
-								jQuery.bithive.SendForm(btn);
+								$.bithive.SendForm(btn);
 							}
 						}
 					});
 				} else {
-					jQuery.bithive.SendForm(btn);
+					$.bithive.SendForm(btn);
 				}
 			});
 
 			// TAGS --------------------------------------------------------------------------------
 			if(jQuery().tagit) {
-				jQuery.bithive.eachElement("input.form-tags", form, itself, function() {
+				$.bithive.eachElement("input.form-tags", form, itself, function() {
 					var field = $(this);
 					var source = $.base64.atob(field.data("source")) || "";
 					var length = field.data("length") || "";
 					var clear = field.data("clear") || "";
 					var disabled = ($(this).hasAttr("disabled"));
-					jQuery.bithive.mkOptions(source, function(src, args) {
+					$.bithive.mkOptions(source, function(src, args) {
 						var source = [];
 						if(src!="") {
 							jQuery.each(src, function(k,v) {
@@ -1781,7 +1976,7 @@ jQuery.extend({
 			}
 
 			// TEXTAREAS ---------------------------------------------------------------------------
-			jQuery.bithive.eachElement("textarea.fullscreen, textarea.fullinput", form, itself, function() {
+			$.bithive.eachElement("textarea.fullscreen, textarea.fullinput", form, itself, function() {
 				$(this).addClass("fullscreen").on("keydown", function(e) {
 					if(e.keyCode==9 || e.which==9) {
 						e.preventDefault();
@@ -1793,7 +1988,7 @@ jQuery.extend({
 				$(this).textareafullscreen({width: "90%"});
 			});
 
-			jQuery.bithive.eachElement("textarea.dynamic", form, itself, function() {
+			$.bithive.eachElement("textarea.dynamic", form, itself, function() {
 				$(this).on("focus change keyup paste", function(e) {
 					var $this = $(this);
 					var hiddenDiv = $("#HiddenDiv");
@@ -1822,15 +2017,15 @@ jQuery.extend({
 			});
 
 			if(typeof squireUI!="undefined") {
-				jQuery.bithive.eachElement("textarea.wysiwyg-lite", form, itself, function() {
+				$.bithive.eachElement("textarea.wysiwyg-lite", form, itself, function() {
 					squireUI($(this), { smallbar:true, ui:"lite", tags:"<br /><br ><p></p><a></a><b></b><i></i><ul></ul><ol></ol><li></li>" });
 				});
 
-				jQuery.bithive.eachElement("textarea.wysiwyg", form, itself, function() {
+				$.bithive.eachElement("textarea.wysiwyg", form, itself, function() {
 					squireUI($(this), { smallbar:true, ui:"simple", tags:"<br /><br ><p></p><a></a><b></b><i></i><ul></ul><ol></ol><li></li>" });
 				});
 
-				jQuery.bithive.eachElement("textarea.wysiwyg-full", form, itself, function() {
+				$.bithive.eachElement("textarea.wysiwyg-full", form, itself, function() {
 					squireUI($(this), { smallbar:true, ui:"full" });
 				});
 			}
@@ -1842,38 +2037,61 @@ jQuery.extend({
 				closable: false,
 				type: BootstrapDialog.TYPE_WARNING,
 				buttons: [{
-					label: "aceptar",
+					label: $.bithive.lang.buttonOk,
 					cssClass: "btn-warning",
 					action: function(dialog) {
 						dialog.close();
 						if(after) { after(); }
 					}
 				}],
-				title: "Alerta",
+				title: $.bithive.lang.alertTitle,
 				message: msg,
 			});
 		},
 
 		// msg: mensaje para el usuario o funcion que retorna o false, si retorna false se aborta el confirm
 		// after: funcion que se ejecuta en caso afirmativo
-		confirm: function(msg, after) {
-			if(typeof msg=="function" || typeof window[msg]=="function") {
-				msg = jQuery.bithive.run(msg);
+		confirm: function(msg, after, secure) {
+			if(typeof msg==="function" || typeof window[msg]==="function") {
+				msg = $.bithive.run(msg);
+			} else {
+				msg = $("<h3>").html(msg);
+			}
+			if(msg===false) { return false; }
+
+			let message = $("<div>", {class:"p-md"}).append(msg);
+			if(typeof secure!=="undefined" && secure) {
+				message.append(
+					$("<div>", {"class":"form-group mt-md"})
+						.html($("<label>", {"class":"control-label"}).html($.bithive.lang.confirmPassword))
+						.append($("<input>", {type:"text", class:"form-control text-pwd"}))
+				);
 			}
 
-			if(msg===false) { return false; }
-			BootstrapDialog.confirm({
+			dialogOptions = {
+				title: $.bithive.lang.confirmTitle,
+				message: message,
 				draggable: true,
-				title: "Confirmar",
-				message: msg,
+				closable: false,
 				type: BootstrapDialog.TYPE_DANGER,
-				btnCancelLabel: "cancelar",
-				btnOKLabel: "aceptar",
-				btnOKClass: "btn-danger",
-				callback: function(result) {
-					if(result) { after(); }
-				}
-			});
+				data: { "callback": after },
+				onshown: function(dialog) {
+					$.bithive.apply(dialog.getModalBody(), true);
+				},
+				buttons: [
+					{ label: $.bithive.lang.buttonCancel, action: function(dialog) { dialog.close(); }}, 
+					{
+						label: $.bithive.lang.buttonOk,
+						cssClass: "btn-danger",
+						action: function(dialog) {
+							dialog.getData("callback")(dialog);
+							dialog.close();
+						}
+					}
+				]
+			};
+
+			var dialog = BootstrapDialog.show(dialogOptions);
 		},
 
 		// beforeFn se ejecuta antes de enviar el formulario
@@ -1917,10 +2135,10 @@ jQuery.extend({
 			if(!alvin) { return false; }
 
 			// unmask ---
-			$(".mask-decimal").each(function() { $(this).val($(this).val().replace(/,/g, "")); });
-			$(".mask-money").each(function() { $(this).val($(this).val().replace(/,/g, "")); });
-			$(".mask-cuit").each(function() { $(this).val($(this).val().replace(/\-/g, "")); });
-			$(".mask-dni").each(function() { $(this).val($(this).val().replace(/\./g, "")); });
+			$(".mask-money").each(function() { $(this).trigger("unmask", true); });
+			$(".mask-decimal").each(function() { $(this).trigger("unmask", true); });
+			$(".mask-cuit").each(function() { $(this).trigger("unmask", true); });
+			$(".mask-dni").each(function() { $(this).trigger("unmask", true); });
 
 			// attacher resizer
 			$(".form-attachresizer", form, false, function() { $(this).prop("attachresizer").toField(); });
@@ -1962,18 +2180,13 @@ jQuery.extend({
 						var parsed = JSON.parse(response);
 					} catch(e) {
 						if(e instanceof SyntaxError) {
-							if(typeof response == "string" && (response.substr(0, 7).toLowerCase()=="http://" || response.substr(0, 8).toLowerCase()=="https://")) {
-								window.location.href = response;
-							} else if(response.substr(0, 15)=="[[TUTOR-DEBUG]]") {
-								// tutor debug
-								jQuery.bithive.SendFormMessages(btnRow, gyros, response, "debug");
-							} else if(response.substr(0, 15)=="[[TUTOR-ALERT]]") {
-								// tutor alert
-								jQuery.bithive.SendFormMessages(btnRow, gyros, response, "alert");
-							} else {
-								// nogal error | php error
-								jQuery.bithive.SendFormMessages(btnRow, gyros, response, "error");
-							}
+							$.bithive.ResponseHandler(response, btnRow, gyros);
+
+							// remask
+							$(".mask-money").each(function() { $(this).trigger("mask"); });
+							$(".mask-decimal").each(function() { $(this).trigger("mask"); });
+							$(".mask-cuit").each(function() { $(this).trigger("mask"); });
+							$(".mask-dni").each(function() { $(this).trigger("mask"); });
 						}
 						return true;
 					}
@@ -1990,16 +2203,16 @@ jQuery.extend({
 							var targetElement = $(form.prop("dialog").target);
 							var href = form.prop("dialog").href;
 							if(href==true) {
-								jQuery.bithive.jsonFiller(parsed, targetElement);
+								$.bithive.jsonFiller(parsed, targetElement);
 							} else {
 								targetElement.load(href, function() {
-									jQuery.bithive.apply(targetElement);
+									$.bithive.apply(targetElement);
 								});
 							}
 						}
 					} else if(typeof form.prop("addnewvalue")!="undefined") {
 						if(parseInt(response)==response) {
-							var source = jQuery.bithive.RefToVal(form.prop("addnewvalue").source);
+							var source = $.bithive.RefToVal(form.prop("addnewvalue").source);
 							jQuery.ajax({
 								url: source,
 								dataType: "json",
@@ -2035,24 +2248,37 @@ jQuery.extend({
 					}
 				},
 				error: function(response) {
-					BootstrapDialog.show({
-						draggable: true,
-						type: BootstrapDialog.TYPE_WARNING,
-						buttons: [{
-							label: "aceptar",
-							cssClass: "btn-warning",
-							action: function(dialog) {
-								dialog.close();
-							}
-						}],
-						title: "Advertencia!",
-						message: response,
-					});
+					$.bithive.alert(response);
 				}
 			});
 		},
 
-		SendFormMessages: function(btnRow, gyros, response, type) {
+		ResponseHandler: function(response, btnRow, gyros, target) {
+			btnRow = btnRow || false;
+			gyros = gyros || false;
+			target = target || false;
+
+			if(typeof response=="string") {
+				if(response.substr(0, 7).toLowerCase()=="http://" || response.substr(0, 8).toLowerCase()=="https://") {
+					window.location.href = response;
+				} else if(target && window[target]) {
+					window[target](response);
+				} else if(target && $(target).length) {
+					$(target).html(response);
+				} else if(response.substr(0, 15)=="[[TUTOR-DEBUG]]") {
+					// tutor debug
+					$.bithive.SendFormMessages(response, btnRow, gyros, "debug");
+				} else if(response.substr(0, 15)=="[[TUTOR-ALERT]]") {
+					// tutor alert
+					$.bithive.SendFormMessages(response, btnRow, gyros, "alert");
+				}
+			} else {
+				// nogal error | php error
+				$.bithive.SendFormMessages(response, btnRow, gyros, "error");
+			}
+		},
+
+		SendFormMessages: function(response, btnRow, gyros, type) {
 			var content = (type=="alert") ? response.substr(15) : response;
 			if(type=="alert") {
 				var typeClass= "warning";
@@ -2079,8 +2305,8 @@ jQuery.extend({
 								.addClass(type+"-close d-block mx-auto my-sm btn px-md btn-md btn-"+typeClass)
 								.click(function(){
 									$("."+type+"-box, .box-overlay").remove();
-									gyros.remove();
-									btnRow.show();
+									if(btnRow) { gyros.remove(); }
+									if(btnRow) { btnRow.show(); }
 								})
 						)
 				)
@@ -2107,10 +2333,11 @@ jQuery.extend({
 		SubForms: function(elem) {
 			var subformButton = $(elem).addClass("subform-trigger");
 			var formid = subformButton.data("id");
+			var suffix = subformButton.data("source-suffix") || "";
 			var source = (elem.nodeName.toLowerCase()!="select") ? subformButton.data("source") : null;
 			var targetSelector = subformButton.data("target") || "#"+formid+"_target";
 			var limit = parseInt(subformButton.data("limit")) || 0;
-			var limitmsg = subformButton.data("limit-message") || "Límite de registros alcanzado";
+			var limitmsg = subformButton.data("limit-message") || $.bithive.lang.subFormLimitMsg;
 			subformButton.prop({"last-subform": null});
 			var preload = parseInt(subformButton.data("default"));
 			var subclass = subformButton.data("class") || "";
@@ -2121,8 +2348,9 @@ jQuery.extend({
 					let target = $(targetSelector);
 					target.html("");
 					source = $(this).children("option:selected").data("info") || null;
+					if(source!==null) { source = source+suffix; }
 					if(source) {
-						jQuery.bithive.SubFormTrigger(e, data, parentForm, source, subformButton, target, subclass);
+						$.bithive.SubFormTrigger(e, data, parentForm, source, subformButton, target, subclass);
 					}
 				});
 			} else if(subformButton.hasClass("form-number")) {
@@ -2138,11 +2366,11 @@ jQuery.extend({
 						for(let x=0; x<y; x++) {
 							if(limit) {
 								if($(".subform-form", target).length >= limit) {
-									jQuery.bithive.alert(limitmsg);
+									$.bithive.alert(limitmsg);
 									return false;
 								}
 							}
-							let sub = jQuery.bithive.SubFormTrigger(e, data, parentForm, src, subformButton, target, subclass);
+							let sub = $.bithive.SubFormTrigger(e, data, parentForm, src, subformButton, target, subclass);
 						}
 					} else {
 						y = y * -1 + 1;
@@ -2169,11 +2397,11 @@ jQuery.extend({
 					let src = (subSource && subSource!==true) ? subSource : source;
 					if(limit) {
 						if($(".subform-form", target).length >= limit) {
-							jQuery.bithive.alert(limitmsg);
+							$.bithive.alert(limitmsg);
 							return false;
 						}
 					}
-					return jQuery.bithive.SubFormTrigger(e, data, parentForm, src, subformButton, target, subclass);
+					return $.bithive.SubFormTrigger(e, data, parentForm, src, subformButton, target, subclass);
 				});
 			}
 
@@ -2182,12 +2410,16 @@ jQuery.extend({
 			if(subformButton.hasAttr("data-value")) {
 				var div = $("<div>").html($("<div>").gyros({width:"40px", stroke:2}));
 				var info = jQuery.base64.atob(subformButton.data("value"));
-				info = decodeURIComponent(escape(info));
-				info = JSON.parse(info);
-				$.each(info, function() {
-					if(subformButton.prop("subFormType")=="number") { subformButton.val(parseInt(subformButton.val())+1); }
-					subformButton.trigger(trigger, [this]);
-				});
+				try { 
+					info = decodeURIComponent(escape(info));
+					info = JSON.parse(info);
+					$.each(info, function() {
+						if(subformButton.prop("subFormType")=="number") { subformButton.val(parseInt(subformButton.val())+1); }
+						subformButton.trigger(trigger, [this]);
+					});
+				} catch(e) { 
+					console.error(e); 
+				}
 			} else {
 				if(preload>0) {
 					if(subformButton.prop("subFormType")=="number") {
@@ -2209,11 +2441,11 @@ jQuery.extend({
 			div.prop("subform-target", target);
 			div.prop("subFormIdVal", subFormIdValue);
 
-			jQuery.bithive.RequestCounter(1);
+			$.bithive.RequestCounter(1);
 			div.load(source, function(){
 				div.prop("subFormData", ((typeof data != "undefined") ? data : null));
 				if(parentForm) {
-					jQuery.bithive.SubFormProccess(target, div, data, subformButton);
+					// $.bithive.SubFormProccess(target, div, data, subformButton);
 					let subFormId = $("[data-subform-id]", div).data("subform-id");
 					let subFormIdValue = div.prop("subFormIdVal");
 					let parentId = parentForm.prop("subform-id");
@@ -2227,16 +2459,23 @@ jQuery.extend({
 							.attr("data-subform-parent", parentId)
 							.appendTo(div);
 					}
+					
+					$.bithive.SubFormProccess(target, div, data, subformButton);
+
 					childLink.val(parentLink);
 					$("[data-subform-nested]", div).remove();
 					div.attr("style", "margin-left: 10% !important").insertAfter(parentForm);
 					$("[data-subform-nested]", parentForm).prop("last-subform", div);
 				} else {
-					jQuery.bithive.SubFormProccess(target, div, data, subformButton);
-					target.append(div);
+					// swap por attacher ---
+						target.append(div);
+						$.bithive.SubFormProccess(target, div, data, subformButton);
+						// $.bithive.SubFormProccess(target, div, data, subformButton);
+						// target.append(div);
+					// swap por attacher ---
 					subformButton.prop("last-subform", div);
 				}
-				jQuery.bithive.RequestCounter(-1);
+				$.bithive.RequestCounter(-1);
 			});
 
 			return div;
@@ -2322,44 +2561,33 @@ jQuery.extend({
 							}
 							subform.fadeOut(function() {
 								subform.remove();
-								if(afterrem) { jQuery.bithive.run(afterrem); }
+								if(afterrem) { $.bithive.run(afterrem); }
 							});
 						} else {
-							BootstrapDialog.confirm({
-								draggable: true,
-								title: "Confirmar",
-								message: btnRem.html()+"?",
-								type: BootstrapDialog.TYPE_DANGER,
-								btnCancelLabel: "cancelar",
-								btnOKLabel: "aceptar",
-								btnOKClass: "btn-danger",
-								callback: function(result) {
-									if(result) {
-										if(btnRem.prop("subform-remove-value")) {
-											subform.parent().append($("<input>").attr({
-												"type": "hidden",
-												"name":  name+"_remove["+subFormIdValue+"]",
-												"value": btnRem.prop("subform-remove-value")
-											}).prop("subFormFieldId", subFormIdValue));
+							$.bithive.confirm(btnRem.html()+"?", function(){
+								if(btnRem.prop("subform-remove-value")) {
+									subform.parent().append($("<input>").attr({
+										"type": "hidden",
+										"name":  name+"_remove["+subFormIdValue+"]",
+										"value": btnRem.prop("subform-remove-value")
+									}).prop("subFormFieldId", subFormIdValue));
 
-											// nested
-											$("[data-subform-parent='"+name+"'][value='"+btnRem.prop("subform-remove-value")+"']").each(function(){
-												let subRem = $("[data-subform='remove']", $(this).parent());
-												if(subRem[0]) { subRem.trigger("click", true); }
-											});
-										}
-										subform.fadeOut(function() {
-											subform.remove();
-											if(button.hasClass("form-number")) {
-												let subqty = $(".subform-form", target).length;
-												button.prop("subforms", subqty);
-												button.val(subqty);
-											}
-											if(afterrem) { jQuery.bithive.run(afterrem); }
-										});
-										jQuery.bithive.enumerate($("[data-subform='number']", target));
-									}
+									// nested
+									$("[data-subform-parent='"+name+"'][value='"+btnRem.prop("subform-remove-value")+"']").each(function(){
+										let subRem = $("[data-subform='remove']", $(this).parent());
+										if(subRem[0]) { subRem.trigger("click", true); }
+									});
 								}
+								subform.fadeOut(function() {
+									subform.remove();
+									if(button.hasClass("form-number")) {
+										let subqty = $(".subform-form", target).length;
+										button.prop("subforms", subqty);
+										button.val(subqty);
+									}
+									if(afterrem) { $.bithive.run(afterrem); }
+								});
+								$.bithive.enumerate($("[data-subform='number']", target));
 							});
 						}
 					});
@@ -2373,9 +2601,9 @@ jQuery.extend({
 								button.prop("subforms", subqty);
 								button.val(subqty);
 							}
-							if(afterrem) { jQuery.bithive.run(afterrem); }
+							if(afterrem) { $.bithive.run(afterrem); }
 						});
-						jQuery.bithive.enumerate($("[data-subform='number']", target));
+						$.bithive.enumerate($("[data-subform='number']", target));
 					});
 				}
 			}
@@ -2387,7 +2615,7 @@ jQuery.extend({
 				if($(this).hasAttr("data-subform-before")) { eval($(this).data("subform-before")+"(subform)"); }
 				button.trigger("click");
 				let cloning = setInterval(function(){
-					if(jQuery.bithive.RequestCounter()) {
+					if($.bithive.RequestCounter()) {
 						let cloned = button.prop("last-subform");
 						let clonedData = {};
 						$("input, textarea, select", subform).each(function(){
@@ -2395,13 +2623,14 @@ jQuery.extend({
 							clonedData[field.attr("name").replace(/\[\w+\]/, "")] = field.val();
 						});
 
-						jQuery.bithive.SubFormFillData([cloned, clonedData]);
+						$.bithive.SubFormFillData([cloned, clonedData]);
 
 						if($(this).hasAttr("data-subform-after")) { eval($(this).data("subform-after")+"(subform, cloned)"); }
 
-						if(afterclone) { jQuery.bithive.run(afterclone, $($(".grabado").last(), target)); }
+						// if(afterclone) { $.bithive.run(afterclone, $($(".grabado").last(), target)); } // gol
+						if(afterclone) { $.bithive.run(afterclone, $($(".subform-form").last(), target)); }
 						button.prop("subforms", button.prop("subforms") + 1);
-						jQuery.bithive.enumerate($("[data-subform='number']", target));
+						$.bithive.enumerate($("[data-subform='number']", target));
 						clearInterval(cloning);
 					}
 				}, 200);
@@ -2426,7 +2655,7 @@ jQuery.extend({
 					var subsub = nestButton.prop("last-subform");
 					if(nestButton.hasAttr("data-subform-after")) { eval(nestButton.data("subform-after")+"(subform, subsub)"); }
 
-					jQuery.bithive.enumerate($("[data-subform='number']", subform));
+					$.bithive.enumerate($("[data-subform='number']", subform));
 				});
 			}
 
@@ -2461,14 +2690,14 @@ jQuery.extend({
 			}
 
 			// botones up/down
-			$("[data-subform='up']", div).click(function() { div.insertBefore(div.prev()); jQuery.bithive.enumerate($("[data-subform='number']", target)); });
-			$("[data-subform='down']", div).click(function() { div.insertAfter(div.next()); jQuery.bithive.enumerate($("[data-subform='number']", target)); });
-			jQuery.bithive.enumerate($("[data-subform='number']", target));
+			$("[data-subform='up']", div).click(function() { div.insertBefore(div.prev()); $.bithive.enumerate($("[data-subform='number']", target)); });
+			$("[data-subform='down']", div).click(function() { div.insertAfter(div.next()); $.bithive.enumerate($("[data-subform='number']", target)); });
+			$.bithive.enumerate($("[data-subform='number']", target));
 
-			jQuery.bithive.apply(div, false, function(){
+			$.bithive.apply(div, false, function(){
 				if(data) {
 					if(btnEdit.length || subclass.indexOf("subform-disabled")>-1) {
-						$("input,select,textarea", div).each(function() {
+						$("input,select,textarea,div.form-attacher", div).each(function() {
 							var field = $(this);
 							if(field.hasClass("ui-autocomplete-input")) {
 								field.prop("disabled", true);
@@ -2480,18 +2709,18 @@ jQuery.extend({
 							
 							if(btnRem.length) { btnRem.hide(); } 
 						}).promise().done(function(){
-							jQuery.bithive.ApplyCounter(div, 1);
-							jQuery.bithive.SubFormFillData([div, data]);
-							if(afteradd) { jQuery.bithive.onload(function(){ jQuery.bithive.run(afteradd, div); }, div); }
+							$.bithive.ApplyCounter(div, 1);
+							$.bithive.SubFormFillData([div, data]);
+							if(afteradd) { $.bithive.onload(function(){ $.bithive.run(afteradd, div); }, div); }
 						});
 					} else {
-						jQuery.bithive.ApplyCounter(div, 1);
-						jQuery.bithive.SubFormFillData([div, data]);
-						if(afteradd) { jQuery.bithive.onload(function(){ jQuery.bithive.run(afteradd, div); }, div); }
+						$.bithive.ApplyCounter(div, 1);
+						$.bithive.SubFormFillData([div, data]);
+						if(afteradd) { $.bithive.onload(function(){ $.bithive.run(afteradd, div); }, div); }
 					}
 				} else {
-					jQuery.bithive.SubFormFillData([div, data]);
-					if(afteradd) { jQuery.bithive.onload(function(){ jQuery.bithive.run(afteradd, div); }, div); }
+					$.bithive.SubFormFillData([div, data]);
+					if(afteradd) { $.bithive.onload(function(){ $.bithive.run(afteradd, div); }, div); }
 				}
 			});
 		},
@@ -2500,19 +2729,19 @@ jQuery.extend({
 			let div = args[0];
 			let data = args[1];
 			var subFormIdValue = div.prop("subFormIdVal") || jQuery.uid();
-			$("input,select,textarea", div).each(function() {
+			$("input,select,textarea,div.form-attacher", div).each(function() {
 				var field = $(this);
-				var name = field.attr("name");
+				var name = (field.hasClass("form-attacher")) ? field.attr("data-name") : field.attr("name");
 				if(typeof name != "undefined") {
 					name = name.replace(/\[\w+\]/g, "");
 					if(data && !(data instanceof jQuery) && data[name]) {
 						if(field.attr("type")=="checkbox" || field.attr("type")=="radio") {
 							if(field.val()==data[name]) { field.prop("checked", true); }
 						} else if(field.hasClass("bootstrap-select")) {
-							jQuery.bithive.ApplyCounter(div, 1);
+							$.bithive.ApplyCounter(div, 1);
 							field.on("loaded.bs.select", function(){
 								field.selectpicker("val", data[name]);
-								jQuery.bithive.ApplyCounter(div, -1);
+								$.bithive.ApplyCounter(div, -1);
 							});
 						} else if(field.hasClass("form-autocomplete-value")) {
 							field.val(data[name]);
@@ -2521,9 +2750,16 @@ jQuery.extend({
 							field.val(data[name]);
 						}
 						field.data("value", data[name]);
+						if(field.hasProp("class", "mask-[0-9a-z\-]+")) {
+							field.trigger("preparemask").trigger("mask");
+						}
 					}
 
-					field.attr("name", name+"["+subFormIdValue+"]").prop("subFormFieldId", subFormIdValue);
+					if(field.hasClass("form-attacher")) {
+						field.attr("data-name", name+"["+subFormIdValue+"]").prop("subFormFieldId", subFormIdValue);
+					} else {
+						field.attr("name", name+"["+subFormIdValue+"]").prop("subFormFieldId", subFormIdValue);
+					}
 				}
 			}).promise().done(function(){
 				if(typeof data == "undefined") {
@@ -2534,7 +2770,7 @@ jQuery.extend({
 					}).prop("subFormFieldId", subFormIdValue));
 				}
 
-				jQuery.bithive.jsonFiller(data, div, function(){
+				$.bithive.jsonFiller(data, div, function(){
 					// datepickers
 					$(".form-date", div).each(function() {
 						if($(this).data("DateTimePicker")) {
@@ -2554,8 +2790,8 @@ jQuery.extend({
 								name = name.substring(0, name.length-2);
 							}
 							if(data && data[name]) {
-								if(field.val()==data[name]) { field.prop("checked", true); }
-								field.data("value", data[name]);
+								if(data[name]!="" && data[name]!=0) { field.prop("checked", true); }
+								field.data("value", data[name]).val(data[name]);
 							}
 
 							field.attr("name", name+"["+subFormIdValue+"]").prop("subFormFieldId", subFormIdValue);
@@ -2573,7 +2809,7 @@ jQuery.extend({
 						}
 					}
 
-					jQuery.bithive.ApplyCounter(div, -1);
+					$.bithive.ApplyCounter(div, -1);
 				});
 			});
 		},
@@ -2600,12 +2836,12 @@ jQuery.extend({
 			if(type=="radio") {
 				after = function(){
 					if(elem.hasAttr("data-lnk-target") && elem.hasAttr("data-lnk-source")) {
-						jQuery.bithive.RelatedOptions(elem, "radio");
+						$.bithive.RelatedOptions(elem, "radio");
 					}
 				};
 			}
 
-			jQuery.bithive.mkOptions(source, function(src, args) {
+			$.bithive.mkOptions(source, function(src, args) {
 				var cssClass = args[0].data("class") || "col-xs-12";
 				var name = args[0].data("name") || type;
 
@@ -2632,7 +2868,6 @@ jQuery.extend({
 							.addClass("custom-control custom-"+type+" col "+cssClass)
 							.append($("<label>").attr("for", uid).addClass("c-pointer custom-control-label").html(option.label))
 						;
-
 						if($.inArray(option.value, args[1])>=0) { $("input", chk).prop("checked", true); }
 						args[0].append(chk);
 					});
@@ -2649,7 +2884,7 @@ jQuery.extend({
 													"id": uid,
 													"type": "checkbox",
 													"name": name,
-													"value": option.value,
+													"value": (option.value || 0)
 												})
 												.addClass("form-onoffswitch-checkbox")
 											;
@@ -2664,7 +2899,11 @@ jQuery.extend({
 							.addClass(cssClass)
 						;
 
-						if($.inArray(option.value, args[1])>=0) { $("input", onoff).prop("checked", true); }
+						if(args[0].data("boolean")=="1") {
+							if(args[1][0]>=0) { $("input", onoff).prop("checked", true); }
+						} else {
+							if($.inArray($("input", onoff).val(), args[1])>=0) { $("input", onoff).prop("checked", true); }
+						}
 						args[0].append(onoff);
 					});
 				}
@@ -2675,11 +2914,11 @@ jQuery.extend({
 		},
 
 		mkselect: function(elem, source, values) {
-			jQuery.bithive.mkSelectOptions(elem,source,values,function(){
+			$.bithive.mkSelectOptions(elem,source,values,function(){
 				if(elem.hasAttr("data-lnk-target") && elem.hasAttr("data-lnk-source")) {
-					jQuery.bithive.RelatedOptions(elem, "select");
+					$.bithive.RelatedOptions(elem, "select");
 				}
-				jQuery.bithive.BootstrapSelect(elem);
+				$.bithive.BootstrapSelect(elem);
 			});
 		},
 
@@ -2744,32 +2983,32 @@ jQuery.extend({
 					}
 				}
 
-				jQuery.bithive.RequestCounter(1);
+				$.bithive.RequestCounter(1);
 				jQuery.ajax({
 					url: jQuery.base64.atob(lnksrc) + $(this).val(),
 					dataType: "json",
 					success: function(data) {
-						var values = jQuery.bithive.OptionsValues(lnktarget);
+						var values = $.bithive.OptionsValues(lnktarget);
 						if(lnktarget.hasClass("checkbox")) {
-							jQuery.bithive.mkchecks("checkbox", lnktarget, data, values);
+							$.bithive.mkchecks("checkbox", lnktarget, data, values);
 						} else if(lnktarget.hasClass("radio")) {
-							jQuery.bithive.mkchecks("radio", lnktarget, data, values);
+							$.bithive.mkchecks("radio", lnktarget, data, values);
 						} else {
 							$("#"+lnktarget.prop("gyrosid")).remove();
 							lnktarget.show();
-							jQuery.bithive.mkSelectOptions(lnktarget, data, values, function(){
-								jQuery.bithive.BootstrapSelect(lnktarget);
+							$.bithive.mkSelectOptions(lnktarget, data, values, function(){
+								$.bithive.BootstrapSelect(lnktarget);
 								$("button", lnktarget.parent()).show();
 							});
 						}
 					},
 					complete: function(response) {
-						jQuery.bithive.RequestCounter(-1);
+						$.bithive.RequestCounter(-1);
 					}
 				});
 			});
 			
-			jQuery.bithive.styles();
+			$.bithive.styles();
 			if(type=="select") {
 				targets.trigger("change");
 			} else {
@@ -2778,7 +3017,7 @@ jQuery.extend({
 		},
 
 		mkSelectOptions: function(elem,source,values,after) {
-			jQuery.bithive.mkOptions(source, function(src, args) {
+			$.bithive.mkOptions(source, function(src, args) {
 				if(!elem.hasAttr("data-nodefault") || elem.data("nodefault")=="") {
 					args[0].html("<option value='0'>--</option>");
 				} else {
@@ -2817,14 +3056,14 @@ jQuery.extend({
 
 				if(elem.hasAttr("data-addnew")) {
 					var urladd = jQuery.base64.atob(elem.data("addnew"));
-					var addtext = (elem.hasAttr("data-addnewtext")) ? elem.data("addnewtext") : "Agregar";
+					var addtext = (elem.hasAttr("data-addnewtext")) ? elem.data("addnewtext") : $.bithive.lang.buttonAdd;
 
 					$("option:first", args[0]).after(
 						$("<option />")
 							.attr("value", "[--add-new-value--]")
 							.html("[ "+addtext+" ]") 
 							.click(function(){
-								var dialog = jQuery.bithive.addNewValue(urladd, addtext, false, elem);
+								var dialog = $.bithive.addNewValue(urladd, addtext, false, elem);
 								elem.val("0").focus();
 							})
 					);
@@ -2846,7 +3085,7 @@ jQuery.extend({
 			} else if(src.indexOf("[")===0) {
 				source = eval(src);
 			} else {
-				jQuery.bithive.RequestCounter(1);
+				$.bithive.RequestCounter(1);
 				jQuery.ajax({
 					url: src,
 					dataType: "json",
@@ -2854,13 +3093,13 @@ jQuery.extend({
 						source = data;
 					},
 					complete: function(response) {
-						jQuery.bithive.RequestCounter(-1);
+						$.bithive.RequestCounter(-1);
 					}
 				});
 			}
 
 			var limit = 0;
-			jQuery.bithive.RequestCounter(1);
+			$.bithive.RequestCounter(1);
 			var loader = setInterval(function() {
 				limit++;
 				if(src=="") {
@@ -2873,7 +3112,7 @@ jQuery.extend({
 					console.log("Request timeout: "+src);
 					clearInterval(loader);
 				}
-				jQuery.bithive.RequestCounter(-1);
+				$.bithive.RequestCounter(-1);
 			}, 200);
 		},
 
@@ -2900,66 +3139,58 @@ jQuery.extend({
 
 		loadDoc: function(target, href, after) {
 			$(target).load(href, function(){
-				jQuery.bithive.apply($(this));
+				$.bithive.apply($(this));
 				if(after) { after(); }
 			});
 		},
 
+		/*
+			target:
+				_blank
+				_self
+				jquery selector
+				function
+		*/
 		postLink: function(btn, href, values, target) {
-			var formData = new FormData();
-			if(values) {
-				jQuery.each(values, function(key, value) {
-					formData.append(key, value);
-				});
-			}
-
-			var gyros = $("<div>").gyros({top: "-10px", width:"60px", stroke:2});
-			btn.after(gyros).hide();
-
-			$.ajax({
-				type: "POST",
-				url: href,
-				data: formData,
-				contentType: false,
-				cache: false,
-				processData: false,
-				success: function(response) {
-					try {
-						var parsed = JSON.parse(response);
-					} catch(e) {
-						if(e instanceof SyntaxError) {
-							if(typeof response == "string" && (response.substr(0, 7).toLowerCase()=="http://" || response.substr(0, 8).toLowerCase()=="https://")) {
-								window.location.href = response;
-							} else if(response.substr(0, 15)=="[[TUTOR-DEBUG]]") {
-								// tutor debug
-								jQuery.bithive.SendFormMessages(btn, gyros, response, "debug");
-							} else if(response.substr(0, 15)=="[[TUTOR-ALERT]]") {
-								// tutor alert
-								jQuery.bithive.SendFormMessages(btn, gyros, response, "alert");
-							} else {
-								// nogal error | php error
-								jQuery.bithive.SendFormMessages(btn, gyros, response, "error");
-							}
-						}
-						return true;
-					}
-				},
-				error: function(response) {
-					BootstrapDialog.show({
-						draggable: true,
-						type: BootstrapDialog.TYPE_WARNING,
-						buttons: [{
-							label: "aceptar",
-							cssClass: "btn-warning",
-							action: function(dialog) {
-								dialog.close();
-							}
-						}],
-						title: "Advertencia!",
-						message: response,
+			if(typeof target!="undefined" && (target=="_blank" || target=="_self")) {
+				var form = $("<form>").attr({"method": "post", "target": target, "action": href}).appendTo("body");
+				if(values) {
+					jQuery.each(values, function(key, value) {
+						form.append($("<input>").attr({"type":"hidden", "name":key}).val(value));
 					});
 				}
-			});
+				form[0].submit(function() {
+					form.remove(); 
+					return true
+				});
+			} else {
+				var formData = new FormData();
+				if(values) {
+					jQuery.each(values, function(key, value) {
+						formData.append(key, value);
+					});
+				}
+
+				var gyros = $("<div>").gyros({top: "-10px", width:"60px", stroke:2});
+				btn.after(gyros).hide();
+
+				$.ajax({
+					type: "POST",
+					url: href,
+					data: formData,
+					contentType: false,
+					cache: false,
+					processData: false,
+					success: function(response) {
+						gyros.remove();
+						btn.show();
+						$.bithive.ResponseHandler(response, btn, gyros, target);
+					},
+					error: function(response) {
+						$.bithive.alert(response);
+					}
+				});
+			}
 		},
 
 		parseMoney: function(str, decimal) {
@@ -2981,7 +3212,7 @@ jQuery.extend({
 				} else {
 					target.html(value);
 				}
-				jQuery.bithive.styles(target, true);
+				$.bithive.styles(target, true);
 
 				x++;
 				if(func && y === x+1) { func(); }
@@ -2990,7 +3221,7 @@ jQuery.extend({
 
 		addNewValue: function(urladd, addtext, target, field) {
 			if(!urladd) { return false; }
-			if(!addtext) { addtext = "Agregar"; }
+			if(!addtext) { addtext = $.bithive.lang.buttonAdd; }
 			if(!target) { target = false; }
 			if(!field) {
 				field = false;
@@ -3014,14 +3245,14 @@ jQuery.extend({
 									$("<input>", {
 										"type": "button",
 										"class": "btn btn-primary form-submit",
-										"value": "Guardar"
+										"value": $.bithive.lang.buttonOk
 									})
 								)
 								.append(
 									$("<input>", {
 										"type": "button",
 										"class": "btn margin-md margin-only-left",
-										"value": "Cancelar",
+										"value": $.bithive.lang.buttonCancel,
 										"click": function(e) {
 											dialog.close();
 										}
@@ -3031,7 +3262,7 @@ jQuery.extend({
 						.appendTo(form)
 					;
 
-					jQuery.bithive.apply($(this));
+					$.bithive.apply($(this));
 				})
 			});
 
@@ -3064,40 +3295,44 @@ jQuery.extend({
 			});
 		}, 
 
-		tableToPDF: function(elem) {
-			var pdf = $("<div>").html(elem.clone());
+		prepareToPDF: function(elem) {
+			let pdf = $("<div>").html(elem.clone());
 			pdf.appendTo("body");
 			
-			// $("#doccontent", pdf).attr({"data-pdfcss": "width:200px"}); 
+			let pdfContent = "";
+			if($("form", pdf).length) {
+				pdfContent = jQuery.formDataToJSON($("form", pdf), true);
+			} else {
+				$("*", pdf).not(":visible").remove();
+				$(".no-print, .dropdown-menu", pdf).remove();
 
-			$("*", pdf).not(":visible").remove();
-			$(".no-print, .dropdown-menu", pdf).remove();
-
-			$("div.pdf-table", pdf).each(function() {
-				$("> div", $(this)).each(function() {
+				// tablas
+				$("div.pdf-table", pdf).each(function() {
 					$("> div", $(this)).each(function() {
-						$(this).replaceWith($("<td>").html($(this).html()));
+						$("> div", $(this)).each(function() {
+							$(this).replaceWith($("<td>").html($(this).html()));
+						});
+						$(this).replaceWith($("<tr>", {valing:"top"}).html($(this).html()));
 					});
-					$(this).replaceWith($("<tr>", {valing:"top"}).html($(this).html()));
+					$(this).replaceWith($("<table>").attr({"data-pdfcss": "width:240px;border:solid 1px #000000"}).html($(this).html()));
 				});
-				$(this).replaceWith($("<table>").attr({"data-pdfcss": "width:240px;border:solid 1px #000000"}).html($(this).html()));
-			});
+			
+				// styles
+				pdf.cssInline(["table", "thead", "tbody", "tr", "th", "div"], [
+					"color", "background-color", "font-size", "display",
+					"margin", "margin-top", "margin-right", "margin-bottom", "margin-left",
+					"padding", "padding-top", "padding-right", "padding-bottom", "padding-left", 
+				]);
+				$("[data-inlinecss]", pdf).each(function(k, v) {
+					var attrs = $(v).attr("data-pdfcss")+";" || "";
+					attrs += $.bithive.CSSToPDFConvert($(v).data("inlinecss"), 190, 1200);
+					$(v).attr("data-pdfcss", attrs);
+				});
+			
+				pdfContent = pdf.html();
+			}
 
-			pdf.cssInline(["table", "thead", "tbody", "tr", "th", "div"], [
-				"color", "background-color", "font-size", "display",
-				"margin", "margin-top", "margin-right", "margin-bottom", "margin-left",
-				"padding", "padding-top", "padding-right", "padding-bottom", "padding-left", 
-			]);
-
-			$("[data-inlinecss]", pdf).each(function(k, v) {
-				var attrs = $(v).attr("data-pdfcss")+";" || "";
-				attrs += jQuery.bithive.CSSToPDFConvert($(v).data("inlinecss"), 190, 1200);
-				$(v).attr("data-pdfcss", attrs);
-			});
-
-			var pdfContent = pdf.html();
 			pdf.remove();
-
 			return pdfContent;
 		},
 
@@ -3128,6 +3363,49 @@ jQuery.extend({
 			inline = inline.replace(/font\-size:(.*?);/g, "");
 	
 			return inline;
+		},
+
+		InputMask: function(elem, options) {
+			if(options.preparemask && typeof options.preparemask == "function") { elem.val(options.preparemask(elem)); }
+			elem.mask(options.mask, options.options);
+			elem.on("mask", function() {
+				$(this).val($(this).masked());
+			}).on("preparemask", function() {
+				$(this).val(options.preparemask($(this)));
+			}).on("paste", function(e) {
+				let paste = $(this);
+				setTimeout(function(){
+					paste.unmask();
+					paste.trigger("change");
+				}, 0);
+			}).on("unmask", function(e, set){
+				if(options.unmask) {
+					var val = $(this).val();
+					if(typeof options.unmask == "function") {
+						val = options.unmask($(this));
+					} else {
+						for(let i in options.unmask) {
+							val = val.replace(new RegExp(options.unmask[i][0], "g"), options.unmask[i][1]);
+						}
+					}
+
+					if(set) { $(this).val(val); } else { return val; }
+				}
+			}).trigger("change");
+
+			return elem;
 		}
 	}
+});
+
+// ejecución al inicio ---------------------------------------------------------
+$(function() {
+	$(document).on("click contextmenu", function (e) {
+		if($.bithive.ctxmenu.menu) {
+			if($(e.target).closest($.bithive.ctxmenu.menu).length === 0) {
+				$(".dropdown-menu", $.bithive.ctxmenu.menu).removeClass("show").hide();
+				$.bithive.ctxmenu.menu.removeClass("show").hide();
+			}
+		}
+	});
 });

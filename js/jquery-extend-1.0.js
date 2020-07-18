@@ -206,6 +206,17 @@
 			return size;
 		},
 
+		
+		strpad: function(val, len, pad, dir) {
+			if(typeof pad == "undefined") { pad = "0"; }
+			if(typeof dir == "undefined") { dir = "left"; }
+			if(dir.toLowerCase()=="left") {
+				return (pad.repeat(len)+val).slice(len*-1);
+			} else {
+				return (val+pad.repeat(len)).slice(len*-1);
+			}
+		},
+
 		isJson: function(str) {
 			try {
 				if(str.substring(0,1)!="[" && str.substring(0,1)!="{" ) { return false; }
@@ -309,13 +320,32 @@
 			}
 
 			return str;
+		},
+
+		formDataToJSON: function(form, incDisabled) { // form = jquery element
+			if(incDisabled) { $("input, select, textarea", form).prop("disabled", false); }
+
+			let formData = new FormData(form[0]);
+			let jsonData = {};
+			formData.forEach((value, key) => {
+				if(!jsonData.hasOwnProperty(key)){
+					jsonData[key] = value;
+					return;
+				}
+				if(!Array.isArray(jsonData[key])){
+					jsonData[key] = [jsonData[key]];    
+				}
+				jsonData[key].Push(value);
+			});
+			
+			return JSON.stringify(jsonData);
 		}
 	});
 })(jQuery);
 
 
 jQuery.fn.extend({
-		id: function(newid){
+	id: function(newid){
 		if(typeof(newid)!="undefined") {
 			return this.attr("id", newid);
 		} else {
@@ -323,6 +353,51 @@ jQuery.fn.extend({
 			if(typeof(id)=="undefined") { this.attr("id", jQuery.uid()); }
 			return this.attr("id");
 		}
+	},
+
+	loadOnScroll: function(options) {
+		let elem = this;
+		
+		elem.data("loadOnScrollReset", function() {
+			elem.prop("loadOnScrollEnabled", true);
+			elem.prop("loadOnScrollPage", 0);
+		});
+
+		elem.data("loadOnScroll", function(force) {
+			if(force || (elem.offset().top + elem.outerHeight() < $(window).scrollTop() + $(window).innerHeight())) {
+				if(elem.prop("loadOnScrollEnabled")) {
+					let page = elem.prop("loadOnScrollPage") + 1;
+					elem.prop("loadOnScrollEnabled", false);
+					elem.prop("loadOnScrollPage", page);
+
+					let method = "GET";
+					let data = "";
+					if(options.form) {
+						let form = $(options.form);
+						if(form.attr("method")) { method = form.attr("method").toUpperCase(); }
+						data = (method=="GET") ? form.serialize() : new FormData(form[0]);
+					}
+
+					$.ajax({
+						type: method,
+						url: options.url+page,
+						data: data,
+						contentType: false,
+						cache: false,
+						processData: false,
+					}).success(function(response) {
+						if(response!="0") {
+							elem.append(response);
+							elem.prop("loadOnScrollEnabled", true);
+						}
+					});
+				}
+			}
+		});
+
+		elem.data("loadOnScrollReset")();
+		elem.data("loadOnScroll")(true);
+		$(window).scroll(function(){ elem.data("loadOnScroll")(); });
 	},
 
 	selectText: function(){
@@ -365,6 +440,16 @@ jQuery.fn.extend({
 	
 	hasAttr: function(name) {
 		return (this.attr(name)!==undefined && this.attr(name)!="");
+	},
+
+	// $(this).hasProp(type);
+	// $(this).hasProp(type, "input");
+	// $(this).hasProp(class, "mask-[^ ]+"); // mask-date | mask-decimal | mask- (falla)
+	hasProp: function(prop, pattern){
+		if(pattern) {
+			return new RegExp(pattern).test(this.prop("class")); 
+		}
+		return $(this).prop(prop) !== undefined;
 	},
 
 	hideShow: function() {

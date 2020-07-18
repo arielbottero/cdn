@@ -70,6 +70,7 @@ nav ul.sidebar-nav li {
     line-height: 20px;
     display: inline-block;
     width: 100%;
+    cursor: pointer;
 }
 
 nav ul.sidebar-nav li:before {

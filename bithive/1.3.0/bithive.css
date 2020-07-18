@@ -72,6 +72,26 @@ a {
 		padding-bottom: 5px !important;
 	}
 
+.content-header #headercontent {
+	background-color: #FFFFFF;
+	box-shadow: 0 .15rem .4rem 0 #5A5C6966 !important;
+	border-radius: 1.2rem;
+	border-left: solid 5px #5A5C69;
+	margin-bottom: 15px;
+	margin-top: 15px;
+	padding-bottom: 15px;
+	padding-top: 15px;
+}
+
+.kpi {
+	border-radius: 5px;
+	box-shadow: 0 .15rem .8rem 0 #5A5C6966 !important;
+	cursor: pointer;
+	display: inline-block;
+	text-decoration: none;
+	width: 100%;
+}
+
 .content-body {
 	margin-left: 15px;
 	margin-right: 15px;
@@ -79,7 +99,7 @@ a {
 }
 	.content-body > div {
 		background-color: #FFFFFF;
-		box-shadow: 0 .15rem 1.75rem 0 #5A5C6926 !important;
+		box-shadow: 0 .15rem .4rem 0 #5A5C6966 !important;
 		border-radius: 1.2rem;
 		border-top: solid 5px #5A5C69;
 		padding-top: 15px !important;
@@ -118,8 +138,11 @@ a {
 }
 
 .login {
-	/* background-color: #FFFFFF; */
-	box-shadow: 2px 2px 2px 0 #00000024, 0 3px 1px -2px #00000033, 0 1px 5px 0 #0000001f;
+	background-color: #FFFFFF;
+	box-shadow: 0 .15rem .4rem 0 #5A5C6966 !important;
+	border-radius: 1.2rem;
+	border-top: solid 15px #5A5C69;
+	padding-top: 15px !important;
 	margin-left: auto !important;
 	margin-right: auto !important;
 	margin-top: 30px;
@@ -206,13 +229,13 @@ ul.form-autocomplete-addtext li:last-child {
 	width: 50px;
 }
 
-h3.title {
+h3.title, .h3.title {
 	margin-top: 15px;
 	margin-bottom: 15px;
 	font-size: 28px;
 }
 
-h4.subtitle {
+h4.subtitle, .h4.subtitle {
 	margin-top: 10px;
 	margin-bottom: 15px;
 }
@@ -273,7 +296,7 @@ td.dropdown {
 		width: 100%;
 		max-width: 100%;
 		min-height: calc(100% - 41px);
-		top: 65px !important;
+		top: 63px !important;
 		left: 0px !important;
 		border: 0 !important;
 		text-align: center;
@@ -352,6 +375,10 @@ td.dropdown {
 }
 
 /* FORMS =====================================================================*/
+.no-notes small {
+	display: none;
+}
+
 .calendar .calendar-row {
 	margin: 0px;
 }
@@ -367,13 +394,22 @@ td.dropdown {
 		border-right: solid 1px #D8D8D8;
 	}
 
-/* FORMS =====================================================================*/
 .btn {
 	border-radius: 2rem;
 	box-shadow: 0 .15rem .5rem 0 #5A5C6926 !important;
 }
-.bootstrap-select .btn { border-radius: 0; }
+.bootstrap-select .btn {
+	border-radius: 0;
+	box-shadow: none !important;
+}
 
+.subform-box {
+	border: 1px solid #CED4DA;
+	border-left: solid 3px #5A5C69;
+	border-radius: 1.2rem;
+	margin-bottom: 15px;
+	padding: 10px;
+}
 
 .control-label {
 	font-size: 14px;
@@ -472,6 +508,28 @@ select.bootstrap-select {
 	content: "\f03d" !important;
 }
 
+.form-view .form-group {
+	position: relative;
+}
+	.form-view .form-group::before {
+		display: block;
+		height: 100%;
+		width: 100%;
+		z-index: 1000;
+		content: " ";
+		position: absolute;
+		cursor: help;
+	}
+
+	.form-view .btn[data-subform='update'] {
+		visibility: hidden;
+	}
+
+	.form-view .form-subform,
+	.form-view .form-submit {
+		display: none;
+	}
+
 .form-error {
 	/* background-color: #AB0000; */
 	/* color: #FFFFFF; */
@@ -566,6 +624,51 @@ select.bootstrap-select {
 	
 }
 
+/* CARDS =====================================================================*/
+.card-file {
+	border-radius: 1.2rem;
+	margin: 5px;
+}
+	.card-file .card-img-top {
+		width: 100%;
+	}
+
+	.card-file .card-body {
+		min-height: 100px;
+		max-height: 100px;
+		overflow: hidden;
+	}
+
+	.card-file .card-footer {
+		text-align: center;
+	}
+		.card-file .card-footer i {
+			font-size: 20px;
+		}
+
+.card-file .icon-file {
+	position: relative;
+	width: 50%;
+}
+
+.card-file .icon-file:after {
+	content: "";
+	display: block;
+	padding-bottom: 100%;
+}
+
+.card-file .icon-file .content {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	padding: 15px;
+	text-align: center;
+}
+	.card-file .icon-file .content img {
+		filter: opacity(50%);
+		height: 100%;
+	}
+
 /* FICHAS ====================================================================*/
 .info-box {
 	display: flex;
@@ -630,10 +733,8 @@ select.bootstrap-select {
 
 /* tooltip */
 .tooltip > .tooltip-inner {
-	/* background-color: #000000 !important; */
 	border-radius: 2px !important;
 	box-sizing: content-box;
-	/* color: #FFFFFF !important; */
 	font-size: 14px;
 	padding: 5px;
 	text-align: left;

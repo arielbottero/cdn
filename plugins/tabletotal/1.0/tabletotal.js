@@ -14,7 +14,10 @@
 			this.options = {
 				nodata	: "Sin Datos",
 				cssClass: "",
-				after: function(table) {} // tabla = elemento principal
+				hidden: false,
+				before: function(table) {}, // tabla = elemento principal. Se ejecuta antes de leer todas las lineas
+				after: function(table) {}, // tabla = elemento principal. Se ejecuta al finalizar todas las lineas
+				row: function(tr) {} // tr = fila actual. Se ejecuta en cada linea
 			};
 
 			if(typeof params=="string") { params = { cols: params }; }
@@ -80,6 +83,8 @@
 				table.prop("tbtotal-subtotal", subtotal);
 
 				table.on("runtotals", function(){
+					params.before(table);
+
 					var cols = table.prop("tbtotal-cols");
 					var subtotal = table.prop("tbtotal-subtotal");
 					var lastSutotal = false;
@@ -92,9 +97,10 @@
 							tr.remove();
 						} else {
 							rows++;
+							params.row(tr);
 							$("td,th", tr).each(function(idx, col) {
 								var value = $(col).text() || "";
-								switch(cols[idx].type) {
+								switch(cols[idx] && cols[idx].type) {
 									case "avg":
 									case "sum":
 										if(!totals[idx]) { totals[idx] = 0; }
@@ -126,7 +132,7 @@
 										var subtr = $("thead tr.table-total", table).clone().addClass("table-total-subtotal");
 										$("th", subtr).each(function(idx, th) {
 											var subth = $(th);
-											switch(cols[idx].type) {
+											switch(cols[idx] && cols[idx].type) {
 												case "count":
 													subth.html(rows);
 													break;
@@ -152,12 +158,13 @@
 						}
 					});
 
+					// analizar que hace subtotal... me olvide...
 					if(rows>0) {
 						if(subtotal!==false) {
 							var subtr = $("thead tr.table-total", table).clone().addClass("table-total-subtotal");
 							$("th", subtr).each(function(idx, th) {
 								var subth = $(th);
-								switch(cols[idx].type) {
+								switch(cols[idx] && cols[idx].type) {
 									case "count":
 										subth.html(rows);
 										break;
@@ -179,7 +186,7 @@
 
 						$("thead tr.table-total", table).show();
 						$("thead tr.table-total th", table).each(function(idx, th) {
-							switch(cols[idx].type) {
+							switch(cols[idx] && cols[idx].type) {
 								case "count":
 									$(th).html(rows);
 									break;
@@ -208,7 +215,7 @@
 							).appendTo($("tfoot", table));
 					}
 
-					params.after($(".table-total", table));
+					params.after(table);
 				});
 				
 				if(!$("tfoot", table).length) { table.append($("<tfoot>")); }

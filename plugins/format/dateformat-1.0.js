@@ -99,13 +99,25 @@
 
 			// format
 			if(this.el.is("input") || this.el.is("textarea") || this.el.is("select")) {
-				this.el.attr("data-df-value", this.el.val());
-				var date = this.dateformat(this.el.val());
-				this.el.val(this.format(date, this.options.mask, this.options.utc));
+				this.el.on("format", function(){
+					$(this).attr("data-df-value", $(this).val());
+					var date = $this.dateformat($(this).val());
+					if(date) {
+						$(this).val($this.format(date, $this.options.mask, $this.options.utc));
+					} else {
+						$(this).val("");
+					}
+				}).trigger("format");
 			} else {
-				this.el.attr("data-df-value", this.el.html());
-				var date = this.dateformat(this.el.html());
-				this.el.html(this.format(date, this.options.mask, this.options.utc));
+				this.el.on("format", function(){
+					$(this).attr("data-df-value", $(this).html());
+					var date = $this.dateformat($(this).html());
+					if(date) {
+						$(this).html($this.format(date, $this.options.mask, $this.options.utc));
+					} else {
+						$(this).html("&nbsp;");
+					}
+				}).trigger("format");
 			}
 
 			return this;
@@ -189,13 +201,16 @@
 			if(typeof dateformat==="string") {
 				if(dateformat.indexOf("-")==-1) {
 					var parts = dateformat.split(/:/);
-					var jsdate = new Date(1970, 1, 1, parts[0], parts[1], parts[2] || 0);					
+					if(parts[0]!="0000") {
+						var jsdate = new Date(1970, 1, 1, parts[0], parts[1], parts[2] || 0);
+					}
 				} else {
 					var parts = dateformat.split(/[- :]/);
-					var jsdate = new Date(parts[0], parts[1] - 1, parts[2], parts[3] || 0, parts[4] || 0, parts[5] || 0);
+					if(parts[0]!="0000") {
+						var jsdate = new Date(parts[0], parts[1] - 1, parts[2], parts[3] || 0, parts[4] || 0, parts[5] || 0);
+					}
 				}
 			}
-
 			return jsdate || null;   
 		}
 	};

@@ -9,6 +9,7 @@
   	
 	// inicio del plugin
 	function Plugin(element) {
+		$this			= this;
 		this.element	= element;	// elemento seleccionado
 		this.el			= $(element); // jQuery element
 		this.name		= pluginName; // nombre del plugin
@@ -55,9 +56,13 @@
 
 			// format
 			if(this.el.is("input") || this.el.is("textarea") || this.el.is("select")) {
-				this.el.val(this.formatNumber(this.el.val()));
+				this.el.on("format", function(){
+					$(this).val($this.formatNumber($(this).val()));
+				}).trigger("format");
 			} else {
-				this.el.html(this.formatNumber(this.el.html()));
+				this.el.on("format", function(){
+					$(this).html($this.formatNumber($(this).html()));
+				}).trigger("format");
 			}
 
 			return this;

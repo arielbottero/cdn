@@ -27,7 +27,8 @@ input:not([type]).form-control,
 input[type="password"].form-control,
 input[type="text"].form-control, 
 label.custom-file-label, 
-.form-control.form-input ,
+span.form-control,
+.form-control.form-input,
 .custom-file-input {
 	min-height: 33px;
 }
@@ -37,7 +38,7 @@ label.custom-file-label::after {
 }
 
 textarea.form-control {
-	height: 112px;
+	height: 133px;
 }
 
 textarea.fullinput {
@@ -1101,6 +1102,151 @@ textarea.fullinput {
 	color: #9F8B0B !important;
 }
 
+/* outlines */
+.btn-amber.btn-outline {
+    color: #FFC107 !important;
+    background-color: #FFFFFF !important;
+}
+
+.btn-black.btn-outline {
+    color: #000000 !important;
+    background-color: #EEEEEE !important;
+}
+
+.btn-blue.btn-outline {
+    color: #2196f3 !important;
+    background-color: #FFFFFF !important;
+}
+
+.btn-blue-gray.btn-outline, .btn-blue-grey.btn-outline {
+    color: #607D8B !important;
+    background-color: #FFFFFF !important;
+}
+
+.btn-blue-dark-gray.btn-outline, .btn-blue-dark-grey.btn-outline {
+    color: #263238 !important;
+    background-color: #FFFFFF !important;
+}
+
+.btn-brown.btn-outline {
+    color: #795548 !important;
+    background-color: #FFFFFF !important;
+}
+
+.btn-burgundy.btn-outline {
+    color: #AB0000 !important;
+    background-color: #FFFFFF !important;
+}
+
+.btn-cyan.btn-outline {
+    color: #00BCD4 !important;
+    background-color: #FFFFFF !important;
+}
+
+.btn-dark.btn-outline {
+    color: #111112 !important;
+    background-color: #FFFFFF !important;
+}
+
+.btn-dark-gray.btn-outline, .btn-dark-grey.btn-outline {
+    color: #666666 !important;
+    background-color: #FFFFFF !important;
+}
+
+.btn-deep-orange.btn-outline {
+    color: #FF5722 !important;
+    background-color: #FFFFFF !important;
+}
+
+.btn-deep-purple.btn-outline {
+    color: #673AB7 !important;
+    background-color: #FFFFFF !important;
+}
+
+.btn-gray.btn-outline, .btn-grey.btn-outline {
+    color: #9E9E9E !important;
+    background-color: #FFFFFF !important;
+}
+
+.btn-indigo.btn-outline {
+    color: #3F51B5 !important;
+    background-color: #FFFFFF !important;
+}
+
+.btn-ivory.btn-outline {
+    color: #FFFFF0 !important;
+    background-color: #000000 !important;
+}
+
+.btn-green.btn-outline {
+    color: #4CAF50 !important;
+    background-color: #FFFFFF !important;
+}
+
+.btn-light-blue.btn-outline {
+    color: #B3E5FC !important;
+    background-color: #FFFFFF !important;
+}
+
+.btn-light-green.btn-outline {
+    color: #D7FFD9 !important;
+    background-color: #FFFFFF !important;
+}
+
+.btn-light-gray.btn-outline, .btn-light-grey.btn-outline {
+    color: #D8D8D8 !important;
+    background-color: #999999 !important;
+}
+
+.btn-lighter-gray.btn-outline, .btn-lighter-grey.btn-outline {
+    color: #F9F9F9 !important;
+    background-color: #999999 !important;
+}
+
+.btn-lime.btn-outline {
+    color: #CDDC39 !important;
+    background-color: #FFFFFF !important;
+}
+
+.btn-peach.btn-outline {
+    color: #FFDAB9 !important;
+    background-color: #000000 !important;
+}
+
+.btn-pink.btn-outline {
+    color: #E91E63 !important;
+    background-color: #FFFFFF !important;
+}
+
+.btn-orange.btn-outline {
+    color: #FF9800 !important;
+    background-color: #FFFFFF !important;
+}
+
+.btn-purple.btn-outline {
+    color: #9C27B0 !important;
+    background-color: #FFFFFF !important;
+}
+
+.btn-red.btn-outline {
+    color: #D50000 !important;
+    background-color: #FFFFFF !important;
+}
+
+.btn-teal.btn-outline {
+    color: #009688 !important;
+    background-color: #FFFFFF !important;
+}
+
+.btn-white.btn-outline {
+    color: #FFFFFF !important;
+    background-color: #888888 !important;
+}
+
+.btn-yellow.btn-outline {
+    color: #FFEB3B !important;
+	background-color: #9F8B0B !important;
+}
 
 /* SHADOWS =======================================================================================*/
 .sw-n { box-shadow: none !important; }
@@ -1120,7 +1266,8 @@ textarea.fullinput {
 
 /* POSICION ======================================================================================*/
 .p-absolute { position: absolute !important; }
-.p-fixed { position: fixed !important; }
+.p-fixed-top { position: fixed !important; top: 0px !important; }
+.p-fixed-bottom { position: fixed !important; bottom: 0px !important;  }
 .p-inherit { position: inherit !important; }
 .p-initial { position: initial !important; }
 .p-relative { position: relative !important; }
