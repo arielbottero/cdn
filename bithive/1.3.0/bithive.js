@@ -1636,9 +1636,9 @@ jQuery.extend({
 				var skipfirst	= $(this).data("skipfirst");
 				var isform		= $(this).data("isform");
 				var closebutton	= $(this).data("closebutton");
+				var targetElement = (target!="") ? $(target) : null;
 
 				if(size!="") { size = "dialog-"+size; }
-				if(target!="") { targetElement = $(target); }
 				href = (href=="true" || href=="1") ? true : href;
 				isform = (isform=="true" || isform=="1") ? true : false;
 				closebutton = (closebutton=="true" || closebutton=="1") ? true : false;
@@ -1660,26 +1660,29 @@ jQuery.extend({
 										code = code[1];
 									}
 									
-									if(type=="multiple") {
-										targetElement.append(code);
-									} else if(type=="toggle") {
-										var curcode = targetElement.html();
-										code = $("<div>").html(code).html();
-										if(curcode.indexOf(code)!=-1) {
-											curcode = curcode.replace(code, "");
-											targetElement.html(curcode);
-										} else {
+									if(targetElement) {
+										if(type=="multiple") {
 											targetElement.append(code);
+										} else if(type=="toggle") {
+											var curcode = targetElement.html();
+											code = $("<div>").html(code).html();
+											if(curcode.indexOf(code)!=-1) {
+												curcode = curcode.replace(code, "");
+												targetElement.html(curcode);
+											} else {
+												targetElement.append(code);
+											}
+										} else if(type=="once") {
+											targetElement.html(code);
+										} else if(type=="onceclose") {
+											targetElement.html(code);
+											dialog.close();
 										}
-									} else if(type=="once") {
-										targetElement.html(code);
-									} else if(type=="onceclose") {
-										targetElement.html(code);
-										dialog.close();
+
+										$.bithive.apply(targetElement);
 									}
 
 									$("[data-relation='close']", modal).click(function(e) { dialog.close(); });
-									$.bithive.apply(targetElement);
 								});
 							}).trigger("relation");
 
@@ -1730,7 +1733,7 @@ jQuery.extend({
 					});
 				});
 				
-				if(href!="" && href!=true && !skipfirst) {
+				if(href!="" && href!=true && !skipfirst && targetElement) {
 					targetElement.load(href, function() {
 						$.bithive.apply(targetElement);
 					});
