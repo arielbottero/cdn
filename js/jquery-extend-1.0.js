@@ -613,5 +613,12 @@ jQuery.fn.extend({
 		}
 
 		return this;
+	},
+	
+	zoom: function(zoom) {
+		if(!$(this).hasProp("zoomLevel")) { $(this).hasProp("zoomLevel", 1); }
+		zoom = $(this).hasProp("zoomLevel") + (zoom/100);
+		$(this).hasProp("zoomLevel", zoom);
+		$(this).css({zoom: zoom, "-moz-transform": "scale(" + zoom + ")" });
 	}
 });
