@@ -616,7 +616,7 @@ jQuery.fn.extend({
 	},
 	
 	zoom: function(zoom, anchor) {
-		if(!anchor) { ancho = "top left"; }
+		if(typeof anchor == "undefined") { anchor = "top left"; }
 		if(!$(this).hasProp("zoomLevel")) { $(this).hasProp("zoomLevel", 1); }
 		zoom = $(this).hasProp("zoomLevel") + (zoom/100);
 		$(this).hasProp("zoomLevel", zoom);
