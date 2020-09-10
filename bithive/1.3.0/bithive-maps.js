@@ -52,7 +52,7 @@ jQuery.extend(jQuery.bithive, {
 
 								$("[geofillsub]", $(selector).closest(".subform-form")).each(function(){
 									let el = $(this);
-									let val = el.attr("geofill");
+									let val = el.attr("geofillsub");
 									if(val=="formatted_address") {
 										el.val(data.results[0].formatted_address);
 									} else {

@@ -64,7 +64,9 @@
 				height: this.options.height,
 				lat: this.options.lat,
 				lng: this.options.lng,
-				zoom: this.options.zoom
+				zoom: this.options.zoom,
+				mapTypeControl: false,
+				streetViewControl: false
 			});
 			this.info.lat = this.options.lat;
 			this.info.lng = this.options.lng;
