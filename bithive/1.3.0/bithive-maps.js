@@ -22,7 +22,6 @@ jQuery.extend(jQuery.bithive, {
 			.on("paste blur", function() {
 				let locator = $(this);
 				let search = locator.val();
-				console.debug(locator.prop("lastsearch"));
 				if(locator.prop("lastsearch")!=search) {
 					locator.prop("lastsearch", search);
 					setTimeout(function() {
@@ -37,6 +36,21 @@ jQuery.extend(jQuery.bithive, {
 								$(selector+"_coords_span").html("Lat:"+lat+", Lng:"+lng);
 
 								$("[geofill]").each(function(){
+									let el = $(this);
+									let val = el.attr("geofill");
+									if(val=="formatted_address") {
+										el.val(data.results[0].formatted_address);
+									} else {
+										$.each(data.results[0].address_components, function(){
+											if(jQuery.inArray(val, this.types)>=0) {
+												el.val(this.long_name);
+												return true;
+											}
+										});
+									}
+								});
+
+								$("[geofillsub]", $(selector).closest(".subform-form")).each(function(){
 									let el = $(this);
 									let val = el.attr("geofill");
 									if(val=="formatted_address") {
