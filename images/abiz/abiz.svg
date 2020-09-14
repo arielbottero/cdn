@@ -8,17 +8,16 @@
     style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
     viewBox="0 0 4855.97 1804.93"
     xmlns:xlink="http://www.w3.org/1999/xlink"
-    xmlns:xodm="http://www.corel.com/coreldraw/odm/2003"
 >
     <defs>
-    <style type="text/css">
-        <![CDATA[
-            .dot {fill:#AB0000;fill-rule:nonzero}
-            .abiz {fill:#000000;fill-rule:nonzero}
-            .sgear {fill:#000000;fill-rule:nonzero}
-            .bgear {fill:#AB0000;fill-rule:nonzero}
-        ]]>
-    </style>
+        <style type="text/css">
+            <![CDATA[
+                .dot {fill:#AB0000;fill-rule:nonzero}
+                .abiz {fill:#000000;fill-rule:nonzero}
+                .sgear {fill:#000000;fill-rule:nonzero}
+                .bgear {fill:#AB0000;fill-rule:nonzero}
+            ]]>
+        </style>
     </defs>
     <g id="abiz">
         <polygon class="dot" points="3984.53,312.88 3762.3,312.88 3762.3,519.23 3984.53,519.23 "/>
