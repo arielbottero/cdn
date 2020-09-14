@@ -2751,6 +2751,7 @@ jQuery.extend({
 							field.prev().val(data[name]).trigger("fill");
 						} else {
 							field.val(data[name]);
+							if(field.hasAttr("onfill")) { field.change(); }
 						}
 						field.data("value", data[name]);
 						if(field.hasProp("class", "mask-[0-9a-z\-]+")) {

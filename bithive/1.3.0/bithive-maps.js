@@ -1,5 +1,15 @@
 jQuery.extend(jQuery.bithive, {
-	mapAddress: function(selector, address, disabled) {
+	mapMark: function(selector, address) {
+		jQuery.ajax({
+			url: "/knot.php?imya=bDjJSY163KZooSb2b5a4TNxQWa1Z17ZX&q="+address,
+			success: function(src) {
+				$(selector).attr("src", src);
+			}
+		});
+	},
+
+	mapAddress: function(selector, address, target) {
+		target = (!target) ? $("body") : $(target);
 		$(selector)
 			.prop("lastsearch", false)
 			.on("showmap", function(){
@@ -7,7 +17,6 @@ jQuery.extend(jQuery.bithive, {
 					address: address,
 					height: "280px",
 					center: true,
-					disabled: disabled,
 					onload: function(map) {
 						$(selector).prop("gmap", map);
 					},
@@ -29,41 +38,31 @@ jQuery.extend(jQuery.bithive, {
 							url: "/knot.php?imya=e7kLzx3gdoSH3CmPtTp3O9KuDhRBzBOF&q="+search,
 							dataType: "json",
 							success: function(data) {
-								let lat = data.results[0].geometry.location.lat;
-								let lng = data.results[0].geometry.location.lng;
-								$(selector).prop("gmap").mark({lat: lat, lng: lng, center: true});
-								$(selector+"_coords").val(lat+","+lng);
-								$(selector+"_coords_span").html("Lat:"+lat+", Lng:"+lng);
+								if(data.results.length) {
+									let lat = data.results[0].geometry.location.lat;
+									let lng = data.results[0].geometry.location.lng;
+									$(selector).prop("gmap").mark({lat: lat, lng: lng, center: true});
+									$(selector+"_coords").val(lat+","+lng);
+									$(selector+"_coords_span").html("Lat:"+lat+", Lng:"+lng);
 
-								$("[geofill]").each(function(){
-									let el = $(this);
-									let val = el.attr("geofill");
-									if(val=="formatted_address") {
-										el.val(data.results[0].formatted_address);
-									} else {
-										$.each(data.results[0].address_components, function(){
-											if(jQuery.inArray(val, this.types)>=0) {
-												el.val(this.long_name);
-												return true;
-											}
-										});
-									}
-								});
-
-								$("[geofillsub]", $(selector).closest(".subform-form")).each(function(){
-									let el = $(this);
-									let val = el.attr("geofillsub");
-									if(val=="formatted_address") {
-										el.val(data.results[0].formatted_address);
-									} else {
-										$.each(data.results[0].address_components, function(){
-											if(jQuery.inArray(val, this.types)>=0) {
-												el.val(this.long_name);
-												return true;
-											}
-										});
-									}
-								})
+									$("[geofill]", target).each(function(){
+										let el = $(this);
+										let val = el.attr("geofill");
+										if(val=="coords") {
+											el.val(lat+","+lng);
+											if(el.hasAttr("onfill")) { el.change(); }
+										} else if(val=="formatted_address") {
+											el.val(data.results[0].formatted_address);
+										} else {
+											$.each(data.results[0].address_components, function(){
+												if(jQuery.inArray(val, this.types)>=0) {
+													el.val(this.long_name);
+													return true;
+												}
+											});
+										}
+									});
+								}
 							}
 						});
 					}, 100);
