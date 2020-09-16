@@ -1,36 +1,25 @@
 <?php 
 
-$aFormat = array(640, 480, "F4F4F4");
+$aFormat = array(640, 480, "F4F4F4", "222222");
 if(isset($_GET["s"]) && !empty($_GET["s"])) {
-    $aCustom = explode("x", $_GET["s"]);
+    $aCustom = str_replace("x", "|", $_GET["s"]);
+    $aCustom = explode("|", $aCustom);
     if(isset($aCustom[0])) { $aFormat[0] = $aCustom[0]; }
     if(isset($aCustom[1])) { $aFormat[1] = $aCustom[1]; }
     if(isset($aCustom[2])) { $aFormat[2] = $aCustom[2]; }
+    if(isset($aCustom[3])) { $aFormat[3] = $aCustom[3]; }
 }
-// print_r($aFormat); exit();
+
 $nWidth = $aFormat[0];
 $nHeight = $aFormat[1];
 $sBgColor = "#".$aFormat[2];
+$nFontColor = "#".$aFormat[3];
 $nTextBoxWidth = ($nWidth*.9);
 $nTextBoxHeight = ($nHeight*.9);
 $nTop = ($nHeight - $nTextBoxHeight)/2;
 $nLeft = ($nWidth - $nTextBoxWidth)/2;
 $nFont = $nHeight*.1;
-$nFontColor = color_inverse($sBgColor);
 $sText = (isset($_GET["t"]) && !empty($_GET["t"])) ? str_replace("_", " ", strip_tags($_GET["t"])) : $nWidth."x".$nHeight;
-
-
-function color_inverse($color){
-    $color = str_replace('#', '', $color);
-    if (strlen($color) != 6){ return '000000'; }
-    $rgb = '';
-    for ($x=0;$x<3;$x++){
-        $c = 255 - hexdec(substr($color,(2*$x),2));
-        $c = ($c < 0) ? 0 : dechex($c);
-        $rgb .= (strlen($c) < 2) ? '0'.$c : $c;
-    }
-    return '#'.$rgb;
-}
 
 $SVG = <<<SVG
 <?xml version="1.0" encoding="UTF-8"?>
