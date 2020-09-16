@@ -17,7 +17,7 @@ $nTop = ($nHeight - $nTextBoxHeight)/2;
 $nLeft = ($nWidth - $nTextBoxWidth)/2;
 $nFont = $nHeight*.1;
 $nFontColor = color_inverse($sBgColor);
-$sText = (isset($_GET["t"]) && !empty($_GET["t"])) ? strip_tags($_GET["t"]) : $nWidth."x".$nHeight;
+$sText = (isset($_GET["t"]) && !empty($_GET["t"])) ? str_replace("_", " ", strip_tags($_GET["t"])) : $nWidth."x".$nHeight;
 
 
 function color_inverse($color){
