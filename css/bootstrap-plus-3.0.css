@@ -22,6 +22,19 @@ body {
 	max-height: 100%;
 }
 
+.img-square {
+	background-size: cover;
+	background-repeat: no-repeat;
+	width: 100%;
+	content: "";
+	margin-bottom: 40px;
+}
+	.img-square:after {
+		content: "";
+		display: block;
+		padding-bottom: 100%;
+	}
+
 /* FORMS =========================================================================================*/ 
 input:not([type]).form-control,
 input[type="password"].form-control,

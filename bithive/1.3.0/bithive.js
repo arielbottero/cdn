@@ -148,10 +148,12 @@ jQuery.extend({
 		},
 
 		eachElement: function(selector, elem, itself, func) {
-			if(!elem) { var elem = $("body"); }
-			let objs = $.bithive.getElement(selector, elem, itself);
-			$.bithive.ApplyCounter(elem, 1);
-			jQuery.each(objs, func).promise().done(function(){ $.bithive.ApplyCounter(elem, -1); });
+			if(typeof elem=="undefined") { var elem = $("body"); }
+			if(elem[0]) {
+				let objs = $.bithive.getElement(selector, elem, itself);
+				$.bithive.ApplyCounter(elem, 1);
+				jQuery.when(jQuery.each(objs, func)).then(function(){ $.bithive.ApplyCounter(elem, -1); });
+			}
 		},
 
 		isSmallScreen: function() {
@@ -250,7 +252,6 @@ jQuery.extend({
 			});
 			
 			// TABS ------------------------------------------------------------
-			// $.bithive.eachElement("nav-tabs a", elem, itself, function() {
 			$.bithive.eachElement("nav-tabs a", elem, itself, function() {
 				$(this).click(function(e) {
 					e.preventDefault();
@@ -474,7 +475,6 @@ jQuery.extend({
 						var btnClose	= (options.close) ? [{ label: options.close, cssClass: "btn-primary pull-center", action: function(dialogItself){ dialogItself.close(); }}] : null;
 						
 						// los elementos de la respuesta que tengan el atributo dialog-close, cerraran el dialogo
-
 						var dialogLinkLoaded = false;
 						var dialogOptions = {
 							draggable: true,
@@ -1158,9 +1158,9 @@ jQuery.extend({
 									success: function(data) {
 										var values = $.bithive.OptionsValues(lnktarget);
 										if(lnktarget.hasClass("checkbox")) {
-											$.bithive.mkchecks("checkbox", lnktarget, data, values);
+											$.bithive.mkchecks(form, "checkbox", lnktarget, data, values);
 										} else if(lnktarget.hasClass("radio")) {
-											$.bithive.mkchecks("radio", lnktarget, data, values);
+											$.bithive.mkchecks(form, "radio", lnktarget, data, values);
 										} else {
 											$("#"+lnktarget.prop("gyrosid")).remove();
 											lnktarget.show();
@@ -1268,7 +1268,7 @@ jQuery.extend({
 				var source = jQuery.base64.atob(field.data("source"));
 				if(source!="") {
 					field.html($("<div>").css("width", "30px").gyros({width:"30px", stroke:2}));
-					$.bithive.mkchecks("checkbox",field,source, $.bithive.OptionsValues(field));
+					$.bithive.mkchecks(form, "checkbox",field,source, $.bithive.OptionsValues(field));
 				}
 			});
 			
@@ -1277,7 +1277,7 @@ jQuery.extend({
 				var source = jQuery.base64.atob(field.data("source"));
 				if(source!="") {
 					field.html($("<div>").css("width", "30px").gyros({width:"30px", stroke:2}));
-					$.bithive.mkchecks("onoffswitch",field,source, $.bithive.OptionsValues(field));
+					$.bithive.mkchecks(form, "onoffswitch", field, source, $.bithive.OptionsValues(field));
 				}
 			});
 			
@@ -1286,7 +1286,7 @@ jQuery.extend({
 				var source = jQuery.base64.atob(field.data("source"));
 				if(source!="") {
 					field.html($("<div>").css("width", "30px").gyros({width:"30px", stroke:2}));
-					$.bithive.mkchecks("radio",field,source, $.bithive.OptionsValues(field));
+					$.bithive.mkchecks(form, "radio",field,source, $.bithive.OptionsValues(field));
 				}
 			});
 
@@ -1356,20 +1356,18 @@ jQuery.extend({
 			if(jQuery().buttonsSet) {
 				$.bithive.eachElement(".form-buttonsset", form, itself, function() {
 					var field = $("input", $(this));
-					var source = $.base64.atob(field.data("source")) || "";
-					$.bithive.mkOptions(source, function(src, args) {
-						if(src!=="") {
-							$(args[0]).buttonsSet(src);
-						}
-					}, [this]);
-				});
-
-				$.bithive.eachElement(".form-daysofweek", form, itself, function() {
-					$(this).buttonsSet($.bithive.lang.buttonsSetDays);
-				});
-
-				$.bithive.eachElement(".form-months", form, itself, function() {
-					$(this).buttonsSet(buttonsSetMonths);
+					if($(this).hasClass("daysofweek")) {
+						$(this).buttonsSet($.bithive.lang.buttonsSetDays);
+					} else if($(this).hasClass("months")) {
+						$(this).buttonsSet(buttonsSetMonths);
+					} else {
+						var source = $.base64.atob(field.data("source")) || "";
+						$.bithive.mkOptions(source, function(src, args) {
+							if(src!=="") {
+								$(args[0]).buttonsSet(src);
+							}
+						}, [this]);						
+					}
 				});
 			}
 
@@ -2448,7 +2446,6 @@ jQuery.extend({
 			div.load(source, function(){
 				div.prop("subFormData", ((typeof data != "undefined") ? data : null));
 				if(parentForm) {
-					// $.bithive.SubFormProccess(target, div, data, subformButton);
 					let subFormId = $("[data-subform-id]", div).data("subform-id");
 					let subFormIdValue = div.prop("subFormIdVal");
 					let parentId = parentForm.prop("subform-id");
@@ -2462,7 +2459,7 @@ jQuery.extend({
 							.attr("data-subform-parent", parentId)
 							.appendTo(div);
 					}
-					
+
 					$.bithive.SubFormProccess(target, div, data, subformButton);
 
 					childLink.val(parentLink);
@@ -2470,12 +2467,8 @@ jQuery.extend({
 					div.attr("style", "margin-left: 10% !important").insertAfter(parentForm);
 					$("[data-subform-nested]", parentForm).prop("last-subform", div);
 				} else {
-					// swap por attacher ---
-						target.append(div);
-						$.bithive.SubFormProccess(target, div, data, subformButton);
-						// $.bithive.SubFormProccess(target, div, data, subformButton);
-						// target.append(div);
-					// swap por attacher ---
+					target.append(div);
+					$.bithive.SubFormProccess(target, div, data, subformButton);
 					subformButton.prop("last-subform", div);
 				}
 				$.bithive.RequestCounter(-1);
@@ -2509,6 +2502,7 @@ jQuery.extend({
 						}
 
 						$("input,select,textarea", subform).prop("disabled", false);
+						$(".form-buttonsset", subform).trigger("enabled");
 						$(".ui-autocomplete-input", subform).each(function() {
 							$(this).prop("disabled", false);
 							$(this).autocomplete("enable").autocomplete("option", "disabled", false);
@@ -2709,15 +2703,12 @@ jQuery.extend({
 							} else {
 								field.prop("disabled", true);
 							}
-							
 							if(btnRem.length) { btnRem.hide(); } 
 						}).promise().done(function(){
-							$.bithive.ApplyCounter(div, 1);
 							$.bithive.SubFormFillData([div, data]);
 							if(afteradd) { $.bithive.onload(function(){ $.bithive.run(afteradd, div); }, div); }
 						});
 					} else {
-						$.bithive.ApplyCounter(div, 1);
 						$.bithive.SubFormFillData([div, data]);
 						if(afteradd) { $.bithive.onload(function(){ $.bithive.run(afteradd, div); }, div); }
 					}
@@ -2775,6 +2766,11 @@ jQuery.extend({
 				}
 
 				$.bithive.jsonFiller(data, div, function(){
+					// buttonsset
+					$(".form-buttonsset", div).each(function() {
+						$(this).trigger("refresh");
+					});
+
 					// datepickers
 					$(".form-date", div).each(function() {
 						if($(this).data("DateTimePicker")) {
@@ -2789,6 +2785,12 @@ jQuery.extend({
 					$(".form-onoffswitch-checkbox", div).each(function() {
 						var field = $(this);
 						var name = field.attr("name");
+						if(data && data[name]) {
+							if(data[name]!="" && data[name]!=0) { field.prop("checked", true); }
+							field.data("value", data[name]).val(data[name]);
+						}
+
+						/*
 						if(typeof name != "undefined") {
 							if(name.substring(name.length - 2)=="[]") {
 								name = name.substring(0, name.length-2);
@@ -2800,6 +2802,7 @@ jQuery.extend({
 
 							field.attr("name", name+"["+subFormIdValue+"]").prop("subFormFieldId", subFormIdValue);
 						}
+						*/
 					});
 
 					if(data && $("[data-subform='toggle']", div)) { $("[data-subform='toggle']", div).trigger("click"); }
@@ -2833,7 +2836,8 @@ jQuery.extend({
 			});
 		},
 		
-		mkchecks: function(type, elem, source, values) {
+		mkchecks: function(container, type, elem, source, values) {
+			$.bithive.ApplyCounter(container, 1);
 			var after = null;
 			var disabled = (elem.hasAttr("disabled"));
 
@@ -2848,72 +2852,81 @@ jQuery.extend({
 			$.bithive.mkOptions(source, function(src, args) {
 				var cssClass = args[0].data("class") || "col-xs-12";
 				var name = args[0].data("name") || type;
-
 				args[0].html("");
 				if(type!="onoffswitch") {
-					$.each(src, function(i,option) {
-						var uid = jQuery.uid();
-						var chk = $("<div>")
-							.html(
-								function() {
-									var opt = $("<input>")
-										.attr({
-											"id": uid,
-											"type": type,
-											"name": name,
-											"value": option.value,
-										})
-										.addClass("custom-control-input")
-									;
-									if(disabled) { opt.attr("disabled", "disabled"); }
-									return opt;
-								}
-							)
-							.addClass("custom-control custom-"+type+" col "+cssClass)
-							.append($("<label>").attr("for", uid).addClass("c-pointer custom-control-label").html(option.label))
-						;
-						if($.inArray(option.value, args[1])>=0) { $("input", chk).prop("checked", true); }
-						args[0].append(chk);
+					$.when(
+						$.each(src, function(i,option) {
+							var uid = jQuery.uid();
+							var chk = $("<div>")
+								.html(
+									function() {
+										var opt = $("<input>")
+											.attr({
+												"id": uid,
+												"type": type,
+												"name": name,
+												"value": option.value,
+											})
+											.addClass("custom-control-input")
+										;
+										if(disabled) { opt.attr("disabled", "disabled"); }
+										return opt;
+									}
+								)
+								.addClass("custom-control custom-"+type+" col "+cssClass)
+								.append($("<label>").attr("for", uid).addClass("c-pointer custom-control-label").html(option.label))
+							;
+
+							if($.inArray(option.value, args[1])>=0) { $("input", chk).prop("checked", true); }
+							args[0].append(chk);
+						})
+					).then(function(){
+						if(args[0].html()=="") { args[0].html(args[0].data("empty")); }
+						if(args[2] && typeof args[2]=="function") { args[2](); }
+						$.bithive.ApplyCounter(container, -1);
 					});
 				} else {
-					$.each(src, function(i,option) {
-						var uid = jQuery.uid();
-						var onoff = $("<div>", {class:"form-onoffswitch-container"})
-							.html($("<div>", {class:"form-onoffswitch-button"})
-								.html($("<div>", {class:"form-onoffswitch"})
-									.html(
-										function() {
-											var opt = $("<input>")
-												.attr({
-													"id": uid,
-													"type": "checkbox",
-													"name": name,
-													"value": (option.value || 0)
-												})
-												.addClass("form-onoffswitch-checkbox")
-											;
-											if(disabled) { opt.attr("disabled", "disabled"); }
-											return opt;
-										}
+					$.when(
+						$.each(src, function(i,option) {
+							var uid = jQuery.uid();
+							var onoff = $("<div>", {class:"form-onoffswitch-container"})
+								.html($("<div>", {class:"form-onoffswitch-button"})
+									.html($("<div>", {class:"form-onoffswitch"})
+										.html(
+											function() {
+												var opt = $("<input>")
+													.attr({
+														"id": uid,
+														"type": "checkbox",
+														"name": name,
+														"value": (option.value || 0)
+													})
+													.addClass("form-onoffswitch-checkbox")
+												;
+												if(disabled) { opt.attr("disabled", "disabled"); }
+												return opt;
+											}
+										)
+										.append($("<label>", {class:"form-onoffswitch-label"}).attr("for", uid))
 									)
-									.append($("<label>", {class:"form-onoffswitch-label"}).attr("for", uid))
 								)
-							)
-							.append($("<label>", {class:"form-onoffswitch-text"}).html(option.label))
-							.addClass(cssClass)
-						;
+								.append($("<label>", {class:"form-onoffswitch-text"}).html(option.label))
+								.addClass(cssClass)
+							;
 
-						if(args[0].data("boolean")=="1") {
-							if(args[1][0]>=0) { $("input", onoff).prop("checked", true); }
-						} else {
-							if($.inArray($("input", onoff).val(), args[1])>=0) { $("input", onoff).prop("checked", true); }
-						}
-						args[0].append(onoff);
+							if(args[0].data("boolean")=="1") {
+								if(args[1][0]>=0) { $("input", onoff).prop("checked", true); }
+							} else {
+								if($.inArray($("input", onoff).val(), args[1])>=0) { $("input", onoff).prop("checked", true); }
+							}
+							args[0].append(onoff)
+						})
+					).then(function(){
+						if(args[0].html()=="") { args[0].html(args[0].data("empty")); }
+						if(args[2] && typeof args[2]=="function") { args[2](); }
+						$.bithive.ApplyCounter(container, -1);
 					});
 				}
-
-				if(args[0].html()=="") { args[0].html(args[0].data("empty")); }
-				if(args[2] && typeof args[2]=="function") { args[2](); }
 			}, [elem,values,after]);
 		},
 
@@ -3206,12 +3219,17 @@ jQuery.extend({
 			}			
 		},
 
+		// jsonfill-id = nombre del indice en el JSON
+		// jsonfill-attr = atributo al cual se asignará el valor
 		jsonFiller: function(parsed, targetElement, func) {
 			let x = 0;
 			let y = $.size(parsed);
 			jQuery.each(parsed, function(key, value) {
-				var target = $("[data-id='"+key+"']", targetElement);
-				if(target.is(":input")) {
+				var target = $("[jsonfill-id='"+key+"']", targetElement);
+
+				if(target.hasAttr("jsonfill-attr")) {
+					target.attr(target.attr("jsonfill-attr"), value);
+				} else if(target.is(":input")) {
 					target.val(value);
 				} else {
 					target.html(value);

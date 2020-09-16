@@ -10,9 +10,12 @@ jQuery.extend(jQuery.bithive, {
 
 	mapAddress: function(selector, address, target) {
 		target = (!target) ? $("body") : $(target);
+		let coords = $("[geofill='coords']", target);
+		if(coords.length) { if(coords.val()!="") { address = coords.val(); } }
+
 		$(selector)
 			.prop("lastsearch", false)
-			.on("showmap", function(){
+			.on("showmap", function(e){
 				$(selector+"_coords").gmapicker({
 					address: address,
 					height: "280px",
@@ -21,10 +24,12 @@ jQuery.extend(jQuery.bithive, {
 						$(selector).prop("gmap", map);
 					},
 					after: function(m) {
-						$(selector).val(m.info.lat+","+m.info.lng);
-						if($(selector+"_coords").val()!=m.info.lat+","+m.info.lng) {
-							$(selector).blur();
-						}
+					//	if(!first) {
+							$(selector).val(m.info.lat+","+m.info.lng);
+							if($(selector+"_coords").val()!=m.info.lat+","+m.info.lng) {
+								$(selector).blur();
+							}
+					//	}
 					}
 				});
 			})

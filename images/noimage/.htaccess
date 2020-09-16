@@ -20,5 +20,5 @@ php_value default_charset "utf-8"
 <IfModule mod_rewrite.c>
 	RewriteEngine On
 	RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteRule ^(.*)$ index.php?s=$1 [QSA,L]
+	RewriteRule ^([0-9a-fx]*)/?(.*)$ index.php?s=$1&t=$2 [QSA,L]
 </IfModule>
