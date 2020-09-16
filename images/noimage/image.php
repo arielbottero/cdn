@@ -7,7 +7,7 @@ if(isset($_GET["s"]) && !empty($_GET["s"])) {
     if(isset($aCustom[1])) { $aFormat[1] = $aCustom[1]; }
     if(isset($aCustom[2])) { $aFormat[2] = $aCustom[2]; }
 }
-
+// print_r($aFormat); exit();
 $nWidth = $aFormat[0];
 $nHeight = $aFormat[1];
 $sBgColor = "#".$aFormat[2];
@@ -49,7 +49,7 @@ $SVG = <<<SVG
             <![CDATA[
                 body { margin: 0; }
                 div { display: table; margin: auto; font-size:{$nFont}px; width: {$nTextBoxWidth}px; height: {$nTextBoxHeight}px; }
-                p { display: table-cell; text-align: center; vertical-align: middle; color: {$nFontColor}; }
+                p { display: table-cell; text-align: center; vertical-align: middle; font-family:Arial,Helvetica,sans-serif; color: {$nFontColor}; }
             ]]>
         </style>
     </defs>

@@ -3,7 +3,7 @@
 #===============================================================================
 Options -Indexes
 Options +FollowSymLinks
-DirectoryIndex index.php index.html
+DirectoryIndex index.html
 
 
 #===============================================================================
@@ -19,6 +19,7 @@ php_value default_charset "utf-8"
 #===============================================================================
 <IfModule mod_rewrite.c>
 	RewriteEngine On
+	RewriteRule ^$ index.html [QSA,L]
 	RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteRule ^([0-9a-fx]*)/?(.*)$ index.php?s=$1&t=$2 [QSA,L]
+	RewriteRule ^([0-9a-fA-FxX]*)/?(.*)$ image.php?s=$1&t=$2 [QSA,L]
 </IfModule>
