@@ -1246,23 +1246,6 @@ jQuery.extend({
 			});
 
 			// CHECKBOX/RADIO ----------------------------------------------------------------------
-			// tilda todos los checkboxes visibles (destilda TODOS) que tengan la clase pasada en data-checkall
-			$.bithive.eachElement("[data-checkall]", form, itself, function() {
-				var checkall = $(this);
-				checkall.prop("isChecked", false);
-				checkall.click(function() {
-					var boxes = $(checkall.data("checkall"));
-					if(!checkall.prop("isChecked")) {
-						boxes.filter(":visible").prop("checked", true);
-						checkall.prop("isChecked", true);
-					} else {
-						boxes.prop("checked", false);
-						checkall.prop("isChecked", false);
-					}
-				});
-			});
-			
-			
 			$.bithive.eachElement("div.checkbox[data-source]", form, itself, function() {
 				var field = $(this);
 				var source = jQuery.base64.atob(field.data("source"));
@@ -1288,6 +1271,27 @@ jQuery.extend({
 					field.html($("<div>").css("width", "30px").gyros({width:"30px", stroke:2}));
 					$.bithive.mkchecks(form, "radio",field,source, $.bithive.OptionsValues(field));
 				}
+			});
+
+			// tilda todos los checkboxes visibles (destilda TODOS) que tengan el selector pasado en data-checkall
+			$.bithive.eachElement("[data-checkall]", form, itself, function() {
+				var checkall = $(this);
+				checkall.prop("isChecked", false);
+				checkall.click(function() {
+					var boxes = $(checkall.data("checkall"));
+					if(!checkall.prop("isChecked")) {
+						boxes.filter(":visible").prop("checked", true);
+						checkall.prop("isChecked", true);
+					} else {
+						boxes.prop("checked", false);
+						checkall.prop("isChecked", false);
+					}
+				});
+			});
+
+			// tilda unicamente este checkbox, destildando todos los pasados en data-checkjustme
+			$.bithive.eachElement("[data-checkjustme]", form, itself, function() {
+				$.bithive.CheckJustMe($(this));
 			});
 
 
@@ -2272,6 +2276,9 @@ jQuery.extend({
 				} else if(response.substr(0, 15)=="[[TUTOR-ALERT]]") {
 					// tutor alert
 					$.bithive.SendFormMessages(response, btnRow, gyros, "alert");
+				} else if(response.substr(0,13)=="[ NOGAL ERROR") {
+					// nogal error | php error
+					$.bithive.SendFormMessages(response, btnRow, gyros, "error");
 				}
 			} else {
 				// nogal error | php error
@@ -2881,6 +2888,7 @@ jQuery.extend({
 							args[0].append(chk);
 						})
 					).then(function(){
+						$.bithive.CheckJustMe(args[0]);
 						if(args[0].html()=="") { args[0].html(args[0].data("empty")); }
 						if(args[2] && typeof args[2]=="function") { args[2](); }
 						$.bithive.ApplyCounter(container, -1);
@@ -2922,6 +2930,7 @@ jQuery.extend({
 							args[0].append(onoff)
 						})
 					).then(function(){
+						$.bithive.CheckJustMe(args[0]);
 						if(args[0].html()=="") { args[0].html(args[0].data("empty")); }
 						if(args[2] && typeof args[2]=="function") { args[2](); }
 						$.bithive.ApplyCounter(container, -1);
@@ -3416,6 +3425,30 @@ jQuery.extend({
 			}).trigger("change");
 
 			return elem;
+		},
+
+
+		CheckJustMe: function(justme) {
+			if(justme.hasClass("onoffswitch")) {
+				$(".form-onoffswitch-label", justme).click(function() {
+					let chk = $(this).prev();
+					if(!chk.prop("disabled") && !chk.prop("checked")) {
+						$(justme.data("checkjustme")).not(chk).prop("checked", false);
+					}
+				});
+			} else if(justme.hasClass("checkbox") || justme.hasClass("radio")) {
+				$("input[type='checkbox'], input[type='radio']", justme).change(function() {
+					if($(this).prop("checked")) {
+						$(justme.data("checkjustme")).not($(this)).prop("checked", false);
+					}
+				});
+			} else {
+				justme.change(function() {
+					if(justme.prop("checked")) {
+						$(justme.data("checkjustme")).not(justme).prop("checked", false);
+					}
+				});
+			}
 		}
 	}
 });
