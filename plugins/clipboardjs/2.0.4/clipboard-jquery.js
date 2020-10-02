@@ -135,5 +135,5 @@
 			// disparador
 			this.init(this.options);
 		}
-		});
+	});
 })(jQuery);

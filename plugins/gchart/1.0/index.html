@@ -1,0 +1,157 @@
+<!DOCTYPE html  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+ 		<title>gchart</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+		<script type="text/javascript" src="https://cdn.upps.cloud/js/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript" src="https://cdn.upps.cloud/js/jquery-ui-1.11.4.min.js"></script>
+		<script type="text/javascript" src="https://cdn.upps.cloud/js/jquery-extend-1.0.js"></script>
+		<script type="text/javascript" src="gchart.js"></script>
+		<link rel="stylesheet" href="https://cdn.upps.cloud/css/bootstrap-4.3.1.min.css" />
+		<script src="https://www.gstatic.com/charts/loader.js"></script>
+		<script>
+			var source = {
+				// chartType: "ComboChart", 
+				// chartType: "PieChart", 
+				// chartType: "BarChart", 
+				// chartType: "ColumnChart", 
+				chartType: "LineChart", 
+				options: {
+					title: "Monthly Coffee Production by Country",
+					vAxis: {title: 'Cups'},
+					hAxis: {title: 'Month'},
+					series: 'curveType',
+					series: {5: {type: 'line'}}
+				},
+				columns: [
+					["string", "Month"],
+					["number", "Sales"],
+					["number", "Sales"],
+					{type:"number", role:"interval"},
+					{type:"number", role:"interval"},
+					{type:"string", role:"annotation"},
+					{role:"tooltip", p:{html:true}},
+					{type:"boolean", role:"certainty"}
+					// {role:"style"}
+				],
+				data: [
+					['April', 1000, 200, 900, 1100,  'A','Stolen data', true],
+					['May',  1170, 1500, 1000, 1200,  'B','Coffee spill', true],
+					['June',  660,  800, 550,  800,  'C','Wumpus attack', true],
+					['July', 1030, null, null, null, null, null, false]
+				]
+			};
+
+			var annual = {
+				chartType: "PieChart", 
+				options: {
+					title: "Annualy Coffee Production",
+					vAxis: {title: 'Cups'},
+					hAxis: {title: 'Month'},
+					height: 300,
+					animation: {
+						startup: true
+					}
+				},
+				columns: [
+					["string", "Month"],
+					["number", "Sales"],
+					["number", "Sales"]
+				],
+				data: [
+					['2018', 2800, 2500],
+					['2019',  3320, 1200],
+					['2020',  3856,  2055]
+				],
+				years: {
+					2018: [
+						['Abril', 1000, 200],
+						['Mayo',  1170, 1500],
+						['Junio',  630,  800]
+					],
+					2019: [
+						['Abril', 1120, 300],
+						['Mayo',  1400, 600],
+						['Junio',  800,  300]
+					],
+					2020: [
+						['Abril', 1500, 455],
+						['Mayo',  1356, 1400],
+						['Junio',  1000,  300]
+					]
+				},
+
+				ready: function(c) {
+					months.data = c.source.years[2020];
+					$("#chart3").gChart(months);
+				},
+
+				click: function(c) {
+					let selectedItem = c.chart.getSelection()[0];
+					if(selectedItem) {
+						$("#chart3").gChart("redraw")(c.source.years[c.data.getValue(selectedItem.row, 0)]);
+					}
+				}
+			};
+
+			var months = {
+				chartType: "ComboChart", 
+				options: {
+					title: "Monthly Coffee Production",
+					vAxis: {title: 'Cups'},
+					hAxis: {title: 'Year'},
+					seriesType: 'bars',
+					height: 300,
+					animation: {
+						startup: true,
+						duration: 1000,
+						easing: 'out'
+					}
+				},
+				columns: [
+					["string", "Year"],
+					["number", "Sales"],
+					["number", "Quantity"]
+				]
+			};
+
+			$(function(){
+				$("#chart").gChart(source);
+				$("#chart2").gChart(annual);
+
+				var months2 = jQuery.extend(true, {}, months);
+				months2.chartType = "AreaChart";
+				delete months2.options.seriesType;
+
+				var annual2 = jQuery.extend(true, {}, annual);
+				annual2.options.is3D = true;
+				annual2.ready = function(c) {
+					months2.data = c.source.years[2020];
+					$("#chart5").gChart(months2);
+				};
+				annual2.click = function(c) {
+					let selectedItem = c.chart.getSelection()[0];
+					if(selectedItem) {
+						$("#chart5").gChart("redraw")(c.source.years[c.data.getValue(selectedItem.row, 0)], true);
+					}
+				};
+				$("#chart4").gChart(annual2);
+			});
+		</script>
+	</head>
+
+	<body>
+		<div class="row pb-5">
+			<div class="col"><div id="chart"></div></div>
+		</div>
+		<div class="row py-5">
+			<div class="col-6"><div id="chart2"></div></div>
+			<div class="col-6"><div id="chart3"></div></div>
+		</div>
+		<div class="row pt-5">
+			<div class="col-6"><div id="chart4"></div></div>
+			<div class="col-6"><div id="chart5"></div></div>
+		</div>
+	</body>
+</html>
