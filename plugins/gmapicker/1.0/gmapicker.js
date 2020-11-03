@@ -55,34 +55,46 @@
 		},
 
 		loadMap: function() {
+			var $this = this;
 			if(this.map!=null) { return true; }
 			var width = (this.options.width!=null) ? this.options.width : "auto";
 			var after = this.options.after || null;
-			this.map = new GMaps({
-				el: this.mapdiv[0],
+			
+			this.map = jQuery.simpleMap.create({
+				target: this.mapdiv[0],
 				width: width,
 				height: this.options.height,
 				lat: this.options.lat,
 				lng: this.options.lng,
 				zoom: this.options.zoom,
 				mapTypeControl: false,
-				streetViewControl: false
+				streetViewControl: false,
+				draggable: this.options.draggable,
+				dragend: function(marker) {
+					let lat = marker.getPosition().lat();
+					let lng = marker.getPosition().lng();
+					$this.info = {
+						lat: lat,
+						lng: lng,
+						link: "https://maps.google.com/maps?z=15&q="+lat+","+lng
+					};
+					if($this.options.center) { $this.center(lat, lng); }
+					if(typeof after=="function") { after($this); }
+				}
 			});
+
 			this.info.lat = this.options.lat;
 			this.info.lng = this.options.lng;
 
 			if(this.options.address) {
 				var onload = this.options.onload || function() {};
 				var $this = this;
-				GMaps.geocode({
-					address: this.options.address,
-					callback: function(results, status) {
-						if(status=="OK") {
-							$this.MapInfo(results[0]);
-							if($this.options.center) { $this.center(); }
-							onload($this);
-							$this.mark({after:after});
-						}
+				this.map.addresscoords(this.options.address, function(results, status) {
+					if(status=="OK") {
+						$this.MapInfo(results[0]);
+						if($this.options.center) { $this.center($this.info.lat, $this.info.lng); }
+						onload($this);
+						$this.mark({after:after});
 					}
 				});
 			} else {
@@ -97,14 +109,11 @@
 			var after = options.after || function() {};
 
 			var $this = this;
-			GMaps.geocode({
-				address: address,
-				callback: function(results, status) {
-					if(status=="OK") {
-						$this.MapInfo(results[0]);
-						if($this.options.center) { $this.center(); }
-						after($this);
-					}
+			this.map.addresscoords(address, function(results, status) {
+				if(status=="OK") {
+					$this.MapInfo(results[0]);
+					if($this.options.center) { $this.center($this.info.lat, $this.info.lng); }
+					after($this);
 				}
 			});
 		},
@@ -116,46 +125,25 @@
 			var after = options.after || this.options.after;
 
 			if(this.options.center) { this.center(lat, lng); }
-			if(!this.options.multiple) { this.map.removeMarkers(); }
+			if(!this.options.multiple) { this.map.clearMarkers(); }
 
 			var $this = this;
-			if(this.options.disabled) {
-				this.map.addMarker({lat: lat, lng: lng});
-			} else {
-				this.map.addMarker({
-					lat: lat,
-					lng: lng,
-					draggable: this.options.draggable,
-					dragend: function(marker) {
-						GMaps.geocode({
-							lat: marker.latLng.lat(),
-							lng: marker.latLng.lng(),
-							callback: function(results, status) {
-								if(status=="OK") {
-									$this.MapInfo(results[0]);
-									if($this.options.center) { $this.center(); }
-									if(typeof after=="function") { after($this); }
-								}
-							}
-						});
-					}
-				});
-			}
+			if(this.options.disabled) { this.map.settings.draggable = false; }
+			this.map.addMarker({lat:lat, lng:lng});
 			this.info = {
 				lat: lat,
 				lng: lng,
 				link: "https://maps.google.com/maps?z=15&q="+lat+","+lng
 			};
 
-			if($this.options.center) { $this.center(); }
+			if($this.options.center) { $this.center(lat, lng); }
 			if(typeof after=="function") { after($this); }
 		},
 		
-		center: function(options) {
-			var options = options || {};
-			var lat = options.lat || this.info.lat;
-			var lng = options.lng || this.info.lng;
-			this.map.setCenter(lat, lng);
+		center: function(lat, lng) {
+			var lat = lat || this.info.lat;
+			var lng = lng || this.info.lng;
+			this.map.centerOn([lat, lng]);
 		},
 
 		container: function() {

@@ -28,7 +28,7 @@
 
 		this.redraw = function(data, append) {
 			if(append) {
-				$this.source.data = $.extend($this.source.data, data);
+				$this.source.data = jQuery.extend($this.source.data, data);
 				for(let x in data) {
 					$this.data.addRow(data[x]);
 				}

@@ -1,7 +1,7 @@
 (function(jQuery) {
 	jQuery.extend({
 		template: function(string, data) {
-			return string.replace(/\{\{([\w]*)\}\}/g, function(str, key) {
+			return string.replace(/\{:([\w]*):\}/g, function(str, key) {
 				return (typeof data[key]!=="undefined" && data[key] !== null) ? data[key] : "";
 			});
 		},

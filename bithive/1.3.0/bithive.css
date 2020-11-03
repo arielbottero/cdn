@@ -62,6 +62,11 @@ a {
 			font-family: "Font Awesome 5 Pro";
 			text-align: right;
 		}
+	
+	#topnav #actions-buttons .action-button .btn {
+		margin-top: 0px !important;
+		margin-bottom: 0px !important;
+	}
 
 .content-header {
 	margin-left: 15px;
@@ -253,6 +258,11 @@ td.dropdown {
 		line-height: 30px;
 	}
 
+#actions-buttons .action-button .btn {
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
 .form-inline .btnbox {
 	padding-bottom: 0px;	
 }
@@ -395,6 +405,7 @@ td.dropdown {
 	}
 
 .btn {
+	cursor: pointer;
 	border-radius: 2rem;
 	box-shadow: 0 .15rem .5rem 0 #5A5C6926 !important;
 }
@@ -489,10 +500,11 @@ select.bootstrap-select {
 		opacity: 1;
 	}
 
-	.bootstrap-select .btn:focus, 
-	.bootstrap-select .btn:active {
-		/* border-color: #AB0000 !important; */
+	.bootstrap-select .btn-light,
+	.bootstrap-select .btn-light:hover {
+		background-color: #FFFFFF !important;
 	}
+
 
 .custom-file-label.photo::after {
 	font-family: "Font Awesome 5 Pro" !important;
@@ -961,8 +973,8 @@ select.bootstrap-select {
 			text-align: center !important;
 		}
 
-		#actions-buttons .action-button a:hover, 
-		#actions-buttons .action-button a {
+		#actions-buttons .action-button .btn:hover, 
+		#actions-buttons .action-button .btn {
 			align-items: center;
 			background: transparent !important;
 			box-shadow: none !important;
@@ -974,15 +986,15 @@ select.bootstrap-select {
 			cursor: pointer;
 		}
 		
-		#actions-buttons .action-button a > span {
+		#actions-buttons .action-button .btn > span {
 			display: none;
 		}
 
-		#actions-buttons .action-button a > i {
+		#actions-buttons .action-button .btn > i {
 			/* color: #ABABAB !important; */
 			font-size: 22px !important;
 		}
-			#actions-buttons .action-button a > i:hover {
+			#actions-buttons .action-button .btn > i:hover {
 				/* color: #AB0000 !important;			 */
 			}
 	

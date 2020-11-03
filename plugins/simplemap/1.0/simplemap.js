@@ -16,7 +16,9 @@ jQuery.extend({
 				click: null,
 				grid: 40,
 				image: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m"
-			}
+			},
+			draggable: false,
+			dragend: null
 		},
 
 		create: function(options) {
@@ -38,26 +40,43 @@ jQuery.extend({
 
 			$.each(coords, function(i, e) {
 				var point = e;
-				var position = {lat: parseFloat(point.x), lng: parseFloat(point.y)};
-
+				var lat = point.lat || point.x;
+				var lng = point.lng || point.y;
+				var position = {lat: parseFloat(lat), lng: parseFloat(lng)};
 				var marker = new google.maps.Marker({
 					map: $this.map,
 					position: position,
-					title: point.title || "lat:"+point.x+", lng:"+point.y,
-					source: point
+					title: point.title || "lat:"+lat+", lng:"+lng,
+					source: point,
+					draggable: $this.settings.draggable
 				});
-
+				
 				if(typeof $this.settings.click == "function") {
 					marker.addListener("click", function() {
 						$this.settings.click(point);
 					});
 				}
+
+				if($this.settings.draggable && typeof $this.settings.dragend == "function") {
+					marker.addListener("dragend", function() {
+						$this.settings.dragend(marker);
+					});
+				}
+
 				$this.markers.push(marker);
 			});
 
 			if(this.settings.clusters.active) { this.createClusters(); }
 
 			return this;
+		},
+
+		clearMarkers: function(remove) {
+			var $this = this;
+			for(let i = 0; i < $this.markers.length; i++) {
+				$this.markers[i].setMap(null);
+			}
+			if(remove) { $this.markers = []; }
 		},
 
 		createClusters: function() {
@@ -104,10 +123,9 @@ jQuery.extend({
 		},
 
 		centerOn: function(coords) {
-			var coords = coords.split(",");
+			var coords = (typeof coords!="string") ? coords : coords.split(",");
 			this.map.setZoom(16);
 			this.map.setCenter({lat:parseFloat(coords[0]), lng:parseFloat(coords[1])});
-			$.fancybox.destroy();
 		},
 
 		faMarker: function(classes) {
@@ -131,6 +149,13 @@ jQuery.extend({
 			ctx.font = size+"px Font Awesome 5 Pro";
 			ctx.fillText(String.fromCharCode(parseInt(glyph, 16)), 0, size*.8);
 			return canvas.toDataURL();
+		},
+
+		addresscoords: function(address, after) {
+			var geocoder = new google.maps.Geocoder();
+			geocoder.geocode({"address":address}, function(results, status) {
+				after(results, status);
+			});
 		}
 	}
 });

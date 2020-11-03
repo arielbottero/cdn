@@ -1,7 +1,7 @@
 (function( $ ){
 	"use strict";
 
-	$.fn.buttonsSet = function(set) {
+	$.fn.buttonsSet = function(set, options) {
 		var dataset = set || [
 			{ "label":"Do", "value":"0" },
 			{ "label":"Lu", "value":"1" },
@@ -11,6 +11,9 @@
 			{ "label":"Vi", "value":"5" },
 			{ "label":"Sa", "value":"6" }
 		];
+
+		var setclass = options.setclass || "";
+		var btnclass = options.btnclass || "";
 
 		return this.each(function(){
 			$(this).on("refresh", function(e){
@@ -47,14 +50,14 @@
 				}
 			}
 
-			var buttonsSet = $("<div>", {class:"buttonsdataset"});
+			var buttonsSet = $("<div>", {class:"buttonsdataset "+setclass});
 			for(var i=0; i < dataset.length; i++) {
 				var set = dataset[i];
 				var id = "dataset"+set.label+n;
 
 				var checked = (set.checked) ? 'checked="checked"' : "";
 				var classname = (set.checked) ? "primary" : "light";
-				$("<span>", {class:"buttonsetbtn"})
+				$("<span>", {class:"buttonsetbtn "+btnclass})
 					.attr("data-value", (set.value))
 					.html($("<input>", {type:"checkbox", id:id, value:(set.value), class:"d-none"}).prop("checked", checked))
 					.append($("<label>", {for:id, class:"btn btn-"+classname}).text(set.label))

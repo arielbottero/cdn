@@ -1,14 +1,14 @@
 jQuery.extend(jQuery.bithive, {
-	mapMark: function(selector, address) {
+	mapMark: function(url, selector, address) {
 		jQuery.ajax({
-			url: "/knot.php?imya=bDjJSY163KZooSb2b5a4TNxQWa1Z17ZX&q="+address,
+			url: url+address,
 			success: function(src) {
 				$(selector).attr("src", src);
 			}
 		});
 	},
 
-	mapAddress: function(selector, address, target) {
+	mapAddress: function(url, selector, address, target) {
 		target = (!target) ? $("body") : $(target);
 		let coords = $("[geofill='coords']", target);
 		if(coords.length) { if(coords.val()!="") { address = coords.val(); } }
@@ -24,12 +24,10 @@ jQuery.extend(jQuery.bithive, {
 						$(selector).prop("gmap", map);
 					},
 					after: function(m) {
-					//	if(!first) {
-							$(selector).val(m.info.lat+","+m.info.lng);
-							if($(selector+"_coords").val()!=m.info.lat+","+m.info.lng) {
-								$(selector).blur();
-							}
-					//	}
+						$(selector).val(m.info.lat+","+m.info.lng);
+						if($(selector+"_coords").val()!=m.info.lat+","+m.info.lng) {
+							$(selector).blur();
+						}
 					}
 				});
 			})
@@ -40,7 +38,7 @@ jQuery.extend(jQuery.bithive, {
 					locator.prop("lastsearch", search);
 					setTimeout(function() {
 						jQuery.ajax({
-							url: "/knot.php?imya=e7kLzx3gdoSH3CmPtTp3O9KuDhRBzBOF&q="+search,
+							url: url+search,
 							dataType: "json",
 							success: function(data) {
 								if(data.results.length) {

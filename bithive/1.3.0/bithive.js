@@ -138,6 +138,12 @@ jQuery.extend({
 				} else {
 					return $.bithive[code](args);
 				}
+			} else if(typeof code=="function") {
+				if(typeof args == "undefined") {
+					return code();
+				} else {
+					return code(args);
+				}
 			} else {
 				return eval(code);
 			}
@@ -423,42 +429,8 @@ jQuery.extend({
 				$.bithive.eachElement(".dialog-content", elem, itself, function() {
 					$(this).click(function(e) {
 						e.preventDefault();
-						var options		= $(this).hyphened("dialog");
-						var id			= options.id || jQuery.uid();
-						var classes		= (options.class) ? " "+options.class : " ";
-						var size		= (options.size) ? "dialog-"+options.size : "";
-						var title		= options.title || "&nbsp;";
-						var closable	= (typeof options.closable == "undefined") ? true : options.closable;
-						var content		= options.content;
-						var btnClose	= (options.close) ? [{ label: options.close, cssClass: "btn-primary pull-center", action: function(dialogItself){ dialogItself.close(); }}] : null;
-						
-						// los elementos de la respuesta que tengan el atributo dialog-close, cerraran el dialogo
-						
-						var dialogLinkLoaded = false;
-						var dialogOptions = {
-							draggable: true,
-							title: title,
-							closable: closable,
-							message: $("<div></div>").id(id).addClass("container-fluid"+classes).html($(content).html()),
-							cssClass: size,
-							onshow: function(dialogRef){
-								if(options.before) { $.bithive.run(options.before); }
-							},
-							onshown: function(dialogRef){
-								var body = $("#"+id);
-								var dialogLinkInterval = setInterval(function() {
-									if(dialogLinkLoaded) {
-										$.bithive.apply(body);
-										$("[dialog-close]", body).click(function(){ dialogRef.close(); });
-										clearInterval(dialogLinkInterval);
-									}
-								}, 100);
-								if(options.after) { $.bithive.run(options.after); }
-							}
-						};
-						
-						if(btnClose!=null) { dialogOptions.buttons = btnClose; }
-						var dialog = BootstrapDialog.show(dialogOptions);
+						var options = $(this).hyphened("dialog");
+						$.bithive.modal(options);
 					});
 				});
 
@@ -1359,16 +1331,18 @@ jQuery.extend({
 			// SETS --------------------------------------------------------------------------------
 			if(jQuery().buttonsSet) {
 				$.bithive.eachElement(".form-buttonsset", form, itself, function() {
-					var field = $("input", $(this));
+					let field = $("input", $(this));
+					let setClass = $(this).data("setclass");
+					let btnClass = $(this).data("btnclass");
 					if($(this).hasClass("daysofweek")) {
-						$(this).buttonsSet($.bithive.lang.buttonsSetDays);
+						$(this).buttonsSet($.bithive.lang.buttonsSetDays, {setclass:setClass, btnclass:btnClass});
 					} else if($(this).hasClass("months")) {
-						$(this).buttonsSet(buttonsSetMonths);
+						$(this).buttonsSet(buttonsSetMonths, {setclass:setClass, btnclass:btnClass});
 					} else {
 						var source = $.base64.atob(field.data("source")) || "";
 						$.bithive.mkOptions(source, function(src, args) {
 							if(src!=="") {
-								$(args[0]).buttonsSet(src);
+								$(args[0]).buttonsSet(src, {setclass:setClass, btnclass:btnClass});
 							}
 						}, [this]);						
 					}
@@ -1841,6 +1815,10 @@ jQuery.extend({
 			$.bithive.eachElement("select.form-select[data-source]", form, itself, function() {
 				var field = $(this);
 				var source = jQuery.base64.atob(field.data("source")) || "";
+				if(field.hasAttr("multiple")) {
+					let name = field.attr("name");
+					if(name.substring(-2)!="[]") { field.attr("name", name+"[]"); }
+				}
 				if(source!="") {
 					$.bithive.mkselect(field, source, $.bithive.OptionsValues(field));
 				} else {
@@ -2096,6 +2074,44 @@ jQuery.extend({
 				]
 			};
 
+			var dialog = BootstrapDialog.show(dialogOptions);
+		},
+
+		modal: function(options) {
+			var id			= options.id || jQuery.uid();
+			var classes		= (options.class) ? " "+options.class : " ";
+			var size		= (options.size) ? "dialog-"+options.size : "";
+			var title		= options.title || "&nbsp;";
+			var closable	= (typeof options.closable == "undefined") ? true : options.closable;
+			var content		= options.content;
+			var btnClose	= (options.close) ? [{ label: options.close, cssClass: "btn-primary pull-center", action: function(dialogItself){ dialogItself.close(); }}] : null;
+			
+			// los elementos de la respuesta que tengan el atributo dialog-close, cerraran el dialogo
+			
+			var dialogLinkLoaded = false;
+			var dialogOptions = {
+				draggable: true,
+				title: title,
+				closable: closable,
+				message: $("<div></div>").id(id).addClass("container-fluid"+classes).html($(content)),
+				cssClass: size,
+				onshow: function(dialogRef){
+					if(options.before) { $.bithive.run(options.before); }
+				},
+				onshown: function(dialogRef){
+					var body = $("#"+id);
+					var dialogLinkInterval = setInterval(function() {
+						if(dialogLinkLoaded) {
+							$.bithive.apply(body);
+							$("[dialog-close]", body).click(function(){ dialogRef.close(); });
+							clearInterval(dialogLinkInterval);
+						}
+					}, 100);
+					if(options.after) { $.bithive.run(options.after); }
+				}
+			};
+			
+			if(btnClose!=null) { dialogOptions.buttons = btnClose; }
 			var dialog = BootstrapDialog.show(dialogOptions);
 		},
 
@@ -2857,7 +2873,7 @@ jQuery.extend({
 			}
 
 			$.bithive.mkOptions(source, function(src, args) {
-				var cssClass = args[0].data("class") || "col-xs-12";
+				var cssClass = args[0].data("class") || "col-12";
 				var name = args[0].data("name") || type;
 				args[0].html("");
 				if(type!="onoffswitch") {
@@ -2880,7 +2896,7 @@ jQuery.extend({
 										return opt;
 									}
 								)
-								.addClass("custom-control custom-"+type+" col "+cssClass)
+								.addClass("custom-control custom-"+type+" col-12 "+cssClass)
 								.append($("<label>").attr("for", uid).addClass("c-pointer custom-control-label").html(option.label))
 							;
 
