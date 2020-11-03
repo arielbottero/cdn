@@ -952,6 +952,13 @@ select.bootstrap-select {
 		font-size: 16px;
 	}
 
+	#topnav .title {
+		font-size: 20px !important;
+		margin-top: 5px;
+		padding: 0;
+		white-space: nowrap;
+	}
+
 	#actions-buttons {
 		position: fixed !important;
 		top: auto !important;
