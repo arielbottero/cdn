@@ -2129,16 +2129,21 @@ jQuery.extend({
 				var hrefRedirect = redirect.val();
 				if(hrefRedirect.indexOf("?")!=-1) {
 					var urlQuery = hrefRedirect.substring(hrefRedirect.indexOf("?")+1);
+					hrefRedirect = hrefRedirect.substring(0, hrefRedirect.indexOf("?")+1);
 					if(urlQuery.indexOf("&")==0) { urlQuery = urlQuery.substring(1); }
-					urlQuery = JSON.parse('{"' + decodeURI(urlQuery).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
-					var urlQueryString = [];
-					$.each(urlQuery, function(k,v){
-						if(k!="response") {
-							urlQueryString.push(k+"="+v);
-						}
-					});
-					hrefRedirect = hrefRedirect.substring(0, hrefRedirect.indexOf("?")+1)
-					hrefRedirect += urlQueryString.join("&")+"&response=";
+					urlQuery = decodeURI(urlQuery).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"');
+					if(urlQuery!="") {
+						urlQuery = JSON.parse('{"' +urlQuery+ '"}');
+						var urlQueryString = [];
+						$.each(urlQuery, function(k,v){
+							if(k!="response") {
+								urlQueryString.push(k+"="+v);
+							}
+						});
+						hrefRedirect += urlQueryString.join("&")+"&response=";
+					} else {
+						hrefRedirect += "&response=";
+					}
 				} else {
 					hrefRedirect += "?response=";
 				}
