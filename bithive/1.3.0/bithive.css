@@ -37,7 +37,7 @@ a {
 	top: 0px;
 	position: fixed;
 	background-color: #FFFFFF;
-	box-shadow: 0 .15rem 1.75rem 0 #5A5C6926 !important;
+	box-shadow: 0 .15rem 1.75rem 0 #5A5C6988 !important;
 	height: 55px;
 	text-align: center;
 	width: 100%;
@@ -148,10 +148,10 @@ a {
 	border-radius: 1.2rem;
 	border-top: solid 15px #5A5C69;
 	padding-top: 15px !important;
-	margin-left: auto !important;
-	margin-right: auto !important;
-	margin-top: 30px;
+	margin: auto !important;
+	margin-top: 25px !important;
 	max-width: 450px;
+	width: 90%;
 }
 
 	.login > h2 {
@@ -897,13 +897,13 @@ select.bootstrap-select {
 		width: 100%;
 	}
 
-	.login {
-		margin-top: 0;
+	.wall {
+		display: flex;
 	}
-		.login > div {
-			min-height: calc(100vh - 105px);
-		}
 
+	.login {
+		margin-top: auto !important;
+	}
 
 	#home-menu .dropdown,
 	#home-menu .dropdown .dropdown-menu ul li {

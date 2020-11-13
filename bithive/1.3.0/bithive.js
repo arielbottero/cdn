@@ -4,6 +4,7 @@ jQuery.extend({
 		ctxmenu: {menu: null, top:0, left:0},
 		httpRequests: 0,
 		onLoadCounter: 0,
+		dynCSS: {formats:{}},
 
 		lang: {
 			alertTitle: "Atención!",
@@ -404,10 +405,15 @@ jQuery.extend({
 				});
 
 				$.bithive.eachElement(".format-money", elem, itself, function() {
-					var curclass = jQuery.uid();
 					var currency = $(this).attr("format-custom") || "";
+					if(!$.bithive.dynCSS.formats[currency]) {
+						var curclass = jQuery.uid();
+						$.bithive.dynCSS.formats[currency] = curclass;
+						$('<style>.format-money.'+curclass+':before{content:"'+currency+'"}</style>').appendTo("head");
+					} else {
+						var curclass = $.bithive.dynCSS.formats[currency];
+					}
 					$(this).addClass("text-right "+curclass).numberformat({"format":"money"});
-					$('<style>.format-money.'+curclass+':before{content:"'+currency+'"}</style>').appendTo("head");
 				});
 
 				$.bithive.eachElement(".format-decimal", elem, itself, function() {
@@ -2651,9 +2657,10 @@ jQuery.extend({
 						$.bithive.SubFormFillData([cloned, clonedData]);
 
 						if($(this).hasAttr("data-subform-after")) { eval($(this).data("subform-after")+"(subform, cloned)"); }
-
-						// if(afterclone) { $.bithive.run(afterclone, $($(".grabado").last(), target)); } // gol
-						if(afterclone) { $.bithive.run(afterclone, $($(".subform-form").last(), target)); }
+						
+						// afterclone: [clone, source]
+						if(afterclone) { $.bithive.run(afterclone, [$($(".subform-form").last(), target), subform]); }
+						
 						button.prop("subforms", button.prop("subforms") + 1);
 						$.bithive.enumerate($("[data-subform='number']", target));
 						clearInterval(cloning);

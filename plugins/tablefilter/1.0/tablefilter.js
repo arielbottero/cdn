@@ -209,9 +209,6 @@
 										if(!params.sensitive) { filterValText =  filterValText.toLowerCase(); }
 									}
 								}
-								
-								filterVal = filterVal.trim();
-								if(!params.sensitive) { filterVal =  filterVal.toLowerCase(); }
 								$("td:nth-child("+colnum+")", $("tbody", table)).not(".day").each(function(e){
 									if(!splitter && filterVal!="" && filterVal!="**") {
 										if(type=="multiple") {
@@ -227,6 +224,8 @@
 											});
 											if(hide) { $(this).parent().hide(); }
 										} else if(type=="input") {
+											filterVal = filterVal.trim();
+											if(!params.sensitive) { filterVal =  filterVal.toLowerCase(); }
 											var curval = (!params.sensitive) ? $(this).text().toLowerCase() : $(this).text();
 											if(sign!==false) {
 												if(isNaN(filterVal)) {console.log("dd")
