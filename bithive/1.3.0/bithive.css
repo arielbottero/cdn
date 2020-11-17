@@ -209,7 +209,7 @@ a {
 
 ul.ui-autocomplete {
 	margin-top: -10px !important;
-	z-index: 9999;
+	z-index: 10100;
 }
 
 ul.form-autocomplete-addtext li:last-child {

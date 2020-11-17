@@ -1109,8 +1109,22 @@ jQuery.extend({
 						$.getJSON($.bithive.RefToVal(src) + "&q=" +encodeURIComponent(request.term), response);
 					};
 				}
-
 				field.prop("autocomplete-target", target);
+
+				// clear btn
+				var clear = $("<i>", {class:"autocomplete-clear fas fa-trash-alt p-absolute c-pointer m-n p-n text-primary"}).click(function(){
+					field.val("");
+					$("#"+field.prop("autocomplete-target")).val("");
+					$(this).addClass("d-none");
+				})
+				field.parent().addClass("p-relative").append(clear);
+				clear.css({
+					top: (field.position().top + ((field.height() - clear.height()) / 2) + parseInt(field.css("padding-top")))+"px", 
+					right: "15px"
+				}).addClass("d-none");
+
+				field.prop("autocomplete-clear", clear);
+
 				var target = $("#"+target);
 				field.autocomplete({
 					source: source,
@@ -1127,6 +1141,7 @@ jQuery.extend({
 							setTimeout(function() { field.val(ui.item.label).attr("title", ui.item.label); },10);
 							var target = $("#"+field.prop("autocomplete-target"));
 							target.val(ui.item.value);
+							clear.removeClass("d-none");
 
 							// relaciones
 							if(lnksrc) {
@@ -1170,10 +1185,18 @@ jQuery.extend({
 					$(this).prop("oldlabel", $(this).val());
 					$(this).prop("oldval", targetField.val());
 					$(this).val("");
+					$(this).prop("autocomplete-clear").addClass("d-none");
 				}).on("blur", function() {
 					var targetField = $("#"+$(this).prop("autocomplete-target"));
 					if(targetField.val()==$(this).prop("oldval")) {
 						$(this).val($(this).prop("oldlabel"));
+					}
+
+					if($(this).val().trim().length==0) {
+						targetField.val("");
+						$(this).prop("autocomplete-clear").addClass("d-none");
+					} else {
+						$(this).prop("autocomplete-clear").removeClass("d-none");
 					}
 				}).on("fill", function(){
 					let field = $(this);
