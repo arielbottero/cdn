@@ -68,6 +68,17 @@ a {
 		margin-bottom: 0px !important;
 	}
 
+	#topnav h3 {
+		display: block;
+		overflow: hidden;
+		height: 36px;
+	}
+
+	#topnav #actions-buttons {
+		background: #FFFFFF;
+		height: 40px;
+	}
+
 .content-header {
 	margin-left: 15px;
 	margin-right: 15px;
