@@ -534,7 +534,7 @@ select.bootstrap-select {
 .form-view .form-group {
 	position: relative;
 }
-	.form-view .form-group::before {
+	.form-view .form-group:not(.form-view-unlocked)::before {
 		display: block;
 		height: 100%;
 		width: 100%;

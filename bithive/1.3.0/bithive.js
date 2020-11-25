@@ -1305,7 +1305,7 @@ jQuery.extend({
 			$.bithive.eachElement(".form-html", form, itself, function() {
 				var url = $(this).data("url");
 				if(url!="") {
-					$(this).load(url, function() {
+					$(this).html($("<div>").gyros({top: "0px", width:"32px", stroke:2})).load(url, function() {
 						$.bithive.apply($(this));
 					});
 				}
@@ -1361,17 +1361,18 @@ jQuery.extend({
 			if(jQuery().buttonsSet) {
 				$.bithive.eachElement(".form-buttonsset", form, itself, function() {
 					let field = $("input", $(this));
+					let groupClass = $(this).data("groupclass");
 					let setClass = $(this).data("setclass");
 					let btnClass = $(this).data("btnclass");
 					if($(this).hasClass("daysofweek")) {
-						$(this).buttonsSet($.bithive.lang.buttonsSetDays, {setclass:setClass, btnclass:btnClass});
+						$(this).buttonsSet($.bithive.lang.buttonsSetDays, {setclass:setClass, btnclass:btnClass, groupclass:groupClass});
 					} else if($(this).hasClass("months")) {
-						$(this).buttonsSet(buttonsSetMonths, {setclass:setClass, btnclass:btnClass});
+						$(this).buttonsSet(buttonsSetMonths, {setclass:setClass, btnclass:btnClass, groupclass:groupClass});
 					} else {
 						var source = $.base64.atob(field.data("source")) || "";
 						$.bithive.mkOptions(source, function(src, args) {
 							if(src!=="") {
-								$(args[0]).buttonsSet(src, {setclass:setClass, btnclass:btnClass});
+								$(args[0]).buttonsSet(src, {setclass:setClass, btnclass:btnClass, groupclass:groupClass});
 							}
 						}, [this]);						
 					}
@@ -2116,13 +2117,13 @@ jQuery.extend({
 			var btnClose	= (options.close) ? [{ label: options.close, cssClass: "btn-primary pull-center", action: function(dialogItself){ dialogItself.close(); }}] : null;
 			
 			// los elementos de la respuesta que tengan el atributo dialog-close, cerraran el dialogo
-			
+
 			var dialogLinkLoaded = false;
 			var dialogOptions = {
 				draggable: true,
 				title: title,
 				closable: closable,
-				message: $("<div></div>").id(id).addClass("container-fluid"+classes).html($(content)),
+				message: $("<div></div>").id(id).addClass("container-fluid"+classes).html($(content).html()),
 				cssClass: size,
 				onshow: function(dialogRef){
 					if(options.before) { $.bithive.run(options.before); }

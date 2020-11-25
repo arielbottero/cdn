@@ -12,6 +12,7 @@
 			{ "label":"Sa", "value":"6" }
 		];
 
+		var groupclass = options.groupclass || "";
 		var setclass = options.setclass || "";
 		var btnclass = options.btnclass || "";
 
@@ -50,11 +51,20 @@
 				}
 			}
 
+			var setGroup = (dataset[0].hasOwnProperty("group")) ? dataset[0].group : null;
 			var buttonsSet = $("<div>", {class:"buttonsdataset "+setclass});
+			if(setGroup) { $("<div>", {class:"buttonsdatasetgroup "+groupclass}).html(setGroup).appendTo(buttonsSet); }
 			for(var i=0; i < dataset.length; i++) {
 				var set = dataset[i];
-				var id = "dataset"+set.label+n;
 
+				if(setGroup && set.group!=setGroup) {
+					buttonsSet.insertAfter(field);
+					setGroup = set.group;
+					var buttonsSet = $("<div>", {class:"buttonsdataset "+setclass});
+					$("<div>", {class:"buttonsdatasetgroup "+groupclass}).html(setGroup).appendTo(buttonsSet);
+				}
+
+				var id = "dataset"+set.label+n;
 				var checked = (set.checked) ? 'checked="checked"' : "";
 				var classname = (set.checked) ? "primary" : "light";
 				$("<span>", {class:"buttonsetbtn "+btnclass})
