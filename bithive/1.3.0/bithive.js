@@ -1118,10 +1118,7 @@ jQuery.extend({
 					$(this).addClass("d-none");
 				})
 				field.parent().addClass("p-relative").append(clear);
-				clear.css({
-					top: (field.position().top + ((field.height() - clear.height()) / 2) + parseInt(field.css("padding-top")))+"px", 
-					right: "15px"
-				}).addClass("d-none");
+				clear.css({top: "41.5px", right: "15px"}).addClass("d-none");
 
 				field.prop("autocomplete-clear", clear);
 
