@@ -12,6 +12,7 @@ jQuery.extend({
 			confirmQuestion: "Confirmar?",
 			confirmMsgDelete: "Eliminar el registro?",
 			confirmPassword: "Ingrese su Contraseña",
+			confirmLeave: "Algunos datos han cambiado, está seguro de proseguir?",
 			buttonOk: "Aceptar",
 			buttonCancel: "Cancelar",
 			buttonClose: "Cerrar",
