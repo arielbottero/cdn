@@ -50,17 +50,22 @@ a {
 	}
 
 	#topnav .avatar {
-		border-radius: 50% !important
+		border-radius: 80%;
+		height: 35px;
+		margin: 5px 0;
+		width: 35px;
 	}
 
 	#topnav .form-autocomplete {
-		/* color: #495057 !important; */
 		width: 200px;
-		border-radius: 15px;
 	}
 		#topnav .form-autocomplete::placeholder {
 			font-family: "Font Awesome 5 Pro";
 			text-align: right;
+		}
+
+		#topnav .form-autocomplete .ui-autocomplete .ui-menu-item-wrapper small {
+			font-weight: bold;
 		}
 	
 	#topnav #actions-buttons .action-button .btn {
@@ -68,12 +73,21 @@ a {
 		margin-bottom: 0px !important;
 	}
 
+	#topnav #hamburger {
+		cursor: pointer;
+	}
+
 	#topnav h3 {
+		cursor: pointer;
 		display: block;
+		font-size: 20px !important;
 		height: 35px;
-		line-height: 35px;
+		margin: 0;
 		overflow: hidden;
 	}
+		#topnav h3.title small {
+			font-size: 12px !important;
+		}	
 
 	#topnav #actions-buttons {
 		background: #FFFFFF;
@@ -92,7 +106,7 @@ a {
 .content-header #headercontent {
 	background-color: #FFFFFF;
 	box-shadow: 0 .15rem .4rem 0 #5A5C6966 !important;
-	border-radius: 1.2rem;
+	/* border-radius: 1.2rem; */
 	border-left: solid 5px #5A5C69;
 	margin-bottom: 15px;
 	margin-top: 15px;
@@ -101,7 +115,7 @@ a {
 }
 
 .kpi {
-	border-radius: 5px;
+	/* border-radius: 5px; */
 	box-shadow: 0 .15rem .8rem 0 #5A5C6966 !important;
 	cursor: pointer;
 	display: inline-block;
@@ -117,7 +131,7 @@ a {
 	.content-body > div {
 		background-color: #FFFFFF;
 		box-shadow: 0 .15rem .4rem 0 #5A5C6966 !important;
-		border-radius: 1.2rem;
+		/* border-radius: 1.2rem; */
 		border-top: solid 5px #5A5C69;
 		padding-top: 15px !important;
 	}
@@ -157,7 +171,7 @@ a {
 .login {
 	background-color: #FFFFFF;
 	box-shadow: 0 .15rem .4rem 0 #5A5C6966 !important;
-	border-radius: 1.2rem;
+	/* border-radius: 1.2rem; */
 	border-top: solid 15px #5A5C69;
 	padding-top: 15px !important;
 	margin: auto !important;
@@ -251,6 +265,10 @@ h3.title, .h3.title {
 	margin-bottom: 15px;
 	font-size: 22px;
 }
+	h3.title small, .h3.title small {
+		display: block !important;
+		font-size: 14px !important;
+	}
 
 h4.subtitle, .h4.subtitle {
 	margin-top: 10px;
@@ -340,7 +358,7 @@ td.dropdown {
 	#home-menu .dropdown > a,
 	#home-menu .dropdown .dropdown-menu ul li a {
 		cursor: pointer;
-		border-radius: 1.2rem;
+		/* border-radius: 1.2rem; */
 		box-shadow: 0 .15rem 1.75rem 0 #5A5C6926 !important;
 		display: inline-block;
 		height: 200px;
@@ -418,7 +436,7 @@ td.dropdown {
 
 .btn {
 	cursor: pointer;
-	border-radius: 2rem;
+	/* border-radius: 2rem; */
 	box-shadow: 0 .15rem .5rem 0 #5A5C6926 !important;
 }
 .bootstrap-select .btn {
@@ -429,9 +447,15 @@ td.dropdown {
 .subform-box {
 	border: 1px solid #CED4DA;
 	border-left: solid 3px #5A5C69;
-	border-radius: 1.2rem;
+	/* border-radius: 1.2rem; */
 	margin-bottom: 15px;
 	padding: 15px 30px;
+}
+
+.form-control,
+.bootstrap-select *, .form-select *, 
+.ui-autocomplete .ui-menu-item-wrapper {
+	font-size: 14px;
 }
 
 .control-label {
@@ -555,7 +579,7 @@ select.bootstrap-select {
 	}
 
 .form-error {
-	border-radius: 3px;
+	/* border-radius: 3px; */
 	float: right;
 	margin-top: 2px;
 	padding: 4px;
@@ -650,7 +674,7 @@ select.bootstrap-select {
 
 /* CARDS =====================================================================*/
 .card-file {
-	border-radius: 1.2rem;
+	/* border-radius: 1.2rem; */
 	margin: 5px;
 }
 	.card-file .card-img-top {
@@ -723,7 +747,7 @@ select.bootstrap-select {
 	font-size: 1rem;
 	border-left: solid 1px #CED4DA;
 	border-bottom: solid 1px #CED4DA;
-	border-bottom-left-radius: 5px;
+	/* border-bottom-left-radius: 5px; */
 	padding-left: 10px;
 	padding-bottom: 10px;
 }
@@ -1057,8 +1081,8 @@ select.bootstrap-select {
 
 	.bootstrap-dialog .modal-dialog .modal-content .modal-footer {
 		background-color: #FFFFFF;
-		border-bottom-left-radius: 4px;
-		border-bottom-right-radius: 4px;
+		/* border-bottom-left-radius: 4px;
+		border-bottom-right-radius: 4px; */
 		border-top: 0px;
 		justify-content: center;
 	}
