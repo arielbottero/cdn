@@ -3074,6 +3074,7 @@ jQuery.extend({
 							lnktarget.show();
 							$.bithive.mkSelectOptions(lnktarget, data, values, function(){
 								$.bithive.BootstrapSelect(lnktarget);
+								$("#subsector").selectpicker("refresh");
 								$("button", lnktarget.parent()).show();
 							});
 						}

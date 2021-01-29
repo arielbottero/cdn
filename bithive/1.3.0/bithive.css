@@ -419,6 +419,14 @@ td.dropdown {
 	display: none;
 }
 
+.divider {
+	border-top: solid 2px #D8D8D8;
+	border-width: 1px 0 0 0;
+	border-style: solid;
+	padding-top: 30px;
+	margin-top: 30px;
+}
+
 .calendar .calendar-row {
 	margin: 0px;
 }
