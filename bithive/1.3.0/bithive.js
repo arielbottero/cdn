@@ -8,6 +8,7 @@ jQuery.extend({
 
 		lang: {
 			alertTitle: "Atención!",
+			alvinErrorMessage: "Error en la carga del formulario.<br />Por favor revise los datos e intente nuevamente.",
 			confirmTitle: "Confirmar",
 			confirmQuestion: "Confirmar?",
 			confirmMsgDelete: "Eliminar el registro?",
@@ -2060,6 +2061,24 @@ jQuery.extend({
 			});
 		},
 
+		danger: function(msg, after) {
+			BootstrapDialog.show({
+				draggable: true,
+				closable: false,
+				type: BootstrapDialog.TYPE_DANGER,
+				buttons: [{
+					label: $.bithive.lang.buttonOk,
+					cssClass: "btn-danger",
+					action: function(dialog) {
+						dialog.close();
+						if(after) { after(); }
+					}
+				}],
+				title: $.bithive.lang.alertTitle,
+				message: msg,
+			});
+		},
+
 		// msg: mensaje para el usuario o funcion que retorna o false, si retorna false se aborta el confirm
 		// after: funcion que se ejecuta en caso afirmativo
 		confirm: function(msg, after, secure) {
@@ -2180,13 +2199,37 @@ jQuery.extend({
 
 			var fields = $("input,select,textarea", form);
 
+			let alvinfocus = false;
 			var alvin = true;
 			$(".form-error", form).remove();
 			$.each(fields, function() {
 				$(this).alvin("check");
-				if($(this).prop("alvinerror")) { alvin = false; }
+				if($(this).prop("alvinerror")) {
+					if($(this).hasClass("form-select")) {
+						$("> button", $(this).parent())
+							.addClass("form-error-border")
+							.on("focus change", function(){
+								$(this).removeClass("form-error-border");
+							}
+						);
+					} else {
+						$(this)
+							.addClass("form-error-border")
+							.on("focus change", function(){
+								$(this).removeClass("form-error-border");
+							}
+						);
+					}
+
+					if(!alvinfocus) { alvinfocus = $(this); }
+					alvin = false;
+				}
 			});
-			if(!alvin) { return false; }
+			if(!alvin) {
+				window.scrollTo(0, alvinfocus.position().top);
+				$.bithive.danger($.bithive.lang.alvinErrorMessage);
+				return false;
+			}
 
 			// unmask ---
 			$(".mask-money").each(function() { $(this).trigger("unmask", true); });
@@ -3004,7 +3047,6 @@ jQuery.extend({
 				let defaultValue = elem.data("default") || false;
 				elem.selectpicker({
 					defaultValue: defaultValue,
-					style: "btn-white",
 					width: "100%",
 					size: 10
 				}).on("DOMSubtreeModified", function() {

@@ -12,6 +12,7 @@ vRules["type"]
 	imya
 	ipv4
 	ipv6
+	noempty
 	number
 	time
 	url
@@ -68,6 +69,9 @@ vRules["in"]
 			if(node=="input" && (this.el[0].type.toLowerCase()=="radio" || this.el[0].type.toLowerCase()=="checkbox")) {
 				var aRules = this.el.parents("div").hyphened("alvin");
 				var val = $("input[name='"+this.el.attr("name")+"']:checked").val() || "";
+			} else if(this.el.hasClass("form-date") && this.el.data("linked-with")) {
+				var aRules = this.el.hyphened("alvin");
+				var val = $("[name='"+this.el.data("linked-with")+"']").val();
 			} else {
 				var aRules = this.el.hyphened("alvin");
 				var val = this.el.val();
