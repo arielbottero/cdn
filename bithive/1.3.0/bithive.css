@@ -419,6 +419,11 @@ td.dropdown {
 	display: none;
 }
 
+.form-autocomplete::placeholder {
+	font-family: "Font Awesome 5 Pro";
+	text-align: right;
+}
+
 .form-section .divider {
 	border-top: solid 2px #D8D8D8;
 	border-width: 1px 0 0 0;
