@@ -299,6 +299,17 @@ td.dropdown {
 	.form-inline label {
 		padding-right: 15px;	
 	}
+	
+.form-group-inline {
+	display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+}
+	.form-group-inline > * {
+		flex-basis: 0;
+		flex-grow: 1;
+		width: auto;
+	}
 
 .sticky-top {
 	position: sticky;
