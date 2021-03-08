@@ -50,6 +50,7 @@ squireUI = function(selector, options) {
 			if(scripts && scripts.length > 0) {
 				for(var i in scripts) {
 					if(scripts[i].src && scripts[i].src.match(new RegExp("squire\\.js\?.*$"))) {
+						console.log(scripts[i].src);
 						return scripts[i].src.replace(new RegExp("(.*)squire\\.js\?.*$"), "$1");
 					}
 				}
