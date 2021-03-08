@@ -496,7 +496,7 @@ td.dropdown {
 div.form-control.form-input {
 	min-height: 33px;
 	height: auto !important;
-	line-height: 2.2;
+	line-height: 1.5;
 }
 
 div.form-control.fktextarea {

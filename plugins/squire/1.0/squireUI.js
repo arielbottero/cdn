@@ -56,6 +56,7 @@ squireUI = function(selector, options) {
 			}
 		};
 		var currentpath = retrievePath();
+		console.debug(currentpath);
 
 		// css
 		$("head").append($("<link rel='stylesheet' href='"+currentpath+"squireUI.css' type='text/css' media='screen' />"));
