@@ -1000,6 +1000,7 @@ jQuery.extend({
 						dataType: "json",
 						data: { q: val },
 						success: function(response) {
+							console.log(response)
 							gyros.remove();
 							if(response.success=="1") {
 								if(response.message) {
