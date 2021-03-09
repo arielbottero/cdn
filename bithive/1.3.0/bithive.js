@@ -992,9 +992,9 @@ jQuery.extend({
 						"left": "10px",
 						"float": "left"
 					}).gyros({width:gyroside+"px", stroke:2});
-					field.after(gyros);
-console.debug(field)
-console.debug(gyros)
+					// field.after(gyros);
+					gyros.insertAfter(field);
+
 					$.bithive.RequestCounter(1);
 					jQuery.ajax({
 						url: src,
