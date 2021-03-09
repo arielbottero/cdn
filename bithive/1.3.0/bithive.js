@@ -993,14 +993,14 @@ jQuery.extend({
 						"float": "left"
 					}).gyros({width:gyroside+"px", stroke:2});
 					field.after(gyros);
-
+console.debug(field)
+console.debug(gyros)
 					$.bithive.RequestCounter(1);
 					jQuery.ajax({
 						url: src,
 						dataType: "json",
 						data: { q: val },
 						success: function(response) {
-							console.log(response)
 							gyros.remove();
 							if(response.success=="1") {
 								if(response.message) {
