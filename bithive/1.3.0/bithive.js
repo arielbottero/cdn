@@ -992,8 +992,7 @@ jQuery.extend({
 						"left": "10px",
 						"float": "left"
 					}).gyros({width:gyroside+"px", stroke:2});
-					// field.after(gyros);
-					gyros.insertAfter(field);
+					field.after(gyros);
 return true;
 					$.bithive.RequestCounter(1);
 					jQuery.ajax({
@@ -1003,6 +1002,7 @@ return true;
 						success: function(response) {
 							gyros.remove();
 							if(response.success=="1") {
+								console.log("si")
 								if(response.message) {
 									$.bithive.confirm(msgok.replace("***", response.message), function(){
 										field.val("");
@@ -1014,6 +1014,7 @@ return true;
 									$.bithive.jsonFiller(response.values, document);
 								}
 							} else {
+								console.log("no")
 								if(response.message) {
 									$.bithive.confirm(msgko.replace("***", response.message), function(){
 										field.val("");
