@@ -982,6 +982,7 @@ jQuery.extend({
 					var src = field.data("checker");
 					var msgok = field.data("checker-success") || false;
 					var msgko = field.data("checker-fail") || false;
+					var after = field.data("checker-after") || false;
 
 					var height = field.outerHeight();
 					var gyroside = 30;
@@ -1005,12 +1006,10 @@ jQuery.extend({
 								if(msgok) {
 									if(response.message) {
 										$.bithive.confirm(msgok.replace("***", response.message), function(){
-											field.val("");
 											field.focus();
 										});
 									} else {
 										$.bithive.confirm(msgok, function(){
-											field.val("");
 											field.focus();
 										});
 									}
@@ -1023,17 +1022,16 @@ jQuery.extend({
 								if(msgko) {
 									if(response.message) {
 										$.bithive.confirm(msgko.replace("***", response.message), function(){
-											field.val("");
 											field.focus();
 										});
 									} else {
 										$.bithive.confirm(msgko, function(){
-											field.val("");
 											field.focus();
 										});
 									}
 								}
 							}
+							if(after) { $.bithive.run(after, [field, response]); }
 						},
 						complete: function(response) {
 							$.bithive.RequestCounter(-1);
