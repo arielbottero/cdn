@@ -980,8 +980,8 @@ jQuery.extend({
 					var field = $(this);
 					var val = field.val();
 					var src = field.data("checker");
-					var msgok = field.data("checker-success");
-					var msgko = field.data("checker-fail");
+					var msgok = field.data("checker-success") || false;
+					var msgko = field.data("checker-fail") || false;
 
 					var height = field.outerHeight();
 					var gyroside = 30;
@@ -1002,24 +1002,36 @@ jQuery.extend({
 						success: function(response) {
 							gyros.remove();
 							if(response.success=="1") {
-								console.log("si")
-								if(response.message) {
-									$.bithive.confirm(msgok.replace("***", response.message), function(){
-										field.val("");
-										field.focus();
-									});
+								if(msgok) {
+									if(response.message) {
+										$.bithive.confirm(msgok.replace("***", response.message), function(){
+											field.val("");
+											field.focus();
+										});
+									} else {
+										$.bithive.confirm(msgok, function(){
+											field.val("");
+											field.focus();
+										});
+									}
 								}
 
 								if(response.values) {
 									$.bithive.jsonFiller(response.values, document);
 								}
 							} else {
-								console.log("no")
-								if(response.message) {
-									$.bithive.confirm(msgko.replace("***", response.message), function(){
-										field.val("");
-										field.focus();
-									});
+								if(msgko) {
+									if(response.message) {
+										$.bithive.confirm(msgko.replace("***", response.message), function(){
+											field.val("");
+											field.focus();
+										});
+									} else {
+										$.bithive.confirm(msgko, function(){
+											field.val("");
+											field.focus();
+										});
+									}
 								}
 							}
 						},
