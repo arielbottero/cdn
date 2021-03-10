@@ -994,7 +994,7 @@ jQuery.extend({
 					}).gyros({width:gyroside+"px", stroke:2});
 					// field.after(gyros);
 					gyros.insertAfter(field);
-
+return true;
 					$.bithive.RequestCounter(1);
 					jQuery.ajax({
 						url: src,
