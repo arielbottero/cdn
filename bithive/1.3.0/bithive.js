@@ -993,7 +993,7 @@ jQuery.extend({
 						"float": "left"
 					}).gyros({width:gyroside+"px", stroke:2});
 					field.after(gyros);
-return true;
+
 					$.bithive.RequestCounter(1);
 					jQuery.ajax({
 						url: src,
