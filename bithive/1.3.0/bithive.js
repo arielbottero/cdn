@@ -585,14 +585,13 @@ jQuery.extend({
 			$.bithive.eachElement("i.link-toggler", elem, itself, function() {
 				$(this)
 					.addClass(function(){
-						let green = parseInt(el.attr("toggler-green")) || 0; // valor para el cual el icono es rojo
+						let green = parseInt(el.attr("toggler-green")) || 1; // valor para el cual el icono es verde
 						return (parseInt($(this).attr("toggler-value"))===green) ? "fas fa-dot-circle text-green" : "fas fa-dot-circle text-red";
 					})
 					.click(function(){
 						let el = $(this);
 						let id = el.attr("toggler-id"); // id del registro
 						let val = el.attr("toggler-value"); // valor actual del estado (0|1)
-						let val = el.attr("toggler-green"); // valor para el cual el icono es rojo
 						let url = el.attr("toggler-url"); // url que administra los estados
 						let after = el.attr("toggler-after") || null; // funcion que se ejecuta luego del cambio de estado  funcname(el, state)
 						el.removeClass("fa-dot-circle text-green text-red");
@@ -603,7 +602,7 @@ jQuery.extend({
 							dataType: "json",
 							success: function(data) {
 								let nval = parseInt(data);
-								let green = parseInt(el.attr("toggler-green")) || 0; 
+								let green = parseInt(el.attr("toggler-green")) || 1; // valor para el cual el icono es verde
 								el.attr("toggler-value", nval).removeClass("fa-circle-notch text-light-gray spinRight");
 								if(nval===green) {
 									el.addClass("fa-dot-circle text-green");
