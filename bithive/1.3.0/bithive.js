@@ -585,7 +585,7 @@ jQuery.extend({
 			$.bithive.eachElement("i.link-toggler", elem, itself, function() {
 				$(this)
 					.addClass(function(){
-						let green = parseInt(el.attr("toggler-green")) || 1; // valor para el cual el icono es verde
+						let green = parseInt($(this).attr("toggler-green")) || 1; // valor para el cual el icono es verde
 						return (parseInt($(this).attr("toggler-value"))===green) ? "fas fa-dot-circle text-green" : "fas fa-dot-circle text-red";
 					})
 					.click(function(){
