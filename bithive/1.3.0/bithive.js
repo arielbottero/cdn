@@ -585,14 +585,14 @@ jQuery.extend({
 			$.bithive.eachElement("i.link-toggler", elem, itself, function() {
 				$(this)
 					.addClass(function(){
-						let redwhen = parseInt(el.attr("toggler-redwhen")) || 0; // valor para el cual el icono es rojo
-						return (parseInt($(this).attr("toggler-value"))===redwhen) ? "fas fa-dot-circle text-red" : "fas fa-dot-circle text-green";
+						let green = parseInt(el.attr("toggler-green")) || 0; // valor para el cual el icono es rojo
+						return (parseInt($(this).attr("toggler-value"))===green) ? "fas fa-dot-circle text-green" : "fas fa-dot-circle text-red";
 					})
 					.click(function(){
 						let el = $(this);
 						let id = el.attr("toggler-id"); // id del registro
 						let val = el.attr("toggler-value"); // valor actual del estado (0|1)
-						let val = el.attr("toggler-redwhen"); // valor para el cual el icono es rojo
+						let val = el.attr("toggler-green"); // valor para el cual el icono es rojo
 						let url = el.attr("toggler-url"); // url que administra los estados
 						let after = el.attr("toggler-after") || null; // funcion que se ejecuta luego del cambio de estado  funcname(el, state)
 						el.removeClass("fa-dot-circle text-green text-red");
@@ -603,12 +603,12 @@ jQuery.extend({
 							dataType: "json",
 							success: function(data) {
 								let nval = parseInt(data);
-								let redwhen = parseInt(el.attr("toggler-redwhen")) || 0; 
+								let green = parseInt(el.attr("toggler-green")) || 0; 
 								el.attr("toggler-value", nval).removeClass("fa-circle-notch text-light-gray spinRight");
-								if(nval===redwhen) {
-									el.addClass("fa-dot-circle text-red");
-								} else {
+								if(nval===green) {
 									el.addClass("fa-dot-circle text-green");
+								} else {
+									el.addClass("fa-dot-circle text-red");
 								}
 
 								if(after) { window[after](el, nval); }
