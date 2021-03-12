@@ -1098,6 +1098,7 @@ select.bootstrap-select {
 }
 
 /* dialog */
+.modal { z-index: 10050; }
 .dialog-xs .modal-dialog { max-width: 300px; }
 .dialog-sm .modal-dialog { max-width: 500px; }
 .dialog-md .modal-dialog { max-width: 700px; }

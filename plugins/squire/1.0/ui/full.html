@@ -36,316 +36,266 @@
 	</nav>
 </div>
 
-<div class="squireUISource modal fade">
-	<div class="modal-dialog modal-hg">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-				<h4 class="modal-title">Editor de Código Fuente</h4><br />
-			</div>
-			<div class="modal-body">
-				<div class="form-group row">
-					<div class="col-xs-12">
-						<div class="form-control-wrapper">
-							<textarea class="squireUISourceCode form-control" rows="10"></textarea>
-						</div>
-					</div>
+<div class="squireUISource d-none">
+	<div class="p-md">
+		<div class="form-group row">
+			<div class="col-12">
+				<div class="form-control-wrapper">
+					<textarea class="squireUISourceCode form-control" rows="10" style="min-height:70vh"></textarea>
 				</div>
 			</div>
-			<div class="modal-footer">
-				<a class="squireUISourceSubmit btn btn-primary">Guardar</a> 
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12 btnbox text-center"><a class="squireUISourceSubmit btn btn-primary">Guardar</a></div>
+	</div>
+</div>
+
+<div class="squireUILink d-none">
+	<div class="p-md">
+		<div class="form-group row">
+			<div class="col-12">
+				<div class="form-control-wrapper">
+					<label class="control-label">URL</label>
+					<input class="squireUILinkURL form-control empty" type="text" placeholder="https://google.com">
+				</div>
 			</div>
+		</div>
+
+		<div class="form-group row">
+			<label class="col-2 control-label">Abrir en:</label>
+			<div class="col-10">
+				<div class="radio radio-primary">
+					<label>
+						<input class="squireUILinkTargetBlank" name="squireUILinkTarget" value="_blank" checked type="radio">
+						una ventana nueva
+					</label>
+				</div>
+				<div class="radio radio-primary">
+					<label>
+						<input class="squireUILinkTargetSelf" name="squireUILinkTarget" value="_self" type="radio">
+						la misma ventana
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-6 btnbox text-right"><a class="squireUILinkSubmit btn btn-primary">Insertar</a></div>
+			<div class="col-6 btnbox text-left"><a class="squireUILinkClear btn btn-default">Eliminar</a></div>
 		</div>
 	</div>
 </div>
 
-
-<div class="squireUILink modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-				<h4 class="modal-title">Insertar Link</h4><br />
-			</div>
-			<div class="modal-body">
-				<div class="form-group row">
-					<div class="col-xs-12">
-						<div class="form-control-wrapper">
-							<input class="squireUILinkURL form-control empty" type="text">
-							<div class="floating-label">Escriba una URL, por ej: http://google.com</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="form-group row">
-					<label class="col-xs-2 control-label">Abrir en:</label>
-					<div class="col-xs-10">
-						<div class="radio radio-primary">
-							<label>
-								<input class="squireUILinkTargetBlank" name="squireUILinkTarget" value="_blank" checked type="radio">
-								una ventana nueva
-							</label>
-						</div>
-						<div class="radio radio-primary">
-							<label>
-								<input class="squireUILinkTargetSelf" name="squireUILinkTarget" value="_self" type="radio">
-								la misma ventana
-							</label>
-						</div>
-					</div>
+<div class="squireUIImage d-none">
+	<div class="p-md">
+		<div class="form-group row">
+			<div class="col-12">
+				<div class="form-control-wrapper">
+					<input class="squireUIImageURL form-control empty" type="text">
+					<div class="floating-label">URL de la imagen, por ej: http://misitio.com/images/01.jpg</div>
 				</div>
 			</div>
-			<div class="modal-footer">
-				<a class="squireUILinkClear btn btn-default">Eliminar</a>
-				<a class="squireUILinkSubmit btn btn-primary">Insertar</a> 
+		</div>
+		<div class="form-group row">
+			<div class="col-6">
+				<div class="form-control-wrapper">
+					<input class="squireUIImageWidth form-control empty" type="text">
+					<div class="floating-label">Ancho para la imagen</div>
+					<span class="material-input"></span>
+				</div>
 			</div>
+			<div class="col-6">
+				<div class="form-control-wrapper">
+					<input class="squireUIImageHeight form-control empty" type="text">
+					<div class="floating-label">Alto para la imagen</div>
+					<span class="material-input"></span>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12 btnbox text-center"><a class="squireUIImageSubmit btn btn-primary">Insertar</a></div>
 		</div>
 	</div>
 </div>
 
-<div class="squireUIImage modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-				<h4 class="modal-title">Insertar Imagen</h4><br />
+<div class="squireUITextColor d-none">
+	<div class="p-md">
+		<div class="row">
+			<div class="squireUITextColorBack col-lg-6 col-12">
+				<h5>Fondo</h5>
+				<table cellspacing="0" cellpadding="0">
+					<tbody>
+						<tr>
+							<td class="squireUI-color-square"><div style="background-color: #000000" title="#000000"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #444444" title="#444444"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #666666" title="#666666"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #999999" title="#999999"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #CCCCCC" title="#CCCCCC"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #EEEEEE" title="#EEEEEE"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #F3F3F3" title="#F3F3F3"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #FFFFFF" title="#FFFFFF"></div></td>
+						</tr>
+						<tr>
+							<td class="squireUI-color-square"><div style="background-color: #FF0000" title="#FF0000"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #FF9900" title="#FF9900"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #FFFF00" title="#FFFF00"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #00FF00" title="#00FF00"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #00FFFF" title="#00FFFF"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #0000FF" title="#0000FF"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #9900FF" title="#9900FF"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #FF00FF" title="#FF00FF"></div></td>
+						</tr>
+						<tr>
+							<td class="squireUI-color-square"><div style="background-color: #F4CCCC" title="#F4CCCC"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #FCE5CD" title="#FCE5CD"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #FFF2CC" title="#FFF2CC"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #D9EAD3" title="#D9EAD3"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #D0E0E3" title="#D0E0E3"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #CFE2F3" title="#CFE2F3"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #D9D2E9" title="#D9D2E9"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #EAD1DC" title="#EAD1DC"></div></td>
+						</tr>
+						<tr>
+							<td class="squireUI-color-square"><div style="background-color: #EA9999" title="#EA9999"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #F9CB9C" title="#F9CB9C"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #FFE599" title="#FFE599"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #B6D7A8" title="#B6D7A8"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #A2C4C9" title="#A2C4C9"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #9FC5E8" title="#9FC5E8"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #B4A7D6" title="#B4A7D6"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #D5A6BD" title="#D5A6BD"></div></td>
+						</tr>
+						<tr>
+							<td class="squireUI-color-square"><div style="background-color: #E06666" title="#E06666"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #F6B26B" title="#F6B26B"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #FFD966" title="#FFD966"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #93C47D" title="#93C47D"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #76A5AF" title="#76A5AF"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #6FA8DC" title="#6FA8DC"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #8E7CC3" title="#8E7CC3"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #C27BA0" title="#C27BA0"></div></td>
+						</tr>
+						<tr>
+							<td class="squireUI-color-square"><div style="background-color: #CC0000" title="#CC0000"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #E69138" title="#E69138"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #F1C232" title="#F1C232"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #6AA84F" title="#6AA84F"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #45818E" title="#45818E"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #3D85C6" title="#3D85C6"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #674EA7" title="#674EA7"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #A64D79" title="#A64D79"></div></td>
+						</tr>
+						<tr>
+							<td class="squireUI-color-square"><div style="background-color: #990000" title="#990000"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #B45F06" title="#B45F06"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #BF9000" title="#BF9000"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #38761D" title="#38761D"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #134F5C" title="#134F5C"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #0B5394" title="#0B5394"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #351C75" title="#351C75"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #741B47" title="#741B47"></div></td>
+						</tr>
+						<tr>
+							<td class="squireUI-color-square"><div style="background-color: #660000" title="#660000"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #783F04" title="#783F04"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #7F6000" title="#7F6000"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #274E13" title="#274E13"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #0C343D" title="#0C343D"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #073763" title="#073763"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #20124D" title="#20124D"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #4C1130" title="#4C1130"></div></td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 			
-			<div class="modal-body">
-				<div class="form-group row">
-					<div class="col-xs-12">
-						<div class="form-control-wrapper">
-							<input class="squireUIImageURL form-control empty" type="text">
-							<div class="floating-label">URL de la imagen, por ej: http://misitio.com/images/01.jpg</div>
-						</div>
-					</div>
-				</div>
-				<div class="form-group row">
-					<div class="col-xs-6">
-						<div class="form-control-wrapper">
-							<input class="squireUIImageWidth form-control empty" type="text">
-							<div class="floating-label">Ancho para la imagen</div>
-							<span class="material-input"></span>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-control-wrapper">
-							<input class="squireUIImageHeight form-control empty" type="text">
-							<div class="floating-label">Alto para la imagen</div>
-							<span class="material-input"></span>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<a class="squireUIImageSubmit btn btn-primary">Insertar</a> 
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="squireUITextColor modal modal_auto fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-				<h4 class="modal-title">Color del Texto</h4><br />
-			</div>
-			
-			<div class="modal-body">
-				<div class="row">
-					<div class="squireUITextColorBack col-lg-6 col-xs-12">
-						<h5>Fondo</h5>
-						<table cellspacing="0" cellpadding="0">
-							<tbody>
-								<tr>
-									<td class="squireUI-color-square"><div style="background-color: #000000" title="#000000"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #444444" title="#444444"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #666666" title="#666666"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #999999" title="#999999"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #CCCCCC" title="#CCCCCC"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #EEEEEE" title="#EEEEEE"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #F3F3F3" title="#F3F3F3"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #FFFFFF" title="#FFFFFF"></div></td>
-								</tr>
-							</tbody>
-						</table>
-						<table cellspacing="0" cellpadding="0" class="offset-top-15">
-							<tbody>
-								<tr>
-									<td class="squireUI-color-square"><div style="background-color: #FF0000" title="#FF0000"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #FF9900" title="#FF9900"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #FFFF00" title="#FFFF00"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #00FF00" title="#00FF00"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #00FFFF" title="#00FFFF"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #0000FF" title="#0000FF"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #9900FF" title="#9900FF"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #FF00FF" title="#FF00FF"></div></td>
-								</tr>
-							</tbody>
-						</table>
-						<table cellspacing="0" cellpadding="0" class="offset-top-15">
-							<tbody>
-								<tr>
-									<td class="squireUI-color-square"><div style="background-color: #F4CCCC" title="#F4CCCC"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #FCE5CD" title="#FCE5CD"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #FFF2CC" title="#FFF2CC"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #D9EAD3" title="#D9EAD3"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #D0E0E3" title="#D0E0E3"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #CFE2F3" title="#CFE2F3"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #D9D2E9" title="#D9D2E9"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #EAD1DC" title="#EAD1DC"></div></td>
-								</tr>
-								<tr>
-									<td class="squireUI-color-square"><div style="background-color: #EA9999" title="#EA9999"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #F9CB9C" title="#F9CB9C"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #FFE599" title="#FFE599"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #B6D7A8" title="#B6D7A8"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #A2C4C9" title="#A2C4C9"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #9FC5E8" title="#9FC5E8"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #B4A7D6" title="#B4A7D6"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #D5A6BD" title="#D5A6BD"></div></td>
-								</tr>
-								<tr>
-									<td class="squireUI-color-square"><div style="background-color: #E06666" title="#E06666"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #F6B26B" title="#F6B26B"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #FFD966" title="#FFD966"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #93C47D" title="#93C47D"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #76A5AF" title="#76A5AF"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #6FA8DC" title="#6FA8DC"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #8E7CC3" title="#8E7CC3"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #C27BA0" title="#C27BA0"></div></td>
-								</tr>
-								<tr>
-									<td class="squireUI-color-square"><div style="background-color: #CC0000" title="#CC0000"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #E69138" title="#E69138"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #F1C232" title="#F1C232"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #6AA84F" title="#6AA84F"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #45818E" title="#45818E"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #3D85C6" title="#3D85C6"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #674EA7" title="#674EA7"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #A64D79" title="#A64D79"></div></td>
-								</tr>
-								<tr>
-									<td class="squireUI-color-square"><div style="background-color: #990000" title="#990000"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #B45F06" title="#B45F06"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #BF9000" title="#BF9000"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #38761D" title="#38761D"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #134F5C" title="#134F5C"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #0B5394" title="#0B5394"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #351C75" title="#351C75"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #741B47" title="#741B47"></div></td>
-								</tr>
-								<tr>
-									<td class="squireUI-color-square"><div style="background-color: #660000" title="#660000"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #783F04" title="#783F04"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #7F6000" title="#7F6000"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #274E13" title="#274E13"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #0C343D" title="#0C343D"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #073763" title="#073763"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #20124D" title="#20124D"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #4C1130" title="#4C1130"></div></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-					
-					<div class="squireUITextColorFore col-lg-6 col-xs-12">
-						<h5>Texto</h5>
-						<table cellspacing="0" cellpadding="0">
-							<tbody>
-								<tr>
-									<td class="squireUI-color-square"><div style="background-color: #000000" title="#000000"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #444444" title="#444444"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #666666" title="#666666"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #999999" title="#999999"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #CCCCCC" title="#CCCCCC"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #EEEEEE" title="#EEEEEE"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #F3F3F3" title="#F3F3F3"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #FFFFFF" title="#FFFFFF"></div></td>
-								</tr>
-							</tbody>
-						</table>
-						<table cellspacing="0" cellpadding="0" class="offset-top-15">
-							<tbody>
-								<tr>
-									<td class="squireUI-color-square"><div style="background-color: #FF0000" title="#FF0000"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #FF9900" title="#FF9900"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #FFFF00" title="#FFFF00"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #00FF00" title="#00FF00"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #00FFFF" title="#00FFFF"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #0000FF" title="#0000FF"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #9900FF" title="#9900FF"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #FF00FF" title="#FF00FF"></div></td>
-								</tr>
-							</tbody>
-						</table>
-						<table cellspacing="0" cellpadding="0" class="offset-top-15">
-							<tbody>
-								<tr>
-									<td class="squireUI-color-square"><div style="background-color: #F4CCCC" title="#F4CCCC"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #FCE5CD" title="#FCE5CD"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #FFF2CC" title="#FFF2CC"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #D9EAD3" title="#D9EAD3"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #D0E0E3" title="#D0E0E3"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #CFE2F3" title="#CFE2F3"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #D9D2E9" title="#D9D2E9"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #EAD1DC" title="#EAD1DC"></div></td>
-								</tr>
-								<tr>
-									<td class="squireUI-color-square"><div style="background-color: #EA9999" title="#EA9999"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #F9CB9C" title="#F9CB9C"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #FFE599" title="#FFE599"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #B6D7A8" title="#B6D7A8"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #A2C4C9" title="#A2C4C9"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #9FC5E8" title="#9FC5E8"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #B4A7D6" title="#B4A7D6"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #D5A6BD" title="#D5A6BD"></div></td>
-								</tr>
-								<tr>
-									<td class="squireUI-color-square"><div style="background-color: #E06666" title="#E06666"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #F6B26B" title="#F6B26B"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #FFD966" title="#FFD966"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #93C47D" title="#93C47D"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #76A5AF" title="#76A5AF"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #6FA8DC" title="#6FA8DC"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #8E7CC3" title="#8E7CC3"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #C27BA0" title="#C27BA0"></div></td>
-								</tr>
-								<tr>
-									<td class="squireUI-color-square"><div style="background-color: #CC0000" title="#CC0000"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #E69138" title="#E69138"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #F1C232" title="#F1C232"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #6AA84F" title="#6AA84F"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #45818E" title="#45818E"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #3D85C6" title="#3D85C6"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #674EA7" title="#674EA7"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #A64D79" title="#A64D79"></div></td>
-								</tr>
-								<tr>
-									<td class="squireUI-color-square"><div style="background-color: #990000" title="#990000"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #B45F06" title="#B45F06"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #BF9000" title="#BF9000"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #38761D" title="#38761D"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #134F5C" title="#134F5C"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #0B5394" title="#0B5394"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #351C75" title="#351C75"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #741B47" title="#741B47"></div></td>
-								</tr>
-								<tr>
-									<td class="squireUI-color-square"><div style="background-color: #660000" title="#660000"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #783F04" title="#783F04"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #7F6000" title="#7F6000"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #274E13" title="#274E13"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #0C343D" title="#0C343D"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #073763" title="#073763"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #20124D" title="#20124D"></div></td>
-									<td class="squireUI-color-square"><div style="background-color: #4C1130" title="#4C1130"></div></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
+			<div class="squireUITextColorFore col-lg-6 col-12">
+				<h5>Texto</h5>
+				<table cellspacing="0" cellpadding="0">
+					<tbody>
+						<tr>
+							<td class="squireUI-color-square"><div style="background-color: #000000" title="#000000"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #444444" title="#444444"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #666666" title="#666666"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #999999" title="#999999"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #CCCCCC" title="#CCCCCC"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #EEEEEE" title="#EEEEEE"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #F3F3F3" title="#F3F3F3"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #FFFFFF" title="#FFFFFF"></div></td>
+						</tr>
+						<tr>
+							<td class="squireUI-color-square"><div style="background-color: #FF0000" title="#FF0000"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #FF9900" title="#FF9900"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #FFFF00" title="#FFFF00"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #00FF00" title="#00FF00"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #00FFFF" title="#00FFFF"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #0000FF" title="#0000FF"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #9900FF" title="#9900FF"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #FF00FF" title="#FF00FF"></div></td>
+						</tr>
+						<tr>
+							<td class="squireUI-color-square"><div style="background-color: #F4CCCC" title="#F4CCCC"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #FCE5CD" title="#FCE5CD"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #FFF2CC" title="#FFF2CC"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #D9EAD3" title="#D9EAD3"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #D0E0E3" title="#D0E0E3"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #CFE2F3" title="#CFE2F3"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #D9D2E9" title="#D9D2E9"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #EAD1DC" title="#EAD1DC"></div></td>
+						</tr>
+						<tr>
+							<td class="squireUI-color-square"><div style="background-color: #EA9999" title="#EA9999"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #F9CB9C" title="#F9CB9C"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #FFE599" title="#FFE599"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #B6D7A8" title="#B6D7A8"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #A2C4C9" title="#A2C4C9"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #9FC5E8" title="#9FC5E8"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #B4A7D6" title="#B4A7D6"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #D5A6BD" title="#D5A6BD"></div></td>
+						</tr>
+						<tr>
+							<td class="squireUI-color-square"><div style="background-color: #E06666" title="#E06666"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #F6B26B" title="#F6B26B"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #FFD966" title="#FFD966"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #93C47D" title="#93C47D"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #76A5AF" title="#76A5AF"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #6FA8DC" title="#6FA8DC"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #8E7CC3" title="#8E7CC3"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #C27BA0" title="#C27BA0"></div></td>
+						</tr>
+						<tr>
+							<td class="squireUI-color-square"><div style="background-color: #CC0000" title="#CC0000"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #E69138" title="#E69138"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #F1C232" title="#F1C232"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #6AA84F" title="#6AA84F"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #45818E" title="#45818E"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #3D85C6" title="#3D85C6"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #674EA7" title="#674EA7"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #A64D79" title="#A64D79"></div></td>
+						</tr>
+						<tr>
+							<td class="squireUI-color-square"><div style="background-color: #990000" title="#990000"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #B45F06" title="#B45F06"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #BF9000" title="#BF9000"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #38761D" title="#38761D"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #134F5C" title="#134F5C"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #0B5394" title="#0B5394"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #351C75" title="#351C75"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #741B47" title="#741B47"></div></td>
+						</tr>
+						<tr>
+							<td class="squireUI-color-square"><div style="background-color: #660000" title="#660000"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #783F04" title="#783F04"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #7F6000" title="#7F6000"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #274E13" title="#274E13"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #0C343D" title="#0C343D"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #073763" title="#073763"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #20124D" title="#20124D"></div></td>
+							<td class="squireUI-color-square"><div style="background-color: #4C1130" title="#4C1130"></div></td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>

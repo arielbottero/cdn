@@ -16,7 +16,6 @@ squireUI = function(selector, options) {
 		}
 	};
 
-
 	var defaultOp = {
 		ui			: "simple",
 		color		: false,
@@ -91,33 +90,63 @@ squireUI = function(selector, options) {
 
 				iframe.squire.alignRight		= function() { iframe.squire.setTextAlignment("right"); };
 				iframe.squire.alignCenter		= function() { iframe.squire.setTextAlignment("center"); };
-				iframe.squire.alignLeft		= function() { iframe.squire.setTextAlignment("left"); };
-				iframe.squire.alignJustify	= function() { iframe.squire.setTextAlignment("justify"); };
+				iframe.squire.alignLeft			= function() { iframe.squire.setTextAlignment("left"); };
+				iframe.squire.alignJustify		= function() { iframe.squire.setTextAlignment("justify"); };
 				iframe.squire.makeHeading		= function() { iframe.squire.setFontSize("2em"); iframe.squire.bold(); };
 
+				let dialog;
 				switch(true) {
 					case test.testBold: iframe.squire.removeBold(); break;
 					case test.testItalic: iframe.squire.removeItalic(); break;
 					case test.testUnderline: iframe.squire.removeUnderline(); break;
 					case test.testLink:
-						e = iframe.squire.getContent();
-						var href = e.href;
-						var target = e.target;
+						if(iframe.squire.getContent()) {
+							let el = $(iframe.squire.getContent().nextSibling);
+							dialog = BootstrapDialog.show({
+								title: "Insertar Enlace",
+								draggable: true,
+								animate: true,
+								draggable: true,
+								message: $("<div></div>").html($(".squireUILink", container).html()),
+								onhidden: function(e) {
+									let modal = dialog.getModalBody();
+									$(".squireUILinkURL", modal).val("");
+									$(".squireUILinkURL", modal).addClass("empty");
+									$(".squireUILinkTargetBlank", modal).prop("checked", true);
+								},
+								onshown: function(e) {
+									let modal = dialog.getModalBody();
+									let href = el.attr("href");
+									let target = el.attr("target");
 
-						// href
-						if(href) { $(".squireUILinkURL", container).removeClass("empty"); }
-						$(".squireUILinkURL", container).val(href);
+									// href
+									if(href) { $(".squireUILinkURL", modal).removeClass("empty"); }
+									$(".squireUILinkURL", modal).val(href);
+									
+									// target
+									if(target && target.toLowerCase()=="_self") {
+										$(".squireUILinkTargetSelf", modal).prop("checked", true);
+									} else {
+										$(".squireUILinkTargetBlank", modal).prop("checked", true);
+									}
+
+									$(".squireUILinkSubmit", modal).click(function () {
+										let newhref = $(".squireUILinkURL", modal).val();
+										let newtarget = $("input[name=squireUILinkTarget]:checked", modal).val();
+										iframe.squire.makeLink(newhref, {target:newtarget});
+										dialog.close();
+									});
 						
-						// target
-						if(target.toLowerCase()=="_self") {
-							$(".squireUILinkTargetSelf", container).prop("checked", true);
-						} else {
-							$(".squireUILinkTargetBlank", container).prop("checked", true);
+									$(".squireUILinkClear", modal).click(function () {
+										iframe.squire.removeLink();
+										dialog.close();
+									});	
+								}
+							});
 						}
-
-						$(".squireUILink", container).modal("show");
 						break;
 					
+					/*
 					case test.testImage:
 						e = iframe.squire.getContent();
 						var src = e.src;
@@ -136,6 +165,7 @@ squireUI = function(selector, options) {
 
 						$(".squireUILink", container).modal("show");
 						break;
+					*/
 					
 					case test.testOrderedList:
 					case test.testUnorderedList:
@@ -145,23 +175,113 @@ squireUI = function(selector, options) {
 					case test.testQuote: iframe.squire.decreaseQuoteLevel(); break;
 
 					case test.isNotValue("getHTML"):
-						$(".squireUISource", container).modal("show");
+						dialog = BootstrapDialog.show({
+							title: "Código Fuente",
+							draggable: true,
+							animate: true,
+							draggable: true,
+							cssClass: "dialog-xl",
+							message: $("<div></div>").html($(".squireUISource", container).html()),
+							onhidden: function(e) {
+								let modal = dialog.getModalBody();
+								$(".squireUILinkURL", modal).val("");
+								$(".squireUILinkURL", modal).addClass("empty");
+								$(".squireUILinkTargetBlank", modal).prop("checked", true);
+							},
+							onshown: function(e) {
+								let modal = dialog.getModalBody();
+								$(".squireUISourceCode").val(iframe.squire.getHTML());
+								$(".squireUISourceSubmit", modal).click(function () {
+									iframe.squire.setHTML($(".squireUISourceCode", modal).val());
+									textarea.html(iframe.squire.getHTML());
+									dialog.close();
+								});
+								
+							},
+							onhidden: function(e) {
+								$(".squireUISourceCode").text();
+							}
+						});
 						break;
 
 					case test.isNotValue("makeLink"):
-						$(".squireUILink", container).modal("show");
+						dialog = BootstrapDialog.show({
+							title: "Insertar Enlace",
+							draggable: true,
+							animate: true,
+							draggable: true,
+							message: $("<div></div>").html($(".squireUILink", container).html()),
+							onhidden: function(e) {
+								let modal = dialog.getModalBody();
+								$(".squireUILinkURL", modal).val("");
+								$(".squireUILinkURL", modal).addClass("empty");
+								$(".squireUILinkTargetBlank", modal).prop("checked", true);
+							},
+							onshown: function(e) {
+								let modal = dialog.getModalBody();
+								$(".squireUILinkSubmit", modal).click(function () {
+									let href = $(".squireUILinkURL", modal).val();
+									let target = $("input[name=squireUILinkTarget]:checked", modal).val();
+									iframe.squire.makeLink(href, {target:target});
+									dialog.close();
+								});
+					
+								$(".squireUILinkClear", modal).click(function () {
+									iframe.squire.removeLink();
+									dialog.close();
+								});	
+							}
+						});
 						break;
 
+					/*
 					case test.isNotValue("insertImage"):
-						$(".squireUIImage", container).modal("show");
+						dialog = BootstrapDialog.show({
+							title: "Insertar Imagen",
+							draggable: true,
+							animate: true,
+							message: $("<div></div>").html($(".squireUIImage", container).html())
+						});
 						break;
+					*/
 
 					case test.isNotValue("selectFont"):
 						iframe.squire[action](prompt("Value:"));
 						break;
 
 					case test.isNotValue("setTextColour"):
-						$(".squireUITextColor", container).modal("show");
+						dialog = BootstrapDialog.show({
+							title: "Color del Texto",
+							draggable: true,
+							animate: true,
+							message: $("<div></div>").html($(".squireUITextColor", container).html()),
+							onshown: function(e) {
+								let modal = dialog.getModalBody();
+								$(".squireUITextColorBack div", modal).each(function(){
+									$(this).css("cursor", "pointer");
+									$(this).hover(
+										function(){ $(this).css({"border":"solid 1px #000000"}); },
+										function(){ $(this).css({"border":"none"}); }
+									);
+									$(this).click(function(){
+										iframe.squire.setHighlightColour($(this).prop("title"));
+										dialog.close();
+									});
+								});
+				
+								$(".squireUITextColorFore div", modal).each(function(){
+									$(this).css("cursor", "pointer");
+									$(this).hover(
+										function(){ $(this).css({"border":"solid 1px #000000"}); },
+										function(){ $(this).css({"border":"none"}); }
+									);
+									$(this).click(function(){
+										iframe.squire.setTextColour($(this).prop("title"));
+										dialog.close();
+									});
+								});
+							}
+						});
 						break;
 
 					default:
@@ -177,68 +297,6 @@ squireUI = function(selector, options) {
 				$(".squireUI-toolbar", container).addClass("squireUI-small");
 			}
 			
-			// html --------------------------------------------------------------------------------
-			$(".squireUISource", container).on("shown.bs.modal", function (e) {
-				$(".squireUISourceCode").val(iframe.squire.getHTML());
-			});
-
-			$(".squireUISource", container).on("hidden.bs.modal", function (e) {
-				$(".squireUISourceCode").text();
-			});
-
-			$(".squireUISourceSubmit", container).click(function () {
-				iframe.squire.setHTML($(".squireUISourceCode", container).val());
-				textarea.html(iframe.squire.getHTML());
-				$(".squireUISource", container).modal("hide");
-			});
-
-			// links -------------------------------------------------------------------------------
-			$(".squireUILink", container).on("hidden.bs.modal", function (e) {
-				$(".squireUILinkURL", container).val("");
-				$(".squireUILinkURL", container).addClass("empty");
-				$(".squireUILinkTargetBlank", container).prop("checked", true);
-			});
-
-			$(".squireUILinkSubmit", container).click(function () {
-				var href = $(".squireUILinkURL", container).val();
-				var target = $("input[name=squireUILinkTarget]:checked", container).val();
-				iframe.squire.makeLink(href, {target:target});
-				$(".squireUILink", container).modal("hide");
-			});
-
-			$(".squireUILinkClear", container).click(function () {
-				iframe.squire.removeLink();
-				$(".squireUILink", container).modal("hide");
-			});	
-
-			
-			// color del texto
-			$(".squireUITextColor", container).on("show.bs.modal", function (e) {
-				$(".squireUITextColorBack div", $(".squireUITextColor", container)).each(function(){
-					$(this).css("cursor", "pointer");
-					$(this).hover(
-						function(){ $(this).css({"border":"solid 1px #000000"}); },
-						function(){ $(this).css({"border":"none"}); }
-					);
-					$(this).click(function(){
-						iframe.squire.setHighlightColour($(this).prop("title"));
-						$(".squireUITextColor", container).modal("hide");
-					});
-				});
-
-				$(".squireUITextColorFore div", $(".squireUITextColor", container)).each(function(){
-					$(this).css("cursor", "pointer");
-					$(this).hover(
-						function(){ $(this).css({"border":"solid 1px #000000"}); },
-						function(){ $(this).css({"border":"none"}); }
-					);
-					$(this).click(function(){
-						iframe.squire.setTextColour($(this).prop("title"));
-						$(".squireUITextColor", container).modal("hide");
-					});
-				});
-			});
-
 			// images ------------------------------------------------------------------------------
 			$(".squireUIImage", container).on("show.bs.modal", function (e) {
 			});
