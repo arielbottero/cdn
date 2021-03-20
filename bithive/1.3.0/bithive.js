@@ -366,7 +366,7 @@ jQuery.extend({
 						var clasess = clip.attr("clipboard-clasess") || "btn btn-success btn-md mt-md";
 						$(this).clipboard({
 							mode: false,
-							text: text,
+							text: text.replace(/\\n/g,"\n").replace(/\\t/g,"\t"),
 							success_after: function(e) { e.clearSelection(); },
 							success_notify: {
 								message: message,

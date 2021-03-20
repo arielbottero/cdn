@@ -65,7 +65,6 @@ vRules["in"]
 			this.el.prop("alvinerror", false);
 			var div = this.el.closest(".form-group");
 			$(".form-error", div).remove();
-
 			if(node=="input" && (this.el[0].type.toLowerCase()=="radio" || this.el[0].type.toLowerCase()=="checkbox")) {
 				var aRules = this.el.parents("div").hyphened("alvin");
 				var val = $("input[name='"+this.el.attr("name")+"']:checked").val() || "";
@@ -83,7 +82,8 @@ vRules["in"]
 			}
 
 			if(valid!==true) {
-				var message = ("message" in aRules) ? decodeURIComponent(escape(aRules["message"])) : "error: "+valid;
+				// var message = ("message" in aRules) ? decodeURIComponent(escape(aRules["message"])) : "error: "+valid;
+				var message = ("message" in aRules) ? aRules["message"] : "error: "+valid;
 				var errspan = $("<span>")
 					.addClass("form-error")
 					.html(message)
