@@ -383,7 +383,7 @@ td.dropdown {
 		#home-menu .dropdown > a span,
 		#home-menu .dropdown .dropdown-menu ul li a span {
 			display: block;
-			font-size: 18px;
+			font-size: 16px;
 			padding: 10px;
 			height: 64px;
 			overflow: hidden;
