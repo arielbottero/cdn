@@ -18,7 +18,7 @@ jQuery.extend(jQuery.bithive, {
 			.on("showmap", function(e){
 				$(selector+"_coords").gmapicker({
 					address: address,
-					height: "280px",
+					height: ($(window).height()/2)+"px",
 					center: true,
 					onload: function(map) {
 						$(selector).prop("gmap", map);
@@ -26,12 +26,12 @@ jQuery.extend(jQuery.bithive, {
 					after: function(m) {
 						$(selector).val(m.info.lat+","+m.info.lng);
 						if($(selector+"_coords").val()!=m.info.lat+","+m.info.lng) {
-							$(selector).blur();
+							$(selector).trigger("search");
 						}
 					}
 				});
 			})
-			.on("paste blur", function() {
+			.on("search", function() {
 				let locator = $(this);
 				let search = locator.val();
 				if(locator.prop("lastsearch")!=search) {
@@ -73,5 +73,9 @@ jQuery.extend(jQuery.bithive, {
 			})
 			.trigger("showmap")
 		;
+
+		$(selector+"_btn").click(function(){
+			$(selector).trigger("search");
+		});
 	}
 });

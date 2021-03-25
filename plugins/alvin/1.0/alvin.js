@@ -71,6 +71,10 @@ vRules["in"]
 			} else if(this.el.hasClass("form-date") && this.el.data("linked-with")) {
 				var aRules = this.el.hyphened("alvin");
 				var val = $("[name='"+this.el.data("linked-with")+"']").val();
+			} else if(this.el.hasClass("form-select")) {
+				var aRules = this.el.hyphened("alvin");
+				var val = this.el.val();
+				if(val=="0") { val=""; }
 			} else {
 				var aRules = this.el.hyphened("alvin");
 				var val = this.el.val();
