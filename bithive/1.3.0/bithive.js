@@ -978,9 +978,12 @@ jQuery.extend({
 			});
 
 			$.bithive.eachElement("[data-checker]", form, itself, function() {
+				$(this).prop("checker-oldvalue", $(this).val());
 				$(this).on("change paste", function() {
 					var field = $(this);
 					var val = field.val();
+					if(val==$(this).prop("checker-oldvalue")) { return false; }
+
 					var src = field.data("checker");
 					var msgok = field.data("checker-success") || false;
 					var msgko = field.data("checker-fail") || false;

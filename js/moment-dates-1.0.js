@@ -69,7 +69,7 @@ var momentdates = {};
 		var date = moment().subtract(3, "month").toDate();
 		var dateend = moment().subtract(1, "month").toDate();
 		var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-		var lastDay = new Date(date.getFullYear(), dateend.getMonth() + 1, 0);
+		var lastDay = new Date(dateend.getFullYear(), dateend.getMonth() + 1, 0);
 		return [firstDay, lastDay];						
 	}
 
@@ -77,7 +77,7 @@ var momentdates = {};
 		var date = moment().subtract(6, "month").toDate();
 		var dateend = moment().subtract(1, "month").toDate();
 		var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-		var lastDay = new Date(date.getFullYear(), dateend.getMonth() + 1, 0);
+		var lastDay = new Date(dateend.getFullYear(), dateend.getMonth() + 1, 0);
 		return [firstDay, lastDay];						
 	}
 
