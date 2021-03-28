@@ -8,7 +8,7 @@
 				cols	: true,
 				hidden	: false,
 				sensitive : false,
-				alltext	: "--",
+				alltext	: "TODO",
 				after: function(table) {}, // tabla = elemento principal
 				afterFilter: function(table) {}, // tabla = elemento principal
 				dplang: {
@@ -203,12 +203,13 @@
 											filterVal = filterVal.substr(1)
 										}
 
-										filterVal = filterVal.trim();
-										if(!params.sensitive) { filterVal = filterVal.toLowerCase(); }
-										var filterValText = '"'+filterVal+'"';
-										if(!params.sensitive) { filterValText =  filterValText.toLowerCase(); }
 									}
+									filterVal = filterVal.trim();
+									if(!params.sensitive) { filterVal = filterVal.toLowerCase(); }
+									var filterValText = '"'+filterVal+'"';
+									if(!params.sensitive) { filterValText =  filterValText.toLowerCase(); }
 								}
+
 								$("td:nth-child("+colnum+")", $("tbody", table)).not(".day").each(function(e){
 									if(!splitter && filterVal!="" && filterVal!="**") {
 										if(type=="multiple") {
@@ -228,7 +229,7 @@
 											if(!params.sensitive) { filterVal =  filterVal.toLowerCase(); }
 											var curval = (!params.sensitive) ? $(this).text().toLowerCase() : $(this).text();
 											if(sign!==false) {
-												if(isNaN(filterVal)) {console.log("dd")
+												if(isNaN(filterVal)) {
 													if(!eval('"'+curval+'"'+sign+filterValText)) { $(this).parent().hide(); }
 												} else {
 													if(!eval($.strToNumber(curval)+sign+$.strToNumber(filterVal))) { $(this).parent().hide(); }
