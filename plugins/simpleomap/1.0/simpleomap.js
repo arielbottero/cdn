@@ -6,63 +6,67 @@ jQuery.extend({
 		target: null,
 		map: null,
 		markers: [],
-		baseLayer: new ol.layer.Tile({source: new ol.source.OSM() }),
+		baseLayer: new OpenLayers.Layer.OSM(),
 		settings: {
 			width: "100%",
 			height: "100%",
 			zoom: 12,
-			minzoom: 2,
-			maxzoom: 18,
-			click: null,
-			clusters: {
-				active: false,
-				click: null,
-				grid: 40,
-				image: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m"
-			},
-			draggable: false,
-			dragend: null,
+			// minzoom: 2,
+			// maxzoom: 18,
+			// click: null,
+			// clusters: {
+			// 	active: false,
+			// 	click: null,
+			// 	grid: 40,
+			// 	image: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m"
+			// },
+			// draggable: false,
+			// dragend: null,
 			layers: null
 		},
 
 		create: function(options) {
 			let $this = this;
+
 			$.extend($this.settings, options);
 			$this.target = $(options.target);
+			$this.mapid = $this.target.id();
 			$this.target.width($this.settings.width).height($this.settings.height);
 
-			if($this.settings.layers===null) {
-				$this.settings.layers = [$this.baseLayer];
-			}
-			$this.map = new ol.Map({
-				target: $this.target[0],
-				layers: $this.settings.layers,
-				view: new ol.View({
-					center: ol.proj.fromLonLat([$this.coord(options.lng), $this.coord(options.lat)]),
-					minZoom: $this.settings.minzoom,
-					maxZoom: $this.settings.maxzoom,
-					zoom: $this.settings.zoom
-				})
-			});
+			var controls = {
+				controls: [
+				//   new OpenLayers.Control.Navigation(),
+				//   new OpenLayers.Control.PanZoomBar(),
+				//   new OpenLayers.Control.Attribution()
+				]
+			};
+
+			if($this.settings.layers===null) { $this.settings.layers = [$this.baseLayer]; }
+
+			$this.map = new OpenLayers.Map($this.mapid, controls);
+			$this.addLayers($this.settings.layers);
+			$this.setCenter(options.lat, options.lng);
 
 			return this;
 		},
 
-		addMarker: function(coords) {
-			var $this = this;
-			if(!Array.isArray(coords) && typeof(coords)=="object") { coords = [coords]; }
+		addLayers: function(layers) {
+			for(let x in layers) {
+				this.map.addLayer(layers[x]);
+			}
+		},
 
+		addMarker: function(coords) {
+			let $this = this;
+			if(!Array.isArray(coords) && typeof(coords)=="object") { coords = [coords]; }
 			
+			let markers = [];
 			$.each(coords, function(i, e) {
 				let point = e;
 				let lat = point.lat || point.x;
 				let lng = point.lng || point.y;
 
-				let marker = new ol.Feature({
-					geometry: new ol.geom.Point(
-						ol.proj.fromLonLat([$this.coord(lng), $this.coord(lat)])
-					)
-				});
+				let marker = $this.position(lat, lng);
 
 				// marker.setStyle(new ol.style.Style({
 				// 	image: new ol.style.Icon({
@@ -95,34 +99,19 @@ jQuery.extend({
 				// 	});
 				// }
 
-				$this.markers.push(marker);
+				markers.push(marker);
 			});
 
 		// 	if(this.settings.clusters.active) { this.createClusters(); }
 
-			let layerMarkers = new ol.layer.Vector({
-				source: new ol.source.Vector({
-					features: this.markers
-				}),
 
-				style: new ol.style.Style({
-					image: new ol.style.Icon({
-						anchor: [0.5, 0.5],
-						anchorXUnits: "fraction",
-						anchorYUnits: "fraction",
-						src: "/images/mapicons/school.svg"
-					})
-					// text: new ol.style.Text({
-					// 	text: '\uf041',
-					// 	font: 'normal 38px "Font Awesome 5 Pro"',
-					// 	fill: new ol.style.Fill({
-					// 		color: '#ff0000'
-					// 	})
-					// })
-				})
-			});
+			let layerMarkers = new OpenLayers.Layer.Markers("Markers");
+			$this.map.addLayer(layerMarkers);
 
-			this.map.addLayer(layerMarkers);
+			for(let x in markers) {
+				console.debug(markers[x]);
+				layerMarkers.addMarker(new OpenLayers.Marker(markers[x]));
+			}
 
 			return this;
 		},
@@ -130,6 +119,13 @@ jQuery.extend({
 		coord: function(coord) {
 			return parseFloat(coord.replace(/,/, "."));
 		},
+
+		position: function(lat, lng) {
+			var fromProjection = new OpenLayers.Projection("EPSG:4326"); // Transform from WGS 1984
+			var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
+			return new OpenLayers.LonLat(this.coord(lng), this.coord(lat)).transform( fromProjection, toProjection);
+		},
+
 		// clearMarkers: function(remove) {
 		// 	var $this = this;
 		// 	for(let i = 0; i < $this.markers.length; i++) {
@@ -181,12 +177,6 @@ jQuery.extend({
 		// 	return this;
 		// },
 
-		// centerOn: function(coords) {
-		// 	var coords = (typeof coords!="string") ? coords : coords.split(",");
-		// 	this.map.setZoom(16);
-		// 	this.map.setCenter({lat:parseFloat(coords[0]), lng:parseFloat(coords[1])});
-		// },
-
 		faMarker: function(classes) {
 			var icon = document.createElement("i");
 			icon.className = classes;
@@ -216,5 +206,10 @@ jQuery.extend({
 		// 		after(results, status);
 		// 	});
 		// }
+
+		setCenter: function(lat, lng, zoom) {
+			if(!zoom) { zoom = this.settings.zoom; }
+			this.map.setCenter(this.position(lat, lng), zoom);
+		}
 	}
 });

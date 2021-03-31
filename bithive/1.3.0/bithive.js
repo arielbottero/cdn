@@ -1134,11 +1134,8 @@ jQuery.extend({
 				var clear = $("<i>", {class:"autocomplete-clear fas fa-trash-alt p-absolute c-pointer m-n p-n text-primary"}).click(function(){
 					field.val("");
 					$("#"+field.prop("autocomplete-target")).val("");
-					$(this).addClass("d-none");
-				})
+				}).addClass("d-none");
 				field.parent().addClass("p-relative").append(clear);
-				clear.css({top: "41.5px", right: "15px"}).addClass("d-none");
-
 				field.prop("autocomplete-clear", clear);
 
 				var target = $("#"+target);
@@ -1157,7 +1154,9 @@ jQuery.extend({
 							setTimeout(function() { field.val(ui.item.label).attr("title", ui.item.label); },10);
 							var target = $("#"+field.prop("autocomplete-target"));
 							target.val(ui.item.value);
-							clear.removeClass("d-none");
+							
+							// clear btn
+							clear.css({top: (field.position().top+((field.height()-clear.height())/2))+"px", right: "15px"}).removeClass("d-none");
 
 							// relaciones
 							if(lnksrc) {
@@ -1248,6 +1247,9 @@ jQuery.extend({
 								}
 							});
 						}
+
+						// clear btn
+						clear.css({top: (field.position().top+((field.height()-clear.height())/2))+"px", right: "15px"}).removeClass("d-none");
 					}
 				}).trigger("fill");
 
@@ -2147,17 +2149,28 @@ jQuery.extend({
 			var size		= (options.size) ? "dialog-"+options.size : "";
 			var title		= options.title || "&nbsp;";
 			var closable	= (typeof options.closable == "undefined") ? true : options.closable;
-			var content		= options.content;
+			var content		= options.content || false;
+			var url			= options.url || false;
+			var onload		= options.onload || false;
 			var btnClose	= (options.close) ? [{ label: options.close, cssClass: "btn-primary pull-center", action: function(dialogItself){ dialogItself.close(); }}] : null;
 			
 			// los elementos de la respuesta que tengan el atributo dialog-close, cerraran el dialogo
+
+			if(url) {
+				var message = $("<div>").id(id).addClass("container-fluid"+classes).load(url, function(){
+					$.bithive.apply(message);
+					if(onload) { onload(message); }
+				});
+			} else {
+				var message = $("<div>").id(id).addClass("container-fluid"+classes).html($(content).html())
+			}
 
 			var dialogLinkLoaded = false;
 			var dialogOptions = {
 				draggable: true,
 				title: title,
 				closable: closable,
-				message: $("<div></div>").id(id).addClass("container-fluid"+classes).html($(content).html()),
+				message: message,
 				cssClass: size,
 				onshow: function(dialogRef){
 					if(options.before) { $.bithive.run(options.before); }
