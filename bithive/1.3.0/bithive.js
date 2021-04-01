@@ -2210,7 +2210,15 @@ jQuery.extend({
 					if(urlQuery.indexOf("&")==0) { urlQuery = urlQuery.substring(1); }
 					urlQuery = decodeURI(urlQuery).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"');
 					if(urlQuery!="") {
-						urlQuery = JSON.parse('{"' +urlQuery+ '"}');
+						try {
+							urlQuery = JSON.parse('{"' +urlQuery+ '"}');
+						} catch(e) {
+							if(e instanceof SyntaxError) {
+								console.debug("Malformed URL: "+urlQuery);
+							}
+							return true;
+						}
+
 						var urlQueryString = [];
 						$.each(urlQuery, function(k,v){
 							if(k!="response") {
