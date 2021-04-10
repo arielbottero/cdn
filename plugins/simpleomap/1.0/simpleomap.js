@@ -5,15 +5,17 @@ jQuery.extend({
 	simpleOMap : {
 		target: null,
 		map: null,
-		markers: [],
-		baseLayer: new OpenLayers.Layer.OSM(),
+		layers: {},
+		markers: {},
+		baseLayer: new ol.layer.Tile({ source: new ol.source.OSM() }),
+
 		settings: {
+			lat: 0,
+			lng: 0,
 			width: "100%",
 			height: "100%",
 			zoom: 12,
-			// minzoom: 2,
-			// maxzoom: 18,
-			// click: null,
+			click: null,
 			// clusters: {
 			// 	active: false,
 			// 	click: null,
@@ -33,98 +35,195 @@ jQuery.extend({
 			$this.mapid = $this.target.id();
 			$this.target.width($this.settings.width).height($this.settings.height);
 
-			var controls = {
-				controls: [
-				//   new OpenLayers.Control.Navigation(),
-				//   new OpenLayers.Control.PanZoomBar(),
-				//   new OpenLayers.Control.Attribution()
-				]
-			};
-
-			if($this.settings.layers===null) { $this.settings.layers = [$this.baseLayer]; }
-
-			$this.map = new OpenLayers.Map($this.mapid, controls);
+			// init
+			$this.map = new ol.Map({
+				target: $this.mapid,
+				view: $this.setCenter($this.settings.lat, $this.settings.lng)
+			});
+			
+			// layers
+			if($this.settings.layers===null) { $this.settings.layers = [["base", $this.baseLayer]]; }
 			$this.addLayers($this.settings.layers);
-			$this.setCenter(options.lat, options.lng);
+
+			// on click
+			if($this.settings.click) {
+				$this.map.on("singleclick", function(evt) {
+					let feature = $this.map.forEachFeatureAtPixel(evt.pixel, function(feature) {
+						return feature;
+					});
+
+					if(feature) {
+						let coordinates = feature.getGeometry().getCoordinates();
+						$this.settings.click(feature.values_.data, coordinates);
+					}
+				});
+			}
 
 			return this;
 		},
 
 		addLayers: function(layers) {
 			for(let x in layers) {
-				this.map.addLayer(layers[x]);
+				this.layers[layers[x][0]] = layers[x][1];
+				this.map.addLayer(layers[x][1]);
 			}
 		},
 
-		addMarker: function(coords) {
+		/* fa icon by classname */
+		// marker: {
+		// 	type: "fa",
+		// 	class: "fas fa-school",
+		// 	color: "#FF0000"
+		// },
+
+		/* image */
+		// marker: {
+		// 	type: "image",
+		// 	url: "https://www.lavanguardia.com/files/image_449_220/uploads/2017/07/19/5fa3cc4195df5.jpeg",
+		// 	scale: .15
+		// }
+
+		/* text */
+		// marker: {
+		// 	type: "text",
+		// 	string: "escuela",
+		// 	scale: .75
+		// }
+		// coords = array[object{lat,lng}]
+		// coords = object{id:object{lat,lng}}
+		addMarker: function(layerName, coords) {
 			let $this = this;
-			if(!Array.isArray(coords) && typeof(coords)=="object") { coords = [coords]; }
-			
 			let markers = [];
+
+			$this.markers[layerName] = {};
 			$.each(coords, function(i, e) {
 				let point = e;
+				let id = point.id || $.uid();
 				let lat = point.lat || point.x;
 				let lng = point.lng || point.y;
 
-				let marker = $this.position(lat, lng);
+				marker = new ol.Feature({
+					geometry: new ol.geom.Point($this.position(lat, lng)),
+					data: point
+				});
 
-				// marker.setStyle(new ol.style.Style({
-				// 	image: new ol.style.Icon({
-				// 		imgSize: [20, 20],
-				// 		offset: [0, 0],
-				// 		opacity: 1,
-				// 		scale: 0.35,
-				// 		// src: $this.faMarker("fas fa-dice-d6")
-				// 		src: "/images/mapicons/school.png"
-				// 	})
-				// }));
+				if(point.marker) {
+					let style = null;
+					let nScale = point.marker.scale ? point.marker.scale : 1;
+					let sColor = point.marker.color ? point.marker.color : "#AB0000";
+					switch(point.marker.type.toLowerCase()) {
+						case "fa":
+							style = new ol.style.Style({
+								text: new ol.style.Text($this.faMarker(point.marker))
+							});
+							break;
 
-				// var marker = new google.maps.Marker({
-				// 	map: $this.map,
-				// 	position: position,
-				// 	title: point.title || "lat:"+lat+", lng:"+lng,
-				// 	source: point,
-				// 	draggable: $this.settings.draggable
-				// });
+						case "image":
+							style = new ol.style.Style({
+								image: new ol.style.Icon({
+									scale: nScale,
+									src: point.marker.url
+								})
+							});
+							break;
+
+						case "text":
+							style = new ol.style.Style({
+								text: new ol.style.Text({
+									text: point.marker.string,
+									scale: nScale,
+									textBaseline: "bottom",
+									font: '900 16px "Sans"',
+									fill: new ol.style.Fill({ color: sColor })
+								})
+							});
+							break;
+					}
+
+					marker.setStyle(style);
+				}
 				
-				// if(typeof $this.settings.click == "function") {
-				// 	marker.addListener("click", function() {
-				// 		$this.settings.click(point);
-				// 	});
-				// }
-
-				// if($this.settings.draggable && typeof $this.settings.dragend == "function") {
-				// 	marker.addListener("dragend", function() {
-				// 		$this.settings.dragend(marker);
-				// 	});
-				// }
-
 				markers.push(marker);
+				$this.markers[layerName][id] = marker;
 			});
 
-		// 	if(this.settings.clusters.active) { this.createClusters(); }
+			let layerMarkers;
+			if(!$this.layers[layerName]) {
+				layerMarkers = new ol.layer.Vector({
+					source: new ol.source.Vector({
+						features: markers
+					})
+				});
+				$this.addLayers([[layerName, layerMarkers]]);
+			} else {
+				layerMarkers = $this.layers[layerName];
+				layerMarkers.getSource().addFeatures(markers);
+			}
 
-
-			let layerMarkers = new OpenLayers.Layer.Markers("Markers");
-			$this.map.addLayer(layerMarkers);
-
-			for(let x in markers) {
-				console.debug(markers[x]);
-				layerMarkers.addMarker(new OpenLayers.Marker(markers[x]));
+			// fit zoom
+			let layerExtent = layerMarkers.getSource().getExtent();
+			if(isFinite(layerExtent[0])) {
+				$this.map.getView().fit(layerExtent);
+			} else {
+				$this.map.getView().setZoom(2);
 			}
 
 			return this;
 		},
 
+		removeMarker: function(layerName, id) {
+			this.layers[layerName].getSource().removeFeature(this.markers[layerName][id]);
+			return this;
+		},
+
+		removeMarkers(layerName) {
+			this.map.removeLayer(this.layers[layerName]);
+			delete this.layers[layerName];
+			return this;
+		},
+
 		coord: function(coord) {
-			return parseFloat(coord.replace(/,/, "."));
+			if(typeof(coord)=="string") { coord = coord.replace(/,/, "."); }
+			return parseFloat(coord);
 		},
 
 		position: function(lat, lng) {
-			var fromProjection = new OpenLayers.Projection("EPSG:4326"); // Transform from WGS 1984
-			var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
-			return new OpenLayers.LonLat(this.coord(lng), this.coord(lat)).transform( fromProjection, toProjection);
+			return ol.proj.fromLonLat([this.coord(lng), this.coord(lat)]);
 		},
+
+		setCenter: function(lat, lng, zoom) {
+			if(!zoom) { zoom = this.settings.zoom; }
+			return new ol.View({
+				center: this.position(lat, lng),
+				zoom: zoom
+			})
+		},
+
+		faMarker: function(options) {
+			let sClass = options.class ? options.class : "fas fa-home";
+			let sColor = options.color ? options.color : "#AB0000";
+			let nScale = options.scale ? parseFloat(options.scale) : 1;
+
+			let icon = document.createElement("i");
+			icon.className = sClass;
+			document.body.appendChild(icon);
+			let glyph = window.getComputedStyle(icon,":before").getPropertyValue("content");
+			document.body.removeChild(icon);
+
+			return {
+				text: glyph.replace(/"/g, ""),
+				scale: nScale,
+				textBaseline: "bottom",
+				font: '900 16px "Font Awesome 5 Pro"',
+				fill: new ol.style.Fill({ color: sColor })
+			};
+		},
+
+		fitZoom: function() {
+			this.map.getView().fit(this.map.getView().calculateExtent());
+			return this;
+		}
+
 
 		// clearMarkers: function(remove) {
 		// 	var $this = this;
@@ -177,28 +276,7 @@ jQuery.extend({
 		// 	return this;
 		// },
 
-		faMarker: function(classes) {
-			var icon = document.createElement("i");
-			icon.className = classes;
-			document.body.appendChild(icon);
-			var glyph	= window.getComputedStyle(icon,":before").getPropertyValue("content");
-			var color	= window.getComputedStyle(icon).color;
-			var size	= window.getComputedStyle(icon).fontSize || 20;
-			document.body.removeChild(icon);
-			size = parseInt(size);
-		
-			glyph = glyph.charCodeAt(1).toString(16);
-		
-			var canvas, ctx;
-			canvas = document.createElement("canvas");
-			canvas.width = canvas.height = size;
-			ctx = canvas.getContext("2d");
-			ctx.fillStyle = color;
-		
-			ctx.font = size+"px Font Awesome 5 Pro";
-			ctx.fillText(String.fromCharCode(parseInt(glyph, 16)), 0, size*.8);
-			return canvas.toDataURL();
-		},
+
 
 		// addresscoords: function(address, after) {
 		// 	var geocoder = new google.maps.Geocoder();
@@ -207,9 +285,6 @@ jQuery.extend({
 		// 	});
 		// }
 
-		setCenter: function(lat, lng, zoom) {
-			if(!zoom) { zoom = this.settings.zoom; }
-			this.map.setCenter(this.position(lat, lng), zoom);
-		}
+
 	}
 });

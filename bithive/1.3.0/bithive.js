@@ -1295,7 +1295,7 @@ jQuery.extend({
 			// tilda todos los checkboxes visibles (destilda TODOS) que tengan el selector pasado en data-checkall
 			$.bithive.eachElement("[data-checkall]", form, itself, function() {
 				var checkall = $(this);
-				checkall.prop("isChecked", false);
+				checkall.prop("isChecked", checkall.prop("checked"));
 				checkall.click(function() {
 					var boxes = $(checkall.data("checkall"));
 					if(!checkall.prop("isChecked")) {
