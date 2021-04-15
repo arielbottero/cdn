@@ -1234,8 +1234,8 @@ jQuery.extend({
 								data: { i:1, q: field.val() },
 								success: function(data) {
 									$.each(data, function(key, item) {
-										if(item.value==current) {
-											target.val(current);
+										if(item.value==current || (item.imya && item.imya==current)) {
+											target.val(item.value);
 											field.val(item.label).attr("title", item.label);
 											if(after) { $.bithive.run(after, [field, item, true]); }
 											return false;
