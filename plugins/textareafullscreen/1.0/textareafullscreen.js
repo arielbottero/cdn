@@ -43,7 +43,8 @@
             // ESC = closes the fullscreen mode
             $(window).on("keyup.txeditor", function(e) {
                 if(e.keyCode == 27) {
-                    isFullscreen ? methods.minimize($(this)) : '';
+                    icon.trigger("click");
+                    // isFullscreen ? methods.minimize($(this)) : '';
                 }
             });
 
@@ -76,7 +77,14 @@
         },
 
         expand: function(editor) {
-			editor.find("textarea").css({width: "100%", height: "100%"});
+			editor.find("textarea").css({width: "100%", height: "100%"}).on("keydown", function(e) {
+                if(e.keyCode==9 || e.which==9) {
+                    e.preventDefault();
+                    var s = this.selectionStart;
+                    this.value = this.value.substring(0,this.selectionStart) + "\t" + this.value.substring(this.selectionEnd);
+                    this.selectionEnd = s+1;
+                }
+            });
 			
             settings.maxWidth ? editor.css("max-width", settings.maxWidth) : "";
             settings.maxHeight ? editor.css("max-height", settings.maxHeight) : "";
@@ -93,7 +101,7 @@
         },
 
         minimize: function(editor) {
-			editor.find("textarea").css({width: "", height: ""});
+			editor.find("textarea").css({width: "", height: ""}).off("keydown");
             $(window).off("resize.txeditor", relocate(editor))
             editor.removeClass("expanded").css({"max-width": "none", "max-height": "none"});
             if(settings.overlay) { methods.removeOverlay(); }

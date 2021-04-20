@@ -24,7 +24,9 @@ vRules["type"]
 vRules["minlength"]
 vRules["maxlength"]
 vRules["greaterthan"]
+vRules["greaterthaneq"]
 vRules["lessthan"]
+vRules["lessthaneq"]
 vRules["in"]
 
 */
@@ -102,11 +104,24 @@ vRules["in"]
 			}
 		},
 
-		between: function(mValue, sMinValue, sMaxValue) {
+		between: function(sValue, sMinValue, sMaxValue) {
+			if(typeof sMaxValue=="undefined") { sMaxValue = sMinValue; }
+			if(!isNaN(sValue)) {
+				sValue = new String(parseFloat(sValue));
+				sMinValue = new String(parseFloat(sMinValue));
+				sMaxValue = new String(parseFloat(sMaxValue));
+			}
+
+			console.debug(sValue, sMinValue, sMaxValue);
+
+			// limites
+			if(sValue.localeCompare(sMinValue)===0) { return 1; }
+			if(sValue.localeCompare(sMaxValue)===0) { return 3; }
+
 			var aBetween	= [];
 			aBetween[0]		= sMinValue;
-			aBetween[1]		= (typeof sMaxValue!="undefined") ? sMaxValue : aBetween[0];
-			aBetween[2]		= mValue;
+			aBetween[1]		= sMaxValue;
+			aBetween[2]		= sValue;
 			
 			aBetween.sort(function(a, b) {
 				var ax = [], bx = [];
@@ -123,13 +138,13 @@ vRules["in"]
 
 				return ax.length - bx.length;
 			});
-			
-			if(aBetween[0]==mValue) {
-				return 0;
-			} else if(aBetween[1]==mValue) {
-				return 1;
+
+			if(aBetween[0]==sValue) {
+				return 0; // es menor al rango
+			} else if(aBetween[1]==sValue) {
+				return 2; // dentro del rango
 			} else {
-				return 2;
+				return 4; // es mayor al rango
 			}
 		},
 
@@ -161,19 +176,29 @@ vRules["in"]
 			}
 
 			// lessthan y greaterthan
-			var bLess = ("lessthan" in vRules);
-			var bGreat = ("greaterthan" in vRules);
-			if(bLess || bGreat) {
-				mLess = (bLess) ? vRules["lessthan"] : vRules["greaterthan"];
-				mGreat = (bGreat) ? vRules["greaterthan"] : vRules["lessthan"];
+			let bLess = ("lessthan" in vRules);
+			let bLessEq = ("lessthaneq" in vRules);
+			let bGreat = ("greaterthan" in vRules);
+			let bGreatEq = ("greaterthaneq" in vRules);
+			if(bLess || bGreat || bLessEq || bGreatEq) {
+				mLess = (bLess || bLessEq) ? (bLessEq ? vRules["lessthaneq"] : vRules["lessthan"]) : (bGreatEq ? vRules["greaterthaneq"] : vRules["greaterthan"]);
+				mGreat = (bGreat || bGreatEq) ? (bGreatEq ? vRules["greaterthaneq"] : vRules["greaterthan"]) : (bLessEq ? vRules["lessthaneq"] : vRules["lessthan"]);
 
-				var nBetween = this.between(mValue, mLess, mGreat);
+				let nBetween = this.between(mValue, mLess, mGreat);
 
-				if(bLess && !bGreat && nBetween>0) { return "lessthan"; }
-				if(bGreat && !bLess && nBetween<2) { return "greaterthan"; }
-				if(bGreat && bLess && nBetween!=1) { return "between"; }
+				if(bLess && !bGreat && !bGreatEq && nBetween>0) { return "lessthan"; }
+				if(bLessEq && !bGreat && !bGreatEq && nBetween>1) { return "lessthan"; }
+
+				if(bLess && bGreat && nBetween!=2) { return "between1"; }
+				if(bLess && bGreatEq && (nBetween<2 || nBetween>3)) { return "between"; }
+				if(bLessEq && bGreat && (nBetween<1 || nBetween>2)) { return "between"; }
+				if(bLessEq && bGreatEq && (nBetween<1 || nBetween>3)) { return "between"; }
+
+				if(bGreat && !bLess && !bLessEq && nBetween<4) { return "greaterthan"; }
+				if(bGreatEq && !bLess && !bLessEq && nBetween<3 && nBetween!=1) { return "greaterthan"; }
+				
 			}
-			
+
 			// in
 			if("in" in vRules) {
 				var aIn = split(",", vRules["in"]);

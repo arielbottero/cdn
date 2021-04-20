@@ -467,6 +467,19 @@ td.dropdown {
 	border-radius: 0;
 	box-shadow: none !important;
 }
+	.bootstrap-select.text-right .filter-option {
+		text-align: right;
+		padding-right: 24px;
+	}
+	.bootstrap-select.text-right .dropdown-menu li {
+		text-align: right;
+	}
+
+	.bootstrap-select.text-center .filter-option,
+	.bootstrap-select.text-center .dropdown-menu li {
+		text-align: center;
+	}
+
 
 .subform-box {
 	border: 1px solid #CED4DA;

@@ -2008,15 +2008,7 @@ jQuery.extend({
 
 			// TEXTAREAS ---------------------------------------------------------------------------
 			$.bithive.eachElement("textarea.fullscreen, textarea.fullinput", form, itself, function() {
-				$(this).addClass("fullscreen").on("keydown", function(e) {
-					if(e.keyCode==9 || e.which==9) {
-						e.preventDefault();
-						var s = this.selectionStart;
-						this.value = this.value.substring(0,this.selectionStart) + "\t" + this.value.substring(this.selectionEnd);
-						this.selectionEnd = s+1;
-					}
-				});
-				$(this).textareafullscreen({width: "90%"});
+				$(this).addClass("fullscreen").textareafullscreen({width: "90%"});
 			});
 
 			$.bithive.eachElement("textarea.dynamic", form, itself, function() {
@@ -2237,6 +2229,12 @@ jQuery.extend({
 
 			var fields = $("input,select,textarea", form);
 
+			// unmask ---
+			$(".mask-money").each(function() { $(this).trigger("unmask", true); });
+			$(".mask-decimal").each(function() { $(this).trigger("unmask", true); });
+			$(".mask-cuit").each(function() { $(this).trigger("unmask", true); });
+			$(".mask-dni").each(function() { $(this).trigger("unmask", true); });
+
 			let alvinfocus = false;
 			var alvin = true;
 			$(".form-error", form).remove();
@@ -2266,14 +2264,14 @@ jQuery.extend({
 			if(!alvin) {
 				window.scrollTo(0, alvinfocus.position().top);
 				$.bithive.danger($.bithive.lang.alvinErrorMessage);
+
+				// remask
+				$(".mask-money").each(function() { $(this).trigger("mask"); });
+				$(".mask-decimal").each(function() { $(this).trigger("mask"); });
+				$(".mask-cuit").each(function() { $(this).trigger("mask"); });
+				$(".mask-dni").each(function() { $(this).trigger("mask"); });
 				return false;
 			}
-
-			// unmask ---
-			$(".mask-money").each(function() { $(this).trigger("unmask", true); });
-			$(".mask-decimal").each(function() { $(this).trigger("unmask", true); });
-			$(".mask-cuit").each(function() { $(this).trigger("unmask", true); });
-			$(".mask-dni").each(function() { $(this).trigger("unmask", true); });
 
 			// attacher resizer
 			$(".form-attachresizer", form, false, function() { $(this).prop("attachresizer").toField(); });
