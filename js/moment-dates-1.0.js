@@ -6,6 +6,7 @@ var momentdates = {};
 		"tomorrow"			: "mañana",
 		"week"				: "esta semana",
 		"month"				: "este mes",
+		"year"				: "este año",
 		"pastWeek"			: "última semana",
 		"pastFortnight"		: "última quincena",
 		"pastMonth"			: "último mes",
@@ -38,6 +39,13 @@ var momentdates = {};
 		var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
 		var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
 		return [firstDay, lastDay];
+	}
+
+	momentdates.year = function () {
+		var date = new Date();
+		var firstDay = new Date(date.getFullYear(), 0, 1);
+		var lastDay = new Date(date.getFullYear(), 11, 31);
+		return [firstDay, lastDay];		
 	}
 
 	// past
