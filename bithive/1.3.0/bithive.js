@@ -556,6 +556,19 @@ jQuery.extend({
 				});
 			});
 
+			// solicita confirmacion en un link
+			$.bithive.eachElement(".link-confirm", elem, itself, function() {
+				$(this).click(function(e) {
+					e.preventDefault();
+					let target = $(this).attr("target") || "_top";
+					let href = $(this).attr("href");
+					let confirm = $(this).data("confirm") || $.bithive.lang.confirmQuestion;
+					$.bithive.confirm(confirm, function(){
+						window.open(href, target);
+					});
+				});
+			});
+
 			// genera un link post basado en un href y un json
 			$.bithive.eachElement(".link-post", elem, itself, function() {
 				$(this).click(function(e) {
