@@ -311,6 +311,15 @@ td.dropdown {
 		width: auto;
 	}
 
+.form-group.row {
+	justify-content: flex-end !important;
+}
+	.form-group.row .form-error{
+		margin-top: 0px;
+		margin-right: 15px;
+		float: none;
+	}
+
 .sticky-top {
 	position: sticky;
 	top: 45px;
