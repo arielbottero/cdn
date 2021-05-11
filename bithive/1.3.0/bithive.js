@@ -381,7 +381,7 @@ jQuery.extend({
 			// booleans
 			$.bithive.eachElement(".format-boolean", elem, itself, function() {
 				var options = ($(this).hasAttr("format-custom")) ? $(this).attr("format-custom").split(";") : [$.bithive.lang.valueYes,$.bithive.lang.valueNo];
-				$(this).html(($(this).html()=="1" || $(this).html()=="true") ? options[0] : options[1]);
+				$(this).html(($(this).html()!="0" || $(this).html()!="false") ? options[1] : options[0]);
 			});
 
 			// case [ format-custom: {value:label;value:label;value:label} ]
