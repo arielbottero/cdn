@@ -41,10 +41,10 @@
             el.css({"resize": "none"});
 
             // ESC = closes the fullscreen mode
-            $(window).on("keyup.txeditor", function(e) {
-                if(e.keyCode == 27) {
+            $(".tx-editor > textarea").on("keydown", function(e) {
+                if(e.keyCode == 27 && $(this).parent().hasClass("expanded")) {
                     icon.trigger("click");
-                    // isFullscreen ? methods.minimize($(this)) : '';
+                    e.stopPropagation();
                 }
             });
 
