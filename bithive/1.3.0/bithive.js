@@ -3065,8 +3065,9 @@ jQuery.extend({
 							;
 
 							if(args[0].data("boolean")=="1" || args[0].data("boolean")=="true") {
-								console.debug(args[1][0]);
-								if(args[1][0]!=0 && args[1][0]!="0" && args[1][0]!="") { $("input", onoff).prop("checked", true); }
+								if(typeof args[1][0] != "undefined") {
+									if(args[1][0]!=0 && args[1][0]!="0" && args[1][0]!="") { $("input", onoff).prop("checked", true); }
+								}
 							} else {
 								if($.inArray($("input", onoff).val(), args[1])>=0) { $("input", onoff).prop("checked", true); }
 							}
