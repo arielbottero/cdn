@@ -239,7 +239,6 @@ ul.ui-autocomplete {
 }
 
 ul.form-autocomplete-addtext li:last-child {
-	/* color: #AB0000; */
 	text-decoration: underline;
 }
 
@@ -806,6 +805,12 @@ select.bootstrap-select {
 	padding-bottom: 10px;
 }
 
+/* BOX BORDERS  ==============================================================*/
+.box-brd-top { border-top: solid 5px #5A5C69 !important; }
+.box-brd-right { border-right: solid 5px #5A5C69 !important; }
+.box-brd-bottom { border-bottom: solid 5px #5A5C69 !important; }
+.box-brd-left { border-left: solid 5px #5A5C69 !important; }
+
 /* FIRMA  ====================================================================*/
 .appsign {
 	background-color: #FFFFFF;
@@ -1092,7 +1097,7 @@ select.bootstrap-select {
 			font-size: 22px !important;
 		}
 			#actions-buttons .action-button .btn > i:hover {
-				/* color: #AB0000 !important;			 */
+				/* color: #5A5C69 !important;			 */
 			}
 	
 	/* .form-inline .form-row,
