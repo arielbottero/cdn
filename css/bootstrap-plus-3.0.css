@@ -450,6 +450,7 @@ textarea.fullinput {
 .text-through { text-decoration: line-through !important; }
 .text-italic { font-style: italic !important; }
 .text-nowrap { white-space: nowrap !important; }
+.text-monospace, .text-monospace * { font-family: Courier, "Courier New", monospace !important; }
 
 .text-bold { font-weight: bold !important; }
 .text-bolder { font-weight: bolder !important; }
