@@ -418,7 +418,7 @@ textarea.fullinput {
 /* TEXT ==========================================================================================*/
 .text-tt,
 .text-monospace {
-	font-family: "Courier New", Courier, monospace !important;
+	font-family: monospace !important;
 }
 
 .overflow-auto {

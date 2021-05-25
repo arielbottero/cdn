@@ -810,6 +810,10 @@ select.bootstrap-select {
 .box-brd-right { border-right: solid 5px #5A5C69 !important; }
 .box-brd-bottom { border-bottom: solid 5px #5A5C69 !important; }
 .box-brd-left { border-left: solid 5px #5A5C69 !important; }
+.box-brd-thin-top { border-top: solid 3px #5A5C69 !important; }
+.box-brd-thin-right { border-right: solid 3px #5A5C69 !important; }
+.box-brd-thin-bottom { border-bottom: solid 3px #5A5C69 !important; }
+.box-brd-thin-left { border-left: solid 3px #5A5C69 !important; }
 
 /* FIRMA  ====================================================================*/
 .appsign {
