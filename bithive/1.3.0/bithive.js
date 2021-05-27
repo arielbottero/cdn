@@ -2488,7 +2488,7 @@ jQuery.extend({
 			var limit = parseInt(subformButton.data("limit")) || 0;
 			var limitmsg = subformButton.data("limit-message") || $.bithive.lang.subFormLimitMsg;
 			subformButton.prop({"last-subform": null});
-			var preload = parseInt(subformButton.data("default"));
+			var defaultfroms = parseInt(subformButton.data("default"));
 			var subclass = subformButton.data("class") || "";
 
 			if(elem.nodeName.toLowerCase()=="select") {
@@ -2570,11 +2570,11 @@ jQuery.extend({
 					console.error(e); 
 				}
 			} else {
-				if(preload>0) {
+				if(defaultfroms>0) {
 					if(subformButton.prop("subFormType")=="number") {
-						subformButton.val(preload).trigger(trigger)
+						subformButton.val(defaultfroms).trigger(trigger)
 					} else {
-						for(var x=0; x<preload; x++) {
+						for(var x=0; x<defaultfroms; x++) {
 							subformButton.trigger(trigger);
 						}
 					}
@@ -2589,6 +2589,7 @@ jQuery.extend({
 			if(subformButton.data("extend")) { subFormIdValue = subformButton.prop("subFormFieldId"); }
 			div.prop("subform-target", target);
 			div.prop("subFormIdVal", subFormIdValue);
+			div.prop("subformButton", subformButton);
 
 			$.bithive.RequestCounter(1);
 			div.load(source, function(){
@@ -2630,6 +2631,7 @@ jQuery.extend({
 			var afteradd = button.data("afteradd") || null;
 			var afterrem = button.data("afterrem") || null;
 			var afterclone = button.data("afterclone") || null;
+			var preloaded = button.data("preloaded") || null;
 			var btnEdit = $("[data-subform='update']", div);
 			var btnRem = $("[data-subform='remove']", div);
 			var btnToggler = $("[data-subform='toggle']", div);
@@ -2659,9 +2661,10 @@ jQuery.extend({
 
 						var name = btnEdit.data("subform-id");
 						if(name && data[name]) {
+							let upsert = preloaded ? "_insert" : "_update";
 							subform.append($("<input>").attr({
 								"type": "hidden",
-								"name":  name+"_update["+subFormIdValue+"]",
+								"name":  name+upsert+"["+subFormIdValue+"]",
 								"value": data[name]
 							}).prop("subFormFieldId", subFormIdValue));
 						}
@@ -2906,6 +2909,11 @@ jQuery.extend({
 					}
 				}
 			}).promise().done(function(){
+				let preloaded = $(div).prop("subformButton").data("preloaded") || false;
+				if(preloaded && $("[data-subform='update']", div)) {
+					$("[data-subform='update']", div).trigger("click");
+				}
+
 				if(typeof data == "undefined") {
 					let subFormId = $("[data-subform-id]", div).data("subform-id");
 					div.append($("<input>").attr({
@@ -2938,20 +2946,6 @@ jQuery.extend({
 							if(data[name]!="" && data[name]!=0) { field.prop("checked", true); }
 							field.data("value", data[name]).val(data[name]);
 						}
-
-						/*
-						if(typeof name != "undefined") {
-							if(name.substring(name.length - 2)=="[]") {
-								name = name.substring(0, name.length-2);
-							}
-							if(data && data[name]) {
-								if(data[name]!="" && data[name]!=0) { field.prop("checked", true); }
-								field.data("value", data[name]).val(data[name]);
-							}
-
-							field.attr("name", name+"["+subFormIdValue+"]").prop("subFormFieldId", subFormIdValue);
-						}
-						*/
 					});
 
 					if(data && $("[data-subform='toggle']", div)) { $("[data-subform='toggle']", div).trigger("click"); }
@@ -2964,7 +2958,6 @@ jQuery.extend({
 							})
 						}
 					}
-
 					$.bithive.ApplyCounter(div, -1);
 				});
 			});
