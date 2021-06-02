@@ -434,6 +434,12 @@ jQuery.extend({
 			
 			// DIALOGS ---------------------------------------------------------
 			if(typeof BootstrapDialog != "undefined") {
+				$.bithive.eachElement(".dialog-close", elem, itself, function() {
+					$(this).click(function(e) {
+						$(".bootstrap-dialog-close-button", $(this).closest(".modal")).trigger("click");
+					});
+				});
+
 				$.bithive.eachElement(".dialog-content", elem, itself, function() {
 					$(this).click(function(e) {
 						e.preventDefault();
@@ -1973,6 +1979,7 @@ jQuery.extend({
 					var length = field.data("length") || "";
 					var clear = field.data("clear") || "";
 					var disabled = ($(this).hasAttr("disabled"));
+					var values = $(this).val();
 					$.bithive.mkOptions(source, function(src, args) {
 						var source = [];
 						if(src!="") {
@@ -2015,6 +2022,20 @@ jQuery.extend({
 							});
 						}
 
+						// valores pre-cargados
+						console.debug(values)
+						if(values) {
+							console.debug(values)
+							let values = values.replace(/(\n|\r\n)/g, args[0].tagit("option","singleFieldDelimiter"));
+							values = values.split(args[0].tagit("option","singleFieldDelimiter"));
+							console.debug(values)
+							if(values.length > 1) {
+								for(let i = 0; i < values.length; i++) {
+									args[0].tagit("createTag", values[i]);
+								}
+							}
+						}
+
 					}, [field]);
 				});
 			}
@@ -2054,15 +2075,41 @@ jQuery.extend({
 
 			if(typeof squireUI!="undefined") {
 				$.bithive.eachElement("textarea.wysiwyg-lite", form, itself, function() {
-					squireUI($(this), { smallbar:true, ui:"lite", tags:"<br /><br ><p></p><a></a><b></b><i></i><ul></ul><ol></ol><li></li>" });
+					squireUI($(this), {
+						smallbar:true,
+						ui:"lite",
+						tags:"<br /><br ><p></p><a></a><b></b><i></i><ul></ul><ol></ol><li></li>",
+						css: [
+							ENV.cdn+"/css/bootstrap-4.3.1.min.css",
+							ENV.cdn+"/css/bootstrap-plus-3.0.css",
+							ENV.cdn+"/css/bootstrap-plus-xs-3.0.css"
+						]
+					});
 				});
 
 				$.bithive.eachElement("textarea.wysiwyg", form, itself, function() {
-					squireUI($(this), { smallbar:true, ui:"simple", tags:"<br /><br ><p></p><a></a><b></b><i></i><ul></ul><ol></ol><li></li>" });
+					squireUI($(this), {
+						smallbar:true, 
+						ui:"simple", 
+						tags:"<br /><br ><p></p><a></a><b></b><i></i><ul></ul><ol></ol><li></li>",
+						css: [
+							ENV.cdn+"/css/bootstrap-4.3.1.min.css",
+							ENV.cdn+"/css/bootstrap-plus-3.0.css",
+							ENV.cdn+"/css/bootstrap-plus-xs-3.0.css"
+						]
+					});
 				});
 
 				$.bithive.eachElement("textarea.wysiwyg-full", form, itself, function() {
-					squireUI($(this), { smallbar:true, ui:"full" });
+					squireUI($(this), {
+						smallbar:true,
+						ui:"full",
+						css: [
+							ENV.cdn+"/css/bootstrap-4.3.1.min.css",
+							ENV.cdn+"/css/bootstrap-plus-3.0.css",
+							ENV.cdn+"/css/bootstrap-plus-xs-3.0.css"
+						]
+					});
 				});
 			}
 		},

@@ -16,6 +16,10 @@ squireUI = function(selector, options) {
 		}
 	};
 
+	Squire.prototype.updateTextarea = function() {
+		this.setHTML(this.getHTML());
+	};
+
 	var defaultOp = {
 		ui			: "simple",
 		color		: false,
@@ -34,12 +38,12 @@ squireUI = function(selector, options) {
 		var textarea = $(this).clone();
 
 		/*
-		var config		= {};
-		config.ui		= $(this).attr("squireUI") || options.ui;
-		config.color	= $(this).attr("squireUI-color") || options.color;
-		config.smallbar	= $(this).attr("squireUI-smallbar") || options.smallbar;
-		config.tags		= $(this).attr("squireUI-tags") || options.tags;
-		config.height	= $(this).attr("squireUI-height") || options.height;
+		config.ui		= $(this).attr("squireUI")
+		config.color	= $(this).attr("squireUI-color")
+		config.smallbar	= $(this).attr("squireUI-smallbar")
+		config.tags		= $(this).attr("squireUI-tags")
+		config.height	= $(this).attr("squireUI-height")
+		config.css		= $(this).attr("squireUI-css") array o cadena separadas por ;
 		*/
 		var config = $.extend(options,  $(this).hyphened("squi"));
 
@@ -62,7 +66,8 @@ squireUI = function(selector, options) {
 		// iframe
 		var iframe = document.createElement("iframe");
 		iframe.className = "squireUI-iframe";
-		iframe.squire;
+		iframe.config = config;
+		// iframe.squire;
 		
 		// editor
 		var editor = document.createElement("div");
@@ -74,17 +79,18 @@ squireUI = function(selector, options) {
 			$(".squireUI-button", editor).click(function() {
 				var iframe = $(this).parents().eq(3).find("iframe")[0];
 				var action = $(this).data("action");
-
+				let content = iframe.squire.getContent() || null;
+				let nodeName = (content && content.nodeName) ? content.nodeName.toUpperCase() : null;
 				test = {
 					value: $(this).data("action"),
-					testBold: iframe.squire.testPresenceinSelection("bold", action, "B", (/>B\b/)),
-					testItalic: iframe.squire.testPresenceinSelection("italic", action, "I", (/>I\b/)),
-					testUnderline: iframe.squire.testPresenceinSelection("underline", action, "U", (/>U\b/)),
-					testUnorderedList: iframe.squire.testPresenceinSelection("makeUnorderedList", action, "UL", (/>UL\b/)),
-					testOrderedList: iframe.squire.testPresenceinSelection("makeOrderedList", action, "OL", (/>OL\b/)),
-					testLink: iframe.squire.testPresenceinSelection("makeLink", action, "A", (/>A\b/)),
-					testImage: iframe.squire.testPresenceinSelection("insertImage", action, "IMG", (/>IMG\b/)),
-					testQuote: iframe.squire.testPresenceinSelection("increaseQuoteLevel", action, "blockquote", (/>blockquote\b/)),
+					testBold: iframe.squire.testPresenceinSelection("bold", action, "B", (/>?B\b/)),
+					testItalic: iframe.squire.testPresenceinSelection("italic", action, "I", (/>?I\b/)),
+					testUnderline: iframe.squire.testPresenceinSelection("underline", action, "U", (/>?U\b/)),
+					testUnorderedList: iframe.squire.testPresenceinSelection("makeUnorderedList", action, "UL", (/>?UL\b/)),
+					testOrderedList: iframe.squire.testPresenceinSelection("makeOrderedList", action, "OL", (/>?OL\b/)),
+					testQuote: iframe.squire.testPresenceinSelection("increaseQuoteLevel", action, "blockquote", (/>?BLOCKQUOTE\b/)),
+					testLink: (nodeName==="A"),
+					testImage: (nodeName==="IMG"),
 					isNotValue: function(a) { return (a==action && this.value !== ""); }
 				};
 
@@ -146,27 +152,51 @@ squireUI = function(selector, options) {
 						}
 						break;
 					
-					/*
-					case test.testImage:
-						e = iframe.squire.getContent();
-						var src = e.src;
-						var width = e.width;
-						var height = e.height;
-						// href
-						if(href) { $(".squireUILinkURL", container).removeClass("empty"); }
-						$(".squireUILinkURL", container).val(href);
-						
-						// target
-						if(target.toLowerCase()=="_self") {
-							$(".squireUILinkTargetSelf", container).prop("checked", true);
-						} else {
-							$(".squireUILinkTargetBlank", container).prop("checked", true);
-						}
-
-						$(".squireUILink", container).modal("show");
-						break;
-					*/
+						case test.testImage:
+						case test.isNotValue("insertImage"):
+							dialog = BootstrapDialog.show({
+								title: "Insertar Imagen",
+								draggable: true,
+								animate: true,
+								message: $("<div></div>").html($(".squireUIImage", container).html()),
+								onhidden: function(e) {
+									let modal = dialog.getModalBody();
+									$(".squireUIImageURL", modal).val("");
+									$(".squireUIImageWidth", modal).val("");
+									$(".squireUIImageHeight", modal).val("");
 					
+									$(".squireUIImageURL", modal).addClass("empty");
+									$(".squireUIImageWidth", modal).addClass("empty");
+									$(".squireUIImageHeight", modal).addClass("empty");
+								},
+								onshown: function(e) {
+									let modal = dialog.getModalBody();
+									if(test.testImage) {
+										$(".squireUIImageURL", modal).val(content.src);
+										$(".squireUIImageWidth", modal).val(content.width);
+										$(".squireUIImageHeight", modal).val(content.height);
+										$(".squireUIImageClass", modal).val(content.className);
+									}
+
+									$(".squireUIImageSubmit", modal).click(function () {
+										let src = $(".squireUIImageURL", modal).val();
+										let width = $(".squireUIImageWidth", modal).val();
+										let height = $(".squireUIImageHeight", modal).val();
+										let classes = $(".squireUIImageClass", modal).val();
+										let attr = {};
+										if(width) { attr.width = width; }
+										if(height) { attr.height = height; }
+										if(classes) { attr.class = classes; }
+										
+										let newImage = iframe.squire.insertImage(src, attr);
+										if(test.testImage) { newImage.parentNode.removeChild(newImage.nextSibling); }
+										iframe.squire.updateTextarea();
+										dialog.close();
+									});
+								}
+							});
+						break;
+
 					case test.testOrderedList:
 					case test.testUnorderedList:
 						iframe.squire.removeList();
@@ -234,17 +264,6 @@ squireUI = function(selector, options) {
 						});
 						break;
 
-					/*
-					case test.isNotValue("insertImage"):
-						dialog = BootstrapDialog.show({
-							title: "Insertar Imagen",
-							draggable: true,
-							animate: true,
-							message: $("<div></div>").html($(".squireUIImage", container).html())
-						});
-						break;
-					*/
-
 					case test.isNotValue("selectFont"):
 						iframe.squire[action](prompt("Value:"));
 						break;
@@ -296,32 +315,6 @@ squireUI = function(selector, options) {
 			if(config.smallbar) {
 				$(".squireUI-toolbar", container).addClass("squireUI-small");
 			}
-			
-			// images ------------------------------------------------------------------------------
-			$(".squireUIImage", container).on("show.bs.modal", function (e) {
-			});
-
-			$(".squireUIImage", container).on("hidden.bs.modal", function (e) {
-				$(".squireUIImageURL", container).val("");
-				$(".squireUIImageWidth", container).val("");
-				$(".squireUIImageHeight", container).val("");
-
-				$(".squireUIImageURL", container).addClass("empty");
-				$(".squireUIImageWidth", container).addClass("empty");
-				$(".squireUIImageHeight", container).addClass("empty");
-			});
-
-			$(".squireUIImageSubmit", container).click(function () {
-				var src = $(".squireUIImageURL", container).val();
-				var width = $(".squireUIImageWidth", container).val();
-				var height = $(".squireUIImageHeight", container).val();
-				
-				var attr = {};
-				if(width) { attr.width = width; }
-				if(height) { attr.height = height; }
-				iframe.squire.insertImage(src, attr);
-				$(".squireUIImage", container).modal("hide");
-			});
 		});
 
 		// eventos
@@ -353,6 +346,15 @@ squireUI = function(selector, options) {
 					}
 				);
 			}
+
+			console.debug(iframe.config.css)
+			if(iframe.config.css) {
+				let aCSS = (typeof iframe.config.css == "string") ? iframe.config.css.split(";") : iframe.config.css;
+				$.each(aCSS, function(){
+					$("head", doc).append($("<link rel='stylesheet' href='"+this+"' type='text/css' media='all' />"));
+				});
+			}
+
 
 			iframe.squire = new Squire(doc);
 			
