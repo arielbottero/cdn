@@ -347,7 +347,6 @@ squireUI = function(selector, options) {
 				);
 			}
 
-			console.debug(iframe.config.css)
 			if(iframe.config.css) {
 				let aCSS = (typeof iframe.config.css == "string") ? iframe.config.css.split(";") : iframe.config.css;
 				$.each(aCSS, function(){

@@ -101,8 +101,8 @@
     }
 
     var Plugin = $.base64 = function(dir, input, encode) {
-            return input ? Plugin[dir](input, encode) : dir ? null : this;
-        };
+        return input ? Plugin[dir](input, encode) : dir ? null : this;
+    };
 
     Plugin.btoa = Plugin.encode = function(plain, utf8encode) {
         plain = Plugin.raw === false || Plugin.utf8encode || utf8encode ? UTF8.encode(plain) : plain;
@@ -118,5 +118,14 @@
         } while (i > 0);
         coded = coded.join('');
         return Plugin.raw === false || Plugin.utf8decode || utf8decode ? UTF8.decode(coded) : coded;
+    };
+
+    Plugin.isBase64 = function(str) {
+        if(str ==="" || str.trim() ==="") { return false; }
+        try {
+            return Plugin.btoa(Plugin.atob(str)) == str;
+        } catch (err) {
+            return false;
+        }
     };
 }(jQuery));

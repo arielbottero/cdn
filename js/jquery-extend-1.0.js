@@ -94,16 +94,16 @@
 			return width;
 		},
 
-		parseURL: function(query) {
+		parseURL: function(uri) {
 			var re = /([^&=]+)=?([^&]*)/g;
-			function createElement(params, key, value) {
+			function createVariable(params, key, value) {
 				key = key + "";
 				if (key.indexOf(".") !== -1) {
 					var list = key.split(".");
 					var new_key = key.split(/\.(.+)?/)[1];
 					if (!params[list[0]]) params[list[0]] = {};
 					if (new_key!=="") {
-						createElement(params[list[0]], new_key, value);
+						createVariable(params[list[0]], new_key, value);
 					} else console.warn('parseParams :: empty property in key "' + key + '"');
 				} else
 				if (key.indexOf("[")!==-1) {
@@ -125,26 +125,28 @@
 					params[key] = value;
 				}
 			}
-
-			query = query + "";
-			if (query==="") { query = window.location + ''; }
+		
+			if(typeof uri=="undefined") { uri = window.location.href; }
+			uri = uri + "";
+		
 			var params = {}, e;
-			if(query) {
-				if (query.indexOf("#") !== -1) {
-					query = query.substr(0, query.indexOf('#'));
+			if(uri) {
+				if(uri.indexOf("#") !== -1) {
+					uri = uri.substr(0, uri.indexOf('#'));
 				}
-				if(query.indexOf("?") !== -1) {
-					query = query.substr(query.indexOf("?") + 1, query.length);
+				if(uri.indexOf("?") !== -1) {
+					uri = uri.substr(uri.indexOf("?") + 1, uri.length);
 				} else { 
 					return {};
 				}
-				if(query=="") { return {}; }
-				while (e = re.exec(query)) {
+				if(uri=="") { return {}; }
+				while (e = re.exec(uri)) {
 					var key = decodeURIComponent(e[1].replace(/\+/g, " "));
 					var value = decodeURIComponent(e[2].replace(/\+/g, " "));
-					createElement(params, key, value);
+					createVariable(params, key, value);
 				}
 			}
+			
 			return params;
 		},
 

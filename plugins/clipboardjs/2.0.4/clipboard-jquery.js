@@ -29,14 +29,14 @@
 				success_after		: function(e) { e.clearSelection(); },
 				success_notify		: {
 										message: "copied to clipboard",
-										classes: "btn btn-success btn-sm margin-sm margin-only-top"
+										classes: "btn btn-success btn-sm mt-sm"
 									},
 
 				// false | json_config
 				error_after			: function(e) { e.clearSelection(); },
 				error_notify		: {
 										message: "error on copy",
-										classes: "btn btn-danger btn-sm margin-sm margin-only-top"
+										classes: "btn btn-danger btn-sm mt-sm"
 									}
 			};
 

@@ -980,6 +980,35 @@ jQuery.extend({
 					"placement": "auto" 
 				});
 			});
+
+			/* btrigger*/
+			$.bithive.eachElement("[btrigger]", elem, itself, function() {
+				let el = $(this);
+				val = el.attr("btrigger").split(",");
+				let evn = (typeof val[1]!="undefined") ? val[1] : "click";
+				let ref = (typeof val[2]!="undefined") ? val[2] : $.uid();
+				let id = "[btrigger='"+el.attr("btrigger")+"'";
+				el.prop("btrigger", [id,evn,ref]).on(evn, function(){
+					$.bithive.btrigger.set($(this).prop("btrigger"));
+				})
+			});
+
+			/* copy */
+			$.bithive.eachElement(".copyable", elem, itself, function() {
+				let content = $(this);
+				let text = content.text();
+				
+				$("<i>", {class:"far fa-copy mr-xs c-pointer"}).click(function(){
+					$(this).clipboard({
+						mode: false,
+						text: text,
+						success_after: function(e) { e.clearSelection(); },
+						success_notify: {
+							message: $.bithive.lang.clipboardSuccess
+						}
+					});
+				}).prependTo(content);
+			});
 		},
 
 
@@ -1863,7 +1892,7 @@ jQuery.extend({
 				let input = $(this);
 				$("<div>", {class:"input-group-append c-pointer"}).html(
 					$("<div>", {class:"input-group-text"}).html(
-						$("<i>", {class:"fad fa-clipboard"})
+						$("<i>", {class:"far fa-copy icon-sm"})
 					)
 				).appendTo(input.parent()).click(function(){
 					let input = $(".form-input", $(this).parent());
@@ -2023,12 +2052,9 @@ jQuery.extend({
 						}
 
 						// valores pre-cargados
-						console.debug(values)
 						if(values) {
-							console.debug(values)
-							let values = values.replace(/(\n|\r\n)/g, args[0].tagit("option","singleFieldDelimiter"));
+							values = values.replace(/(\n|\r\n)/g, args[0].tagit("option","singleFieldDelimiter"));
 							values = values.split(args[0].tagit("option","singleFieldDelimiter"));
-							console.debug(values)
 							if(values.length > 1) {
 								for(let i = 0; i < values.length; i++) {
 									args[0].tagit("createTag", values[i]);
@@ -2250,8 +2276,10 @@ jQuery.extend({
 			var hrefRedirect = false;
 			var form = btnSubmit.closest("form");
 			
-			var before = form.prop("beforeFn") || null;
-			var after = form.prop("afterFn") || null;
+			// var before = form.prop("beforeFn") || null;
+			// var after = form.prop("afterFn") || null;
+			var before = form.attr("before") || null;
+			var after = form.attr("after") || null;
 			
 			var redirect = $("input[name='NGL_REDIRECT']:last", form);
 			if(redirect.length) {
@@ -3611,7 +3639,6 @@ jQuery.extend({
 			return elem;
 		},
 
-
 		CheckJustMe: function(justme) {
 			if(justme.hasClass("onoffswitch")) {
 				$(".form-onoffswitch-label", justme).click(function() {
@@ -3633,12 +3660,38 @@ jQuery.extend({
 					}
 				});
 			}
+		},
+
+		btrigger: {
+			set: function(params) {
+				if(typeof params[2]=="undefined") { ref = $.uid(); }
+				$.removeCookie("btrigger_"+params[2]);
+				$.cookie("btrigger_"+params[2], [params[0], params[1]]);
+			},
+
+			run: function() {
+				$.each($.cookie(), function(k,i) {
+					if(k.substr(0,9)=="btrigger_") {
+						let evn = $.cookie(k);
+						$(evn[0]).trigger(evn[1]);
+					}
+				});
+			},
+
+			clear: function() {
+				$.each($.cookie(), function(k,i) {
+					if(k.substr(0,9)=="btrigger_") {
+						$.removeCookie(k);
+					}
+				});
+			}
 		}
 	}
 });
 
 // ejecución al inicio ---------------------------------------------------------
 $(function() {
+	// ctx menu
 	$(document).on("click contextmenu", function (e) {
 		if($.bithive.ctxmenu.menu) {
 			if($(e.target).closest($.bithive.ctxmenu.menu).length === 0) {
@@ -3646,5 +3699,10 @@ $(function() {
 				$.bithive.ctxmenu.menu.removeClass("show").hide();
 			}
 		}
+	});
+
+	// tabs
+	$(".nav-tabs a").on("shown.bs.tab", function(e) {
+		$.bithive.btrigger.set([".nav-tabs a[href='"+$(this).attr("href")+"']","click","tab"]);
 	});
 });
