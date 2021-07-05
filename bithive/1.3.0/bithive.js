@@ -1099,6 +1099,7 @@ jQuery.extend({
 				var types = ["jpg","jpge","png","gif"];
 				if(field.data("types")!="") { types = field.data("types").split(","); }
 				var maxfiles = field.data("max") || 1;
+				var maxsize = field.data("maxsize") || (8*1024*1024);
 				var autohide = field.data("autohide") || false;
 				var preloads = (field.hasAttr("data-value")) ? eval(jQuery.base64.atob(field.data("value"))) : null;
 
@@ -1106,6 +1107,7 @@ jQuery.extend({
 					name: field.data("name"),
 					types: types,
 					maxfiles: maxfiles,
+					maxsize: maxsize,
 					autohidetarget: autohide,
 					target: ".attacher-target",
 					previews: ".attacher-previews",
