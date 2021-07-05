@@ -33,7 +33,12 @@
 		this.options.name			= "attacher";
 		this.options.types			= ["jpg","jpge","png","gif"];
 		this.options.maxfiles		= 5; // cantidad maxima de uploads
+		this.options.maxsize		= (8*1024*1024); // tamaño máximo del archivo (en bytes)
 		this.options.preload		= null; // json con archivos precargados [{"name":"nombre_archivo", "path":"ruta_archivo", "size":"tamaño_bytes"}, {...} ]
+
+		this.options.msgLimit		= "Límite de archivos alcanzado";
+		this.options.msgFileType	= "Tipo de archivo no permitido: ";
+		this.options.msgFileSize	= "El archivo no puede superar los";
 		
 		// iconos
 		this.options.icons			= {
@@ -196,7 +201,11 @@
 				jQuery.each(files, function(index, file) {
 					// limite de archivos
 					if(attacher.options.maxfiles==nCurrentFiles) {
-						alert("Attachs limit exceeded");
+						if($.bithive) {
+							$.bithive.alert(attacher.options.msgLimit);
+						} else {
+							alert(attacher.options.msgLimit);
+						}
 						return false;
 					}
 					nCurrentFiles++;
@@ -205,7 +214,24 @@
 					var extension = file.name.split(".");
 					extension = extension[extension.length-1];
 					if($.inArray(extension, attacher.options.types)<0) {
-						alert("Invalid type: "+files[index].type);
+						if($.bithive) {
+							$.bithive.alert(attacher.options.msgFileType+" "+files[index].type);
+						} else {
+							alert(attacher.options.msgFileType+" "+files[index].type);
+						}
+						return false;
+					}
+
+					// tamaño del archivo
+					if(file.size > attacher.options.maxsize) {
+						let maxsize = attacher.options.maxsize;
+						let i = Math.floor( Math.log(maxsize) / Math.log(1024) );
+						maxsize = ( maxsize / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+						if($.bithive) {
+							$.bithive.alert(attacher.options.msgFileSize+" "+maxsize);
+						} else {
+							alert(attacher.options.msgFileSize+" "+(maxsize));
+						}
 						return false;
 					}
 

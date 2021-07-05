@@ -953,25 +953,26 @@ jQuery.extend({
 			});
 
 			/* tooltips */
-			$(".form-view .form-group").each(function(){
-				$(this).click(function(){
-					let elem = $(this);
-					elem
-						.removeAttr("title")
-						.tooltip({
-							"trigger": "manual",
-							"html": true,
-							"placement": "auto", 
-							"title": function() { return $(".form-control", $(this)).val() || $(".form-select button", $(this)).attr("title"); }
-						})
-						.tooltip("show")
-					;
+
+			// $(".form-view .form-group").each(function(){
+			// 	$(this).click(function(){
+			// 		let elem = $(this);
+			// 		elem
+			// 			.removeAttr("title")
+			// 			.tooltip({
+			// 				"trigger": "manual",
+			// 				"html": true,
+			// 				"placement": "auto", 
+			// 				"title": function() { return $(".form-control", $(this)).val() || $(".form-select button", $(this)).attr("title"); }
+			// 			})
+			// 			.tooltip("show")
+			// 		;
 					
-					setTimeout(function(){
-						elem.tooltip("dispose");
-					}, 1500);
-				});
-			});
+			// 		setTimeout(function(){
+			// 			elem.tooltip("dispose");
+			// 		}, 1500);
+			// 	});
+			// });
 
 			/* tooltips */
 			$("[data-toggle='tooltip']").each(function(){
@@ -1010,7 +1011,6 @@ jQuery.extend({
 				}).prependTo(content);
 			});
 		},
-
 
 		forms: function(form, itself) {
 			if(!form) { var form = $("body"); }
@@ -2071,6 +2071,18 @@ jQuery.extend({
 				$(this).addClass("fullscreen").textareafullscreen({width: "90%"});
 			});
 
+			$.bithive.eachElement("textarea.limited", form, itself, function() {
+				let counter = $("<small>", {class:"float-right"});
+				let id = counter.id();
+				$(this).after(counter).on("change keyup paste", function(){
+					let limit = $(this).data("limit") || 255;
+					let val = $(this).val();
+					if(val.length >= limit) { $(this).val(val.substring(0, limit)); }
+					let count = (limit - val.length) < 0 ? 0 : (limit - val.length);
+					$("#"+id).text(count+"/"+limit);
+				});
+			});
+
 			$.bithive.eachElement("textarea.dynamic", form, itself, function() {
 				$(this).on("focus change keyup paste", function(e) {
 					var $this = $(this);
@@ -2138,6 +2150,46 @@ jQuery.extend({
 					});
 				});
 			}
+
+			$.bithive.onload(function(){ $.bithive.formsview(form); });
+		},
+
+		// FORM VIEW -----------------------------------------------------------
+		formsview: function(form) {
+			$.bithive.eachElement(".form-view input, .form-view select, .form-view textarea, .form-view select.form-select, .form-view div.squireUI", form, true, function() {
+				let el = $(this);
+				let obj = el;
+				if(el.hasClass("form-select")) {
+					el.prop("disabled", false);
+					obj = $("button", el.parent());
+					obj.prop("value", $(".filter-option-inner-inner", el.parent()).text());
+					$(".dropdown-menu", el.parent()).hide();
+				} else if(el.hasClass("squireUI")) {
+					let content = $("textarea", el).val();
+					let ifr = $("<iframe>", {class:"brd-n w-100"});
+					el.html(ifr);
+					ifr[0].contentWindow.document.write(content);
+					obj = $("<div>", {class:"wysiwyg-view p-absolute w-100 h-100"}).html(content);
+					obj.prop("value", obj.text());
+					obj.html("");
+					el.prepend(obj);
+				} else {
+					el.prop("readonly", true);
+				}
+
+				obj.click(function(e){
+					e.preventDefault();
+					let elem = $(this);
+					elem.clipboard({
+						mode: false,
+						text: elem.prop("value") || elem.val(),
+						success_after: function(e) { e.clearSelection(); },
+						success_notify: {
+							message: $.bithive.lang.clipboardSuccess
+						}
+					});
+				});
+			});
 		},
 
 		alert: function(msg, after) {

@@ -607,14 +607,28 @@ select.bootstrap-select {
 .form-view .form-group {
 	position: relative;
 }
-	.form-view .form-group:not(.form-view-unlocked)::before {
-		display: block;
-		height: 100%;
-		width: 100%;
-		z-index: 1000;
-		content: " ";
-		position: absolute;
-		cursor: help;
+	.form-view input:not(.btn),
+	.form-view textarea:not(.tagit-new textarea),
+	.form-view select,
+	.form-view .form-select button:not(.btn),
+	.form-view .form-select button:not(.btn):hover,
+	.form-view .form-select button.dropdown-toggle,
+	.form-view .form-select button.dropdown-toggle:hover,
+	.form-view .wysiwyg-view {
+		background-color: #E9ECEF !important;
+		border: 1px solid #CED4DA !important;
+		border-radius: .25rem !important;
+		color: #495057 !important;
+		cursor: pointer !important;
+		font-weight: 400 !important;
+		opacity: 1;
+	}
+
+	.form-view .form-select .filter-option-inner-inner {
+		color: #495057 !important;
+	}
+	.form-view .wysiwyg-view {
+		opacity: .4;
 	}
 
 	.form-view .btn[data-subform='update'] {
