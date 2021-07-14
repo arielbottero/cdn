@@ -492,6 +492,7 @@ jQuery.extend({
 				// genera un dialogo de confirmacion
 				$.bithive.eachElement(".dialog-confirm", elem, itself, function() {
 					$(this).click(function(e) {
+						let launcher = $(this);
 						var options = {
 							title: 		$.bithive.lang.confirmTitle, // titulo de la ventana
 							message:	$.bithive.lang.confirmQuestion, // mensaje
@@ -518,7 +519,7 @@ jQuery.extend({
 							callback: function(result) {
 								if(result) {
 									if(typeof window[options.js] == "function") {
-										window[options.js](this);
+										window[options.js](launcher);
 									} else if(options.href) {
 										if(options.target) {
 											if(options.hrefafter) {
