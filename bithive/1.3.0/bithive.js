@@ -407,15 +407,25 @@ jQuery.extend({
 				});
 
 				$.bithive.eachElement(".format-money", elem, itself, function() {
-					var currency = $(this).attr("format-custom") || "";
-					if(!$.bithive.dynCSS.formats[currency]) {
+					var custom = $(this).attr("format-custom") || "";
+                    custom = custom.split(";");
+                    if(custom[1]) {
+                        var currency = custom[0];
+                        var decimal = parseInt(custom[1]);
+                    } else {
+                        var currency = (parseInt(custom[0])!=custom[0]) ? custom[0] : "";
+                        var decimal = (parseInt(custom[1])==custom[1]) ? custom[1] : 2;
+                    }
+					
+                    if(!$.bithive.dynCSS.formats[currency]) {
 						var curclass = jQuery.uid();
 						$.bithive.dynCSS.formats[currency] = curclass;
 						$('<style>.format-money.'+curclass+':before{content:"'+currency+'"}</style>').appendTo("head");
 					} else {
 						var curclass = $.bithive.dynCSS.formats[currency];
 					}
-					$(this).addClass("text-right "+curclass).numberformat({"format":"money"});
+					var decimal = $(this).attr("format-custom") || 2;
+					$(this).addClass("text-right "+curclass).numberformat({"format":"money", "decimal":decimal});
 				});
 
 				$.bithive.eachElement(".format-decimal", elem, itself, function() {
@@ -1182,11 +1192,13 @@ jQuery.extend({
 				field.prop("autocomplete-target", target);
 
 				// clear btn
-				var clear = $("<i>", {class:"autocomplete-clear fas fa-trash-alt p-absolute c-pointer m-n p-n text-primary"}).click(function(){
-					field.val("");
-					$("#"+field.prop("autocomplete-target")).val("");
+				var clear = $(".autocomplete-clear", field.parent()).click(function(){
+                    if(!field.prop("disabled")) {
+	    				$("#"+field.prop("autocomplete-target")).val("");
+                        $(this).addClass("d-none");
+    					field.val("").focus();
+                    }
 				}).addClass("d-none");
-				field.parent().addClass("p-relative").append(clear);
 				field.prop("autocomplete-clear", clear);
 
 				var target = $("#"+target);
@@ -1206,9 +1218,6 @@ jQuery.extend({
 							var target = $("#"+field.prop("autocomplete-target"));
 							target.val(ui.item.value);
 							
-							// clear btn
-							clear.css({top: (field.position().top+((field.height()-clear.height())/2))+"px", right: "15px"}).removeClass("d-none");
-
 							// relaciones
 							if(lnksrc) {
 								jQuery.ajax({
@@ -1299,8 +1308,7 @@ jQuery.extend({
 							});
 						}
 
-						// clear btn
-						clear.css({top: (field.position().top+((field.height()-clear.height())/2))+"px", right: "15px"}).removeClass("d-none");
+	    				clear.removeClass("d-none");
 					}
 				}).trigger("fill");
 
@@ -1655,37 +1663,44 @@ jQuery.extend({
 			// al actualizar, actualizar unmask en SendForm y reMask on debug
 			if(jQuery().mask) {
 				$.bithive.eachElement(".mask-decimal", form, itself, function() {
-					let value = $(this).val();
+                    let decimals = $(this).attr("mask-decimals") || 4;
+                    let zeros = (parseInt(decimals)) ? "0".repeat(decimals) : "";
+                    let zeromask = (zeros!="") ? ","+zeros : "";
+                    let value = $(this).val();
 					$.bithive.InputMask($(this), {
-						mask: "#.##0,0000", 
-						options: {reverse: true, placeholder: "0,0000"}, 
+						mask: "#.##0"+zeromask, 
+						options: {reverse: true, placeholder: "0"+zeromask}, 
 						unmask: function(el) {
-							let val = parseFloat(el.val().replace(/\./g, "").replace(/\,/g, ".")).toFixed(4);
+							let val = parseFloat(el.val().replace(/\./g, "").replace(/\,/g, ".")).toFixed(decimals);
 							if(isNaN(val)) { val = 0; }
 							return val;
 						},
 						preparemask: function(el) {
 							let val = el.val(); 
-							if(val!="" && val.indexOf(".")<0) { val+=".0000"; }
-							return parseFloat(val).toFixed(4);
+							if(val!="" && val.indexOf(".")<0) { val+="."+zero; }
+							return parseFloat(val).toFixed(decimals);
 						}
 				}).addClass("text-right");
 				});
 
 				// money
 				$.bithive.eachElement(".mask-money", form, itself, function() {
+                    let decimals = $(this).attr("mask-decimals") || 2;
+                    let zeros = (parseInt(decimals)) ? "0".repeat(decimals) : "";
+                    let zeromask = (zeros!="") ? ","+zeros : "";
+                    let value = $(this).val();
 					$.bithive.InputMask($(this), {
-						mask: "#.##0,00",
-						options: {reverse: true, placeholder: "0,00"},
+						mask: "#.##0"+zeromask,
+						options: {reverse: true, placeholder: "0"+zeromask},
 						unmask: function(el) {
-							let val = parseFloat(el.val().replace(/\./g, "").replace(/\,/g, ".")).toFixed(2);
+							let val = parseFloat(el.val().replace(/\./g, "").replace(/\,/g, ".")).toFixed(decimals);
 							if(isNaN(val)) { val = 0; }
 							return val;
 						},
 						preparemask: function(el) {
 							let val = el.val(); 
-							if(val!="" && val.indexOf(".")<0) { val+=".00"; }
-							return parseFloat(val).toFixed(2);
+							if(val!="" && val.indexOf(".")<0) { val+="."+zeros; }
+							return parseFloat(val).toFixed(decimals);
 						}
 					}).addClass("text-right");
 				});
@@ -3053,7 +3068,7 @@ jQuery.extend({
 				}
 
 				$.bithive.jsonFiller(data, div, function(){
-					// buttonsset
+                    // buttonsset
 					$(".form-buttonsset", div).each(function() {
 						$(this).trigger("refresh");
 					});

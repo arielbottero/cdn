@@ -91,7 +91,7 @@
 									options += "<option value='"+this+"'>"+this+"</option>";
 								});
 
-								var filter = $("<select>").addClass("custom-select").html(options);
+								var filter = $("<select>", {"data-live-search":"true"}).addClass("custom-select").html(options);
 								if(type=="multiple") { filter.attr("multiple", "multiple"); }
 								var div = $("<div class='filter-select'>").append(filter);
 								if(jQuery().selectpicker) {

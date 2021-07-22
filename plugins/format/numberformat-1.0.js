@@ -73,11 +73,11 @@
 			switch(this.options.format) {
 				case "money":
 					val = parseFloat(val);
-					return this.money(val, this.options.prepend);
+					return this.money(val, this.options.prepend, this.options.decimal);
 
 				case "percent":
 					val = parseFloat(val);
-					return this.percent(val);
+					return this.percent(val, this.options.decimal);
 
 				case "decimal":
 					val = parseFloat(val);
@@ -90,7 +90,8 @@
 			}
 		},
 
-		format: function(val, decimals) {
+        format: function(val, decimals) {
+            if(typeof decimals=="undefined") { decimals=2; }
 			var wNumbMoney = wNumb({
 				decimals: decimals,
 				thousand: ".",
@@ -100,6 +101,7 @@
 		},
 
 		decimal: function(val, decimals) {
+            if(typeof decimals=="undefined") { decimals=2; }
 			var wNumbMoney = wNumb({
 				decimals: decimals,
 				mark: ","
@@ -107,20 +109,23 @@
 			return wNumbMoney.to(val);
 		},
 
-		money: function(val, prefix) {
+		money: function(val, prefix, decimals) {
+            if(typeof prefix=="undefined") { prefix="$"; }
+            if(typeof decimals=="undefined") { decimals=2; }
 			var wNumbMoney = wNumb({
 				prefix: prefix,
-				decimals: 2,
+				decimals: decimals,
 				thousand: ".",
 				mark: ","
 			});
 			return wNumbMoney.to(val);
 		},
 		
-		percent: function(val) {
+		percent: function(val, decimals) {
+            if(typeof decimals=="undefined") { decimals=2; }
 			var wNumbMoney = wNumb({
 				suffix: "%",
-				decimals: 2,
+				decimals: decimals,
 				mark: ","
 			});
 			return wNumbMoney.to(val);

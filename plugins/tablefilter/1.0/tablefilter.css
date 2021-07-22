@@ -20,3 +20,7 @@
 .table-filter .filter-daterange {
 	min-width: 120px;
 }
+
+.table-bordered .table-filter-cell {
+	border-bottom: none;
+}

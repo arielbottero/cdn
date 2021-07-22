@@ -151,18 +151,21 @@
 		},
 
 		// se espera
-		strToNumber: function(sStrNumber) {
+		strToNumber: function(sStrNumber, bDecimal) {
+            if(typeof bDecimal=="undefined" || bDecimal===true) {
+                bDecimal = true;
+            } else {
+                bDecimal = parseInt(bDecimal)>0 ? true : false;
+            }
 			var sStrNumber = new String(sStrNumber);
 			var sNumber = sStrNumber.replace(/,/g, ".");
 			sNumber = sNumber.replace(/[^0-9,\.\-]/g, "");
 			var aNumber = sNumber.split(".");
 			var sDecimal = "";
-			if(aNumber.length>1) { sDecimal = aNumber.pop(); }
+            if(aNumber.length>1 && bDecimal) { sDecimal = aNumber.pop(); }
 			sNumber = aNumber.join("");
 			sNumber = (sDecimal) ? sNumber+"."+sDecimal : sNumber;
-
 			return (isNaN(sNumber)) ? sStrNumber : Number(sNumber);
-
 		},
 
 		getMatchAll: function(string, regex, index) {
