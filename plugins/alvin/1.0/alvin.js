@@ -112,8 +112,6 @@ vRules["in"]
 				sMaxValue = new String(parseFloat(sMaxValue));
 			}
 
-			console.debug(sValue, sMinValue, sMaxValue);
-
 			// limites
 			if(sValue.localeCompare(sMinValue)===0) { return 1; }
 			if(sValue.localeCompare(sMaxValue)===0) { return 3; }

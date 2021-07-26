@@ -1663,44 +1663,42 @@ jQuery.extend({
 			// al actualizar, actualizar unmask en SendForm y reMask on debug
 			if(jQuery().mask) {
 				$.bithive.eachElement(".mask-decimal", form, itself, function() {
-                    let decimals = $(this).attr("mask-decimals") || 4;
-                    let zeros = (parseInt(decimals)) ? "0".repeat(decimals) : "";
-                    let zeromask = (zeros!="") ? ","+zeros : "";
-                    let value = $(this).val();
+                    let decimals = parseInt($(this).attr("mask-decimals") || 4);
+                    let zeros = (decimals<1) ? "#" : "0,"+"0".repeat(decimals);
+					let placeholder = (decimals<1) ? "0" : "0,"+"0".repeat(decimals);
 					$.bithive.InputMask($(this), {
-						mask: "#.##0"+zeromask, 
-						options: {reverse: true, placeholder: "0"+zeromask}, 
+						mask: "#.##"+zeros,
+						options: {reverse: true, placeholder: placeholder},
 						unmask: function(el) {
 							let val = parseFloat(el.val().replace(/\./g, "").replace(/\,/g, ".")).toFixed(decimals);
 							if(isNaN(val)) { val = 0; }
 							return val;
 						},
 						preparemask: function(el) {
-							let val = el.val(); 
-							if(val!="" && val.indexOf(".")<0) { val+="."+zero; }
-							return parseFloat(val).toFixed(decimals);
+							let val = el.val();
+							if(val!="" && val.indexOf(".")<0) { val+="."+zeros; }
+							return (decimals) ? parseFloat(val).toFixed(decimals) : parseInt(val);
 						}
-				}).addClass("text-right");
+					}).addClass("text-right");
 				});
 
 				// money
 				$.bithive.eachElement(".mask-money", form, itself, function() {
-                    let decimals = $(this).attr("mask-decimals") || 2;
-                    let zeros = (parseInt(decimals)) ? "0".repeat(decimals) : "";
-                    let zeromask = (zeros!="") ? ","+zeros : "";
-                    let value = $(this).val();
+                    let decimals = parseInt($(this).attr("mask-decimals") || 2);
+                    let zeros = (decimals<1) ? "#" : "0,"+"0".repeat(decimals);
+                    let placeholder = (decimals<1) ? "0" : "0,"+"0".repeat(decimals);
 					$.bithive.InputMask($(this), {
-						mask: "#.##0"+zeromask,
-						options: {reverse: true, placeholder: "0"+zeromask},
+						mask: "#.##"+zeros,
+						options: {reverse: true, placeholder: placeholder},
 						unmask: function(el) {
 							let val = parseFloat(el.val().replace(/\./g, "").replace(/\,/g, ".")).toFixed(decimals);
 							if(isNaN(val)) { val = 0; }
 							return val;
 						},
 						preparemask: function(el) {
-							let val = el.val(); 
+							let val = el.val();
 							if(val!="" && val.indexOf(".")<0) { val+="."+zeros; }
-							return parseFloat(val).toFixed(decimals);
+							return (decimals) ? parseFloat(val).toFixed(decimals) : parseInt(val);
 						}
 					}).addClass("text-right");
 				});
@@ -3019,6 +3017,7 @@ jQuery.extend({
 		SubFormFillData: function(args) {
 			let div = args[0];
 			let data = args[1];
+			div.prop("subFormData", data);
 			var subFormIdValue = div.prop("subFormIdVal") || jQuery.uid();
 			$("input,select,textarea,div.form-attacher", div).each(function() {
 				var field = $(this);

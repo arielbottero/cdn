@@ -405,6 +405,47 @@ td.dropdown {
 			margin: 15px;
 		}
 
+/* TABLES ====================================================================*/
+table.table {
+	background-color: #FFFFFF !important;
+}
+
+table.table thead th,
+table.table tfoot th,
+table.table .th {
+	background-color: #F8F9FC !important;
+    color: #5A5C69;
+	border-bottom: none !important;
+    font-size: 1.2rem;
+    font-weight: normal;
+}
+
+table.table thead th.secondary,
+table.table tfoot th.secondary {
+    font-size: 1rem;
+	font-weight: bold;
+}
+
+table.table tbody th:not(.th) {
+	border-right: solid 1px #D2D3DA;
+	color: #5A5C69;
+    font-size: 1.2rem;
+	font-weight: normal;
+}
+
+table.table tbody td.dropdown {
+	position: initial;
+}
+
+table.table tbody td {
+	border-top: solid 1px #D2D3DA;
+}
+
+table.table-hover tbody tr:hover td {
+	background-color: #F8F9FC;
+}
+
+
 /* SIDEBAR =====================================================================*/
 .sidebar-nav * {
 	font-size: 14px;
