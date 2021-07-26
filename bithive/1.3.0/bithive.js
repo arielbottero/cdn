@@ -1687,6 +1687,7 @@ jQuery.extend({
 				$.bithive.eachElement(".mask-money", form, itself, function() {
                     let decimals = $(this).attr("mask-decimals") || 2;
 					decimals = parseInt(decimals);
+					let zeros = "0,"+"0".repeat(decimals);
                     let placeholder = "0,"+"0".repeat(decimals);
 					$.bithive.InputMask($(this), {
 						mask: "#.##"+zeros,
