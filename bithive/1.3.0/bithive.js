@@ -425,12 +425,12 @@ jQuery.extend({
 						var curclass = $.bithive.dynCSS.formats[currency];
 					}
 					var decimal = $(this).attr("format-custom") || 2;
-					$(this).addClass("text-right "+curclass).numberformat({"format":"money", "decimal":decimal});
+					$(this).addClass("text-right "+curclass).numberformat({"format":"money", "decimals":decimal});
 				});
 
 				$.bithive.eachElement(".format-decimal", elem, itself, function() {
 					var decimal = $(this).attr("format-custom") || 2;
-					$(this).addClass("text-right").numberformat({"format":"decimal", "decimal":decimal});
+					$(this).addClass("text-right").numberformat({"format":"decimal", "decimals":decimal});
 				});
 
 				$.bithive.eachElement(".format-percent", elem, itself, function() { $(this).numberformat("percent"); });
@@ -1663,9 +1663,10 @@ jQuery.extend({
 			// al actualizar, actualizar unmask en SendForm y reMask on debug
 			if(jQuery().mask) {
 				$.bithive.eachElement(".mask-decimal", form, itself, function() {
-                    let decimals = parseInt($(this).attr("mask-decimals") || 4);
-                    let zeros = (decimals<1) ? "#" : "0,"+"0".repeat(decimals);
-					let placeholder = (decimals<1) ? "0" : "0,"+"0".repeat(decimals);
+                    let decimals = $(this).attr("mask-decimals") || 4;
+					decimals = parseInt(decimals);
+                    let zeros = "0,"+"0".repeat(decimals);
+					let placeholder = "0,"+"0".repeat(decimals);
 					$.bithive.InputMask($(this), {
 						mask: "#.##"+zeros,
 						options: {reverse: true, placeholder: placeholder},
@@ -1677,16 +1678,16 @@ jQuery.extend({
 						preparemask: function(el) {
 							let val = el.val();
 							if(val!="" && val.indexOf(".")<0) { val+="."+zeros; }
-							return (decimals) ? parseFloat(val).toFixed(decimals) : parseInt(val);
+							return parseFloat(val).toFixed(decimals);
 						}
 					}).addClass("text-right");
 				});
 
 				// money
 				$.bithive.eachElement(".mask-money", form, itself, function() {
-                    let decimals = parseInt($(this).attr("mask-decimals") || 2);
-                    let zeros = (decimals<1) ? "#" : "0,"+"0".repeat(decimals);
-                    let placeholder = (decimals<1) ? "0" : "0,"+"0".repeat(decimals);
+                    let decimals = $(this).attr("mask-decimals") || 2;
+					decimals = parseInt(decimals);
+                    let placeholder = "0,"+"0".repeat(decimals);
 					$.bithive.InputMask($(this), {
 						mask: "#.##"+zeros,
 						options: {reverse: true, placeholder: placeholder},
@@ -1698,7 +1699,7 @@ jQuery.extend({
 						preparemask: function(el) {
 							let val = el.val();
 							if(val!="" && val.indexOf(".")<0) { val+="."+zeros; }
-							return (decimals) ? parseFloat(val).toFixed(decimals) : parseInt(val);
+							return parseFloat(val).toFixed(decimals);
 						}
 					}).addClass("text-right");
 				});
