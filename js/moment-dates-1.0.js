@@ -1,24 +1,24 @@
 var momentdates = {};
 (function(){
 	momentdates.labels = {
-		"today"				: "hoy",
-		"yesterday"			: "ayer",
-		"tomorrow"			: "mañana",
-		"week"				: "esta semana",
-		"month"				: "este mes",
-		"year"				: "este año",
-		"pastWeek"			: "última semana",
-		"pastFortnight"		: "última quincena",
-		"pastMonth"			: "último mes",
-		"pastQuarter"		: "último trimestre",
-		"pastSemester"		: "último semestre",
-		"pastYear"			: "último año",
-		"nextWeek"			: "próxima semana",
-		"nextFortnight"		: "próxima quincena",
-		"nextMonth"			: "próximo mes",
-		"nextQuarter"		: "próximo trimestre",
-		"nextSemester"		: "próximo semestre",
-		"nextYear"			: "próximo año"
+		"today"				: "Hoy",
+		"yesterday"			: "Ayer",
+		"tomorrow"			: "Mañana",
+		"week"				: "Esta Semana",
+		"month"				: "Este Mes",
+		"year"				: "Este Año",
+		"pastWeek"			: "Última Semana",
+		"pastFortnight"		: "Última Quincena",
+		"pastMonth"			: "Último Mes",
+		"pastQuarter"		: "Último Trimestre",
+		"pastSemester"		: "Último Semestre",
+		"pastYear"			: "Último Año",
+		"nextWeek"			: "Próxima Semana",
+		"nextFortnight"		: "Próxima Quincena",
+		"nextMonth"			: "Próximo Mes",
+		"nextQuarter"		: "Próximo Trimestre",
+		"nextSemester"		: "Próximo Semestre",
+		"nextYear"			: "Próximo Año"
 	};
 
 

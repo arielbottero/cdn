@@ -1632,6 +1632,16 @@ jQuery.extend({
 							$.each(selectors, function() {
 								if(this=="|") {
 									dropdown.append('<div class="dropdown-divider"></div>');
+								} else if(this=="clear") {
+									$("<a>")
+										.addClass("dropdown-item")
+										.text($.bithive.lang.datePickerTooltips.clear)
+										.click(function(){
+											dp1.data("DateTimePicker").clear();
+											dp2.data("DateTimePicker").clear();
+										})
+										.appendTo(dropdown)
+									;
 								} else if(momentdates.labels[this]) {
 									var method = this;
 									$("<a>")
@@ -2174,7 +2184,9 @@ jQuery.extend({
 
 		// FORM VIEW -----------------------------------------------------------
 		formsview: function(form) {
-			$.bithive.eachElement(".form-view input, .form-view select, .form-view textarea, .form-view select.form-select, .form-view div.squireUI", form, true, function() {
+			let elements = $(".form-view input, .form-view select, .form-view textarea, .form-view select.form-select, .form-view div.squireUI");
+			elements = elements.not("[type='button']");
+			$.bithive.eachElement(elements, form, true, function() {
 				let el = $(this);
 				let obj = el;
 				if(el.hasClass("form-select")) {
