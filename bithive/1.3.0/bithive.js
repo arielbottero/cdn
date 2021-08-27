@@ -2357,9 +2357,6 @@ jQuery.extend({
 		SendForm: function(btnSubmit) {
 			var hrefRedirect = false;
 			var form = btnSubmit.closest("form");
-			
-			// var before = form.prop("beforeFn") || null;
-			// var after = form.prop("afterFn") || null;
 			var before = form.attr("before") || null;
 			var after = form.attr("after") || null;
 			
@@ -2491,6 +2488,7 @@ jQuery.extend({
 							$(".mask-cuit").each(function() { $(this).trigger("mask"); });
 							$(".mask-dni").each(function() { $(this).trigger("mask"); });
 						}
+
 						return true;
 					}
 
@@ -2503,11 +2501,11 @@ jQuery.extend({
 					} else if(typeof form.prop("dialog")!="undefined") {
 						form.prop("dialog").dialog.close();
 						if(form.prop("dialog").href!="") {
-							var targetElement = $(form.prop("dialog").target);
+							var targetElement = $(form.prop("dialog").target) || null;
 							var href = form.prop("dialog").href;
 							if(href==true) {
 								$.bithive.jsonFiller(parsed, targetElement);
-							} else {
+							} else if(targetElement) {
 								targetElement.load(href, function() {
 									$.bithive.apply(targetElement);
 								});
@@ -2538,9 +2536,15 @@ jQuery.extend({
 							form.prop("addnewvalue").dialog.close();
 						}
 					} else {
-						var dialog = $(this).closest(".modal-dialog");
-						if(dialog.length) {
-							dialog.close();
+						if(form.hasAttr("data-dialog")) {
+							let dialog = form.closest(".modal").prop("dialog");
+							if(dialog) { dialog.close(); }
+							if(form.hasAttr("data-after")) {
+								let after = form.data("after");
+								if(typeof after=="string" && typeof window[after]=="function") {
+									window[after](response);
+								}
+							}
 						} else {
 							if(hrefRedirect!==false) {
 								window.location.href = hrefRedirect+response;
@@ -2551,7 +2555,11 @@ jQuery.extend({
 					}
 				},
 				error: function(response) {
-					$.bithive.alert(response);
+					let parser = new DOMParser();
+  					let html = parser.parseFromString(response.responseText,"text/xml");
+  					let code = html.getElementsByTagName("body") || "";
+					let msg = $("<div>").html(code);
+					$.bithive.ResponseHandler(msg.html(), btnRow, gyros);
 				}
 			});
 		},
@@ -2560,7 +2568,6 @@ jQuery.extend({
 			btnRow = btnRow || false;
 			gyros = gyros || false;
 			target = target || false;
-
 			if(typeof response=="string") {
 				if(response.substr(0, 7).toLowerCase()=="http://" || response.substr(0, 8).toLowerCase()=="https://") {
 					window.location.href = response;
@@ -2577,9 +2584,12 @@ jQuery.extend({
 				} else if(response.substr(0,13)=="[ NOGAL ERROR") {
 					// nogal error | php error
 					$.bithive.SendFormMessages(response, btnRow, gyros, "error");
+				} else {
+					// nogal error | php error | server error
+					$.bithive.SendFormMessages(response, btnRow, gyros, "error");
 				}
 			} else {
-				// nogal error | php error
+				// nogal error | php error | server error
 				$.bithive.SendFormMessages(response, btnRow, gyros, "error");
 			}
 		},
