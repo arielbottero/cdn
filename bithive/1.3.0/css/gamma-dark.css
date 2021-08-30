@@ -438,13 +438,14 @@ body.dark {
 .dark .bootstrap-dialog.type-primary .modal-header {
 	background-color: #217EC4;
 	color: #031F30;
+	border-bottom-color: #FFFFFF26;
 }
 
 .dark .bootstrap-dialog .bootstrap-dialog-title {
 	color: #031F30;
 }
 
-.bootstrap-dialog .modal-dialog .modal-content .modal-body {
+.dark .bootstrap-dialog .modal-dialog .modal-content .modal-body {
 	background-color: #031F30;
 }
 
