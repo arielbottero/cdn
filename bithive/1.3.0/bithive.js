@@ -613,10 +613,18 @@ jQuery.extend({
 
 			// convierte un fa icon en un toggler de estados
 			$.bithive.eachElement("i.link-toggler", elem, itself, function() {
+				let classOn = $(this).attr("toggler-class-on") || "text-green";
+				let classOff = $(this).attr("toggler-class-off") || "text-red";
+				let faIcon = $(this).attr("toggler-faicon") || "fa-dot-circle";
+
 				$(this)
+					.prop({
+						"togglerClassOn": "fas "+faIcon+" "+classOn,
+						"togglerClassOff": "fas "+faIcon+" "+classOff,
+						"togglerOnWhen": (parseInt($(this).attr("toggler-on")) || 1)
+					})
 					.addClass(function(){
-						let green = parseInt($(this).attr("toggler-green")) || 1; // valor para el cual el icono es verde
-						return (parseInt($(this).attr("toggler-value"))===green) ? "fas fa-dot-circle text-green" : "fas fa-dot-circle text-red";
+						return ($(this).attr("toggler-value")==$(this).prop("togglerOnWhen")) ? $(this).prop("togglerClassOn"): $(this).prop("togglerClassOff");
 					})
 					.click(function(){
 						let el = $(this);
@@ -624,20 +632,20 @@ jQuery.extend({
 						let val = el.attr("toggler-value"); // valor actual del estado (0|1)
 						let url = el.attr("toggler-url"); // url que administra los estados
 						let after = el.attr("toggler-after") || null; // funcion que se ejecuta luego del cambio de estado  funcname(el, state)
-						el.removeClass("fa-dot-circle text-green text-red");
-						el.addClass("fa-circle-notch text-light-gray spinRight");
+
+						el.removeClass(el.prop("togglerClassOn")+" "+el.prop("togglerClassOff"));
+						el.addClass("fas fa-circle-notch text-light-gray spinRight");
 						jQuery.ajax({
 							url: url,
 							data: {"id":id, "state":val},
 							dataType: "json",
 							success: function(data) {
 								let nval = parseInt(data);
-								let green = parseInt(el.attr("toggler-green")) || 1; // valor para el cual el icono es verde
-								el.attr("toggler-value", nval).removeClass("fa-circle-notch text-light-gray spinRight");
-								if(nval===green) {
-									el.addClass("fa-dot-circle text-green");
+								el.attr("toggler-value", nval).removeClass("fas fa-circle-notch text-light-gray spinRight");
+								if(nval==el.prop("togglerOnWhen")) {
+									el.addClass(el.prop("togglerClassOn"));
 								} else {
-									el.addClass("fa-dot-circle text-red");
+									el.addClass(el.prop("togglerClassOff"));
 								}
 
 								if(after) { window[after](el, nval); }
@@ -3010,6 +3018,13 @@ jQuery.extend({
 			$("[data-subform='down']", div).click(function() { div.insertAfter(div.next()); $.bithive.enumerate($("[data-subform='number']", target)); });
 			$.bithive.enumerate($("[data-subform='number']", target));
 
+			// valor del boton o select disparador
+			div.append($("<input>").attr({
+				"type": "hidden",
+				"name":  name+"_launcher["+subFormIdValue+"]",
+				"value": button.attr("name")
+			}));
+
 			$.bithive.apply(div, false, function(){
 				if(data) {
 					if(btnEdit.length || subclass.indexOf("subform-disabled")>-1) {
@@ -3089,6 +3104,13 @@ jQuery.extend({
 						"name":  subFormId+"_insert["+subFormIdValue+"]"
 					}).prop("subFormFieldId", subFormIdValue));
 				}
+
+				div.append($("<input>").attr({
+					"type": "text",
+					"name":  subFormId+"_target["+subFormIdValue+"]",
+					"value": "dodo"
+				}));
+				//$(div).prop("subform-target")
 
 				$.bithive.jsonFiller(data, div, function(){
                     // buttonsset
