@@ -3105,13 +3105,6 @@ jQuery.extend({
 					}).prop("subFormFieldId", subFormIdValue));
 				}
 
-				div.append($("<input>").attr({
-					"type": "text",
-					"name":  subFormId+"_target["+subFormIdValue+"]",
-					"value": "dodo"
-				}));
-				//$(div).prop("subform-target")
-
 				$.bithive.jsonFiller(data, div, function(){
                     // buttonsset
 					$(".form-buttonsset", div).each(function() {
