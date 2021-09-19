@@ -3479,7 +3479,7 @@ jQuery.extend({
 		},
 
 		help: function(doc) {
-			$.bithive.rightbar.load("https://wiki.hytcom.net/raw/abiz/"+doc+".md", true);
+			$.bithive.rightbar.load("https://raw.githubusercontent.com/hytcom/wiki/master/abiz/"+doc+".md", true);
 		},
 
 		print: function() {
@@ -3814,7 +3814,7 @@ jQuery.extend({
 
 			load: function(url, md) {
 				if(typeof url!="undefined") {
-					$("#rightbar-content").load(url, function(){
+					$("#rightbar-content").load(url, function(response, status, xhr){
 						if(md) {
 							let sd = new showdown.Converter();
 							$.bithive.rightbar.content(sd.makeHtml($.bithive.rightbar.content()));
