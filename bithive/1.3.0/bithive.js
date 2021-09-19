@@ -3479,7 +3479,7 @@ jQuery.extend({
 		},
 
 		help: function(doc) {
-			$.bithive.rightbar.load("https://raw.githubusercontent.com/hytcom/wiki/master/abiz/"+doc+".md?hash="+$.uid(), true);
+			$.bithive.rightbar.load("https://wiki.hytcom.net/raw/abiz/"+doc+".md?hash="+$.uid(), true);
 		},
 
 		print: function() {
