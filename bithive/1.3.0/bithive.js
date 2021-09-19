@@ -175,6 +175,13 @@ jQuery.extend({
 
 			// TITLE -------------------------------------------------------------------------------
 			$("title").html($("title").text().replace(/(<([^>]+)>)/ig,""));
+			
+			// HELP --------------------------------------------------------------------------------
+			$.bithive.eachElement("[data-help][data-help!='']", elem, itself, function() {
+				$(this).append($("<i>", {class:"fas fa-question-circle text-grey ml-xs c-pointer"}).click(function(){
+					$.bithive.help($(this).parent().data("help"));
+				}));
+			});
 
 			// ACTION BUTTONS ----------------------------------------------------------------------
 			// btn-back
@@ -3471,6 +3478,10 @@ jQuery.extend({
 			}
 		},
 
+		help: function(doc) {
+			$.bithive.rightbar.load("https://raw.githubusercontent.com/hytcom/wiki/master/abiz/"+doc+".md?hash="+$.uid(), true);
+		},
+
 		print: function() {
 			$("body").children().not("#bithive-loading").hideShow();
 			$("body").addClass("bg-print");
@@ -3792,6 +3803,39 @@ jQuery.extend({
 						$.removeCookie(k);
 					}
 				});
+			}
+		},
+
+		rightbar: {
+			content: function(content) { 
+				if(typeof content=="undefined") { return $("#rightbar-content").text(); }
+				$("#rightbar-content").html(content);
+			},
+
+			load: function(url, md) {
+				if(typeof url!="undefined") {
+					$("#rightbar-content").load(url, function(){
+						if(md) {
+							let sd = new showdown.Converter();
+							$.bithive.rightbar.content(sd.makeHtml($.bithive.rightbar.content()));
+						}
+						let opened = $("#rightbar").prop("opened") || false;
+						if(!opened) { $.bithive.rightbar.open(); }
+					});
+				}
+			},
+
+			open: function() {
+				$("#rightbar-close", $("#rightbar")).click(function() { $.bithive.rightbar.close(); });
+				$("#rightbar").addClass("rightbar-hover");
+				$("#content").addClass("rightbar-open");
+				$("#rightbar").prop("opened", true);
+			},
+
+			close: function() {
+				$("#rightbar").removeClass("rightbar-hover");
+				$("#content").removeClass("rightbar-open");
+				$("#rightbar").prop("opened", false);
 			}
 		}
 	}

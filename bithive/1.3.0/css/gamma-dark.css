@@ -43,6 +43,11 @@ body.dark {
 		color: #FFFFFF;
 	}
 
+/* RIGHTBAR */
+.dark #rightbar {
+	background-color: #031f30;
+}
+
 /* GYROS */
 .dark .gyros-circular {
 	stroke: #FFFFFF;
