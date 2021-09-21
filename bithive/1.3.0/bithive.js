@@ -929,7 +929,9 @@ jQuery.extend({
 					if(typeof $.cookie("col_"+toggler.prop("colsIdx"))!="undefined") {
 						toggler.prop("colsVisible", $.cookie("col_"+toggler.prop("colsIdx")));
 					}
-					
+
+					$(this).removeClass("d-none");
+
 					toggler.click(function(){
 						let togg = $(this);
 						$("i", togg).toggleClass("text-primary text-light-gray");
@@ -938,7 +940,7 @@ jQuery.extend({
 							$("th:nth-child("+(togg.prop("colsIdx"))+"), td:nth-child("+(togg.prop("colsIdx"))+")", togg.prop("colsTable")).css("cssText", "display:none !important");
 						} else {
 							togg.prop("colsVisible", true);
-							$("th:nth-child("+(togg.prop("colsIdx"))+"), td:nth-child("+(togg.prop("colsIdx"))+")", togg.prop("colsTable")).removeClass("d-none").css("display","");
+							$("th:nth-child("+(togg.prop("colsIdx"))+"), td:nth-child("+(togg.prop("colsIdx"))+")", togg.prop("colsTable")).css("display","");
 						}
 						$.cookie("col_"+togg.prop("colsIdx"), togg.prop("colsVisible"));
 					});
