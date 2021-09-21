@@ -938,7 +938,7 @@ jQuery.extend({
 							$("th:nth-child("+(togg.prop("colsIdx"))+"), td:nth-child("+(togg.prop("colsIdx"))+")", togg.prop("colsTable")).css("cssText", "display:none !important");
 						} else {
 							togg.prop("colsVisible", true);
-							$("th:nth-child("+(togg.prop("colsIdx"))+"), td:nth-child("+(togg.prop("colsIdx"))+")", togg.prop("colsTable")).css("display","");
+							$("th:nth-child("+(togg.prop("colsIdx"))+"), td:nth-child("+(togg.prop("colsIdx"))+")", togg.prop("colsTable")).removeClass("d-none").css("display","");
 						}
 						$.cookie("col_"+togg.prop("colsIdx"), togg.prop("colsVisible"));
 					});
