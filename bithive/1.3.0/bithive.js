@@ -930,8 +930,6 @@ jQuery.extend({
 						toggler.prop("colsVisible", $.cookie("col_"+toggler.prop("colsIdx")));
 					}
 
-					$(this).removeClass("d-none");
-
 					toggler.click(function(){
 						let togg = $(this);
 						$("i", togg).toggleClass("text-primary text-light-gray");
@@ -949,6 +947,8 @@ jQuery.extend({
 						toggler.prop("colsVisible", true);
 						toggler.trigger("click");
 						$(window).resize(function() { toggler.trigger("init"); });
+					} else {
+						$(this).removeClass("d-none");
 					}
 
 					menu.append(div);
