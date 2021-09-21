@@ -174,7 +174,7 @@ jQuery.extend({
 			if(typeof itself == "undefined") { var itself = false; }
 
 			// TITLE -------------------------------------------------------------------------------
-			$("title").html($("title").text().replace(/(<([^>]+)>)/ig,""));
+			$("title", elem).html($("title").text().replace(/(<([^>]+)>)/ig,""));
 			
 			// HELP --------------------------------------------------------------------------------
 			$.bithive.eachElement("[data-help][data-help!='']", elem, itself, function() {
@@ -196,7 +196,7 @@ jQuery.extend({
 			});
 
 			// btn-print
-			$(".btn-print").addClass("no-print").click(function(e) {
+			$(".btn-print", elem).addClass("no-print").click(function(e) {
 				$.bithive.print();
 			});
 
@@ -663,7 +663,7 @@ jQuery.extend({
 			
 			// TABLES ----------------------------------------------------------
 			// full colspan
-			$(".colspanall").each(function() {
+			$(".colspanall", elem).each(function() {
 				var cols = $(this).closest("table").find("tr:first th,td").length;
 				$(this).attr("colspan", cols);
 			});
@@ -908,66 +908,44 @@ jQuery.extend({
 
 			// table-columns
 			$.bithive.eachElement("[data-columns]", elem, itself, function() {
-				var btn = $(this);
-				var columns = $(btn.data("columns"));
+				let btn = $(this);
+				let columns = $(btn.data("columns"));
 				if(typeof columns[0]=="undefined") { btn.remove(); return false; }
 
-				var table = $(columns[0].closest("table"));
+				let table = $(columns[0].closest("table"));
+				let menu = $(".dropdown-menu", btn);
 
-				var menu = $(".dropdown-menu", btn);
 				$.each(columns, function() {
-					var div = $("<div>", {class:"dropdown-item c-pointer", idx: this.cellIndex});
-					var labelText = ($(this).text().trim().length) ? $(this).text().trim() : "_____";
-					var label = $("<label>", {class: "c-pointer", for:"col-"+this.cellIndex}).html(labelText.substring(0,32));
-					var checkbox = $("<i>", {class: "fas fa-check icon-sm text-primary m-sm mr-o"});
+					let div = $("<div>", {class:"dropdown-item c-pointer", idx: this.cellIndex}).prop("colsTable", table);
+					let labelText = ($(this).text().trim().length) ? $(this).text().trim() : "_____";
+					let label = $("<label>", {class: "c-pointer"}).html(labelText.substring(0,32));
+					let checkbox = $("<i>", {class: "fas fa-check icon-sm text-primary m-sm mr-o"});
 
-					var toggler = div.html(checkbox).append(label);
+					let toggler = div.html(checkbox).append(label).prop({
+						"colsTable": table,
+						"colsIdx": this.cellIndex+1,
+						"colsVisible": ($(this).css("display")!="none" ? true : false)
+					});
+					if(typeof $.cookie("col_"+toggler.prop("colsIdx"))!="undefined") {
+						toggler.prop("colsVisible", $.cookie("col_"+toggler.prop("colsIdx")));
+					}
+					
 					toggler.click(function(){
-						$("i", $(this)).toggleClass("text-primary text-light-gray");
-						$("th:nth-child("+(parseInt($(this).attr("idx"))+1)+"), td:nth-child("+(parseInt($(this).attr("idx"))+1)+")", table).each(function(k,v){
-							var cell = $(this);
-							if(cell.hasClass("d-none")) {
-								cell.fadeIn("fast", function(){ cell.removeClass("d-none"); });
-								if(!$.bithive.isSmallScreen() && cell.prop("xs-hidden")) {
-									cell.addClass("d-lg-table-cell");
-								}
-							} else {
-								cell.fadeOut("fast", function(){ cell.addClass("d-none"); });
-								if(!$.bithive.isSmallScreen() && cell.prop("xs-hidden")) {
-									cell.removeClass("d-lg-table-cell");
-								}
-							}
-						}).promise().done(function(){
-							if(table.prop("tableScroll")) {
-								table.trigger("resize");
-							}
-						});
-
-					}).on("init", function(){
-						var isHidden = true;
-						$("th:nth-child("+(parseInt($(this).attr("idx"))+1)+"), td:nth-child("+(parseInt($(this).attr("idx"))+1)+")", table).each(function(k,v){
-							var cell = $(this);
-							cell.addClass("d-none");
-
-							cell.removeClass("excel-false");
-							if(cell.prop("excelfalse")) {
-								cell.addClass("excel-false");
-							}
-
-							if(cell.hasClass("d-lg-table-cell")) {
-								if(!$.bithive.isSmallScreen()) {
-									cell.removeClass("d-none");
-									isHidden = false;
-								}
-								cell.prop("xs-hidden", true);
-							}
-						});
-
-						if(isHidden) { $("i", $(this)).toggleClass("text-primary text-light-gray"); }
+						let togg = $(this);
+						$("i", togg).toggleClass("text-primary text-light-gray");
+						if(togg.prop("colsVisible")) {
+							togg.prop("colsVisible", false);
+							$("th:nth-child("+(togg.prop("colsIdx"))+"), td:nth-child("+(togg.prop("colsIdx"))+")", togg.prop("colsTable")).css("cssText", "display:none !important");
+						} else {
+							togg.prop("colsVisible", true);
+							$("th:nth-child("+(togg.prop("colsIdx"))+"), td:nth-child("+(togg.prop("colsIdx"))+")", togg.prop("colsTable")).css("display","");
+						}
+						$.cookie("col_"+togg.prop("colsIdx"), togg.prop("colsVisible"));
 					});
 
-					if($(this).hasClass("d-none")) {
-						toggler.trigger("init");
+					if(!toggler.prop("colsVisible")) {
+						toggler.prop("colsVisible", true);
+						toggler.trigger("click");
 						$(window).resize(function() { toggler.trigger("init"); });
 					}
 
@@ -977,28 +955,6 @@ jQuery.extend({
 					});
 				});
 			});
-
-			/* tooltips */
-
-			// $(".form-view .form-group").each(function(){
-			// 	$(this).click(function(){
-			// 		let elem = $(this);
-			// 		elem
-			// 			.removeAttr("title")
-			// 			.tooltip({
-			// 				"trigger": "manual",
-			// 				"html": true,
-			// 				"placement": "auto", 
-			// 				"title": function() { return $(".form-control", $(this)).val() || $(".form-select button", $(this)).attr("title"); }
-			// 			})
-			// 			.tooltip("show")
-			// 		;
-					
-			// 		setTimeout(function(){
-			// 			elem.tooltip("dispose");
-			// 		}, 1500);
-			// 	});
-			// });
 
 			/* tooltips */
 			$("[data-toggle='tooltip']").each(function(){

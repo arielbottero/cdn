@@ -24,7 +24,7 @@
 						if(index==-1) { index = k+1; }
 						show.push(":nth-child("+(k+1)+")");
 						heads.push(this.innerHTML);
-					} else if($(this).hasClass("table-xs-none")) {
+					} else if($(this).hasClass("table-xs-none") || $(this).hasClass("d-none")) {
 						hidden.push(":nth-child("+(k+1)+")");
 					} else {
 						heads.push(this.innerHTML);
@@ -44,11 +44,12 @@
 				var skip = show.join(",");
 
 				if(heads.length) {
+					if(hidden.length) { skip += ","+hidden.join(","); }
+					
 					$("tr", table).each(function() {
 						$("td,th", $(this)).not(skip).addClass("d-none d-lg-table-cell");
 					});
 
-					if(hidden.length) { skip += ","+hidden.join(","); }
 					$("tbody tr, thead tr.table-xs-row, tfooter tr.table-xs-row", table).each(function() {
 						var id = jQuery.uid();
 						var row = $(this);
