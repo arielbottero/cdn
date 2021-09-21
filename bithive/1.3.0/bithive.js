@@ -707,30 +707,6 @@ jQuery.extend({
 				});
 			}
 
-			// totales
-			if(jQuery().tabletotal) {
-				// utilizar data-total="none" en los th que no deben tener la opcion
-				$.bithive.eachElement("table.table-total", elem, itself, function(){
-					var before = $(this).data("total-before") || false;
-					var after = $(this).data("total-after") || false;
-					var row = $(this).data("total-row") || false;
-					$(this).tabletotal({
-						cssClass: "table-xs-row",
-						before: function(table) {
-							if(after && typeof window[before]==="function") { window[before](table); }
-						},
-						after: function(table) {
-							$.bithive.apply($("thead", table), true);
-							$.bithive.apply($("tfoot", table), true);
-							if(after && typeof window[after]==="function") { window[after](table); }
-						},
-						row: function(tr) {
-							if(row && typeof window[row]==="function") {  window[row](tr); }
-						}
-					});
-				});
-			}
-
 			// table scroll
 			$.bithive.eachElement("table.table-scroll", elem, itself, function(){
 				let fixed = $(this).data("scroll-fixed") || "400px"; 
@@ -957,6 +933,30 @@ jQuery.extend({
 					});
 				});
 			});
+
+			// totales
+			if(jQuery().tabletotal) {
+				// utilizar data-total="none" en los th que no deben tener la opcion
+				$.bithive.eachElement("table.table-total", elem, itself, function(){
+					var before = $(this).data("total-before") || false;
+					var after = $(this).data("total-after") || false;
+					var row = $(this).data("total-row") || false;
+					$(this).tabletotal({
+						cssClass: "table-xs-row",
+						before: function(table) {
+							if(after && typeof window[before]==="function") { window[before](table); }
+						},
+						after: function(table) {
+							$.bithive.apply($("thead", table), true);
+							$.bithive.apply($("tfoot", table), true);
+							if(after && typeof window[after]==="function") { window[after](table); }
+						},
+						row: function(tr) {
+							if(row && typeof window[row]==="function") {  window[row](tr); }
+						}
+					});
+				});
+			}
 
 			/* tooltips */
 			$("[data-toggle='tooltip']").each(function(){
