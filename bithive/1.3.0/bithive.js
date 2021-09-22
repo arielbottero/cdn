@@ -908,8 +908,11 @@ jQuery.extend({
 						"colsIdx": this.cellIndex+1,
 						"colsVisible": ($(this).css("display")!="none" ? true : false)
 					});
-					if(typeof $.cookie("col_"+toggler.prop("colsIdx"))!="undefined") {
-						toggler.prop("colsVisible", $.cookie("col_"+toggler.prop("colsIdx")));
+
+					if(jQuery().cookie) {
+						if(typeof $.cookie("col_"+toggler.prop("colsIdx"))!="undefined") {
+							toggler.prop("colsVisible", $.cookie("col_"+toggler.prop("colsIdx")));
+						}
 					}
 
 					toggler.click(function(){
@@ -922,7 +925,7 @@ jQuery.extend({
 							togg.prop("colsVisible", true);
 							$("th:nth-child("+(togg.prop("colsIdx"))+"), td:nth-child("+(togg.prop("colsIdx"))+")", togg.prop("colsTable")).removeClass("d-none").css("display","");
 						}
-						$.cookie("col_"+togg.prop("colsIdx"), togg.prop("colsVisible"));
+						if(jQuery().cookie) { $.cookie("col_"+togg.prop("colsIdx"), togg.prop("colsVisible")); }
 					});
 
 					if(!toggler.prop("colsVisible")) {
