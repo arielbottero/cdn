@@ -391,10 +391,16 @@ jQuery.extend({
 				$(this).html(($(this).html()!="0" && $(this).html()!="false" && $(this).html()!="") ? options[0] : options[1]);
 			});
 
-			// case [ format-custom: {value:label;value:label;value:label} ]
+			// case [ format-custom: {"value":"label","value":"label","value":"label"} ]
+			// valor = string. Separar con , para multiples valores
 			$.bithive.eachElement(".format-case", elem, itself, function() {
-				var options = ($(this).hasAttr("format-custom")) ? jQuery.parseJSON($(this).attr("format-custom")) : [$.bithive.lang.valueNo,$.bithive.lang.valueYes];
-				$(this).html(options[$(this).html()]);
+				let options = ($(this).hasAttr("format-custom")) ? jQuery.parseJSON($(this).attr("format-custom")) : [$.bithive.lang.valueNo,$.bithive.lang.valueYes];
+				let vals = $(this).html().split(",");
+				let replaces = [];
+				$.each(vals, function() {
+					if(options[this]) { replaces.push(options[this]); }
+				});
+				if(replaces.length) { $(this).html(replaces.join(",")); }
 			});
 
 			// dates
