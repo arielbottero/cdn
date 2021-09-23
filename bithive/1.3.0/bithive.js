@@ -591,10 +591,30 @@ jQuery.extend({
 				$(this).click(function(e) {
 					e.preventDefault();
 					let target = $(this).attr("target") || "_top";
-					let href = $(this).attr("href");
+					let href = $(this).data("href") || $(this).attr("href")
 					let confirm = $(this).data("confirm") || $.bithive.lang.confirmQuestion;
 					$.bithive.confirm(confirm, function(){
 						window.open(href, target);
+					});
+				});
+			});
+
+			// solicita confirmacion en un link ajax-get
+			$.bithive.eachElement(".link-confirm-ajax", elem, itself, function() {
+				$(this).click(function(e) {
+					e.preventDefault();
+					let href = $(this).data("href") || $(this).attr("href");
+					let confirm = $(this).data("confirm") || $.bithive.lang.confirmQuestion;
+					let after = $(this).data("after") || null;
+					$.bithive.confirm(confirm, function(){
+						jQuery.ajax({
+							url: href,
+							dataType: "text",
+							success: function(response) {
+								if(after) { window[after](response); }
+							}
+						});
+
 					});
 				});
 			});

@@ -69,6 +69,7 @@
 		},
 
 		formatNumber: function(val) {
+			if(/[^0-9\-\.\,]/.test(val)) { return val; }
 			var val = $.strToNumber(val);
 			switch(this.options.format) {
 				case "money":
