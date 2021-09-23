@@ -1011,17 +1011,18 @@ jQuery.extend({
 			$.bithive.eachElement(".copyable", elem, itself, function() {
 				let content = $(this);
 				let text = content.text();
-				
-				$("<i>", {class:"far fa-copy mr-xs c-pointer"}).click(function(){
-					$(this).clipboard({
-						mode: false,
-						text: text,
-						success_after: function(e) { e.clearSelection(); },
-						success_notify: {
-							message: $.bithive.lang.clipboardSuccess
-						}
-					});
-				}).prependTo(content);
+				if(text.length) {
+					$("<i>", {class:"far fa-copy mr-xs c-pointer"}).click(function(){
+						$(this).clipboard({
+							mode: false,
+							text: text,
+							success_after: function(e) { e.clearSelection(); },
+							success_notify: {
+								message: $.bithive.lang.clipboardSuccess
+							}
+						});
+					}).prependTo(content);
+				}
 			});
 		},
 
