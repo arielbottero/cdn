@@ -209,86 +209,86 @@
 								}
 								
 								if(typeof filterVal=="String") { filterVal = filterVal.trim(); }
-								$("td:nth-child("+colnum+")", $("tbody", table)).not(".day").each(function(e){
-									$this.Toggle($(this).parent(), colnum, false); 
-
+								let useSplitter = (!splitter && filterVal!="" && filterVal!="**");
+								$("tr", $("tbody", table)).each(function(e){
 									let hide = false;
-									if(!splitter && filterVal!="" && filterVal!="**") {
-										if(type=="multiple") {
-											hide = true;
-											let curval = (!params.sensitive) ? $(this).text().toLowerCase() : $(this).text();
-											curval = curval.trim();
-											$.each(filterVal, function(i,j){
-												if(!params.sensitive) { j = j.toLowerCase(); }
-												if(j=="*" || j==curval) {
-													hide = false;
-													return true;
-												}
-											});
-										} else if(type=="input") {
-											if(!params.sensitive) { filterVal =  filterVal.toLowerCase(); }
-											let curval = (!params.sensitive) ? $(this).text().toLowerCase() : $(this).text();
-											if(sign!==false) {
-												if(isNaN(filterVal)) {
-													if(!eval('"'+curval+'"'+sign+filterValText)) { hide = true; }
-												} else {
-													if(!eval($.strToNumber(curval)+sign+$.strToNumber(filterVal))) { hide = true; }
-												}
-											} else {
-												if(curval.indexOf(filterVal)==-1) { hide = true; }
-											}
-										} else if(type=="date") {
-											let id = filterField.attr("id");
-											let filterValDate = $("#"+id).data("DateTimePicker").date();
-											filterValDate = (filterValDate) ? filterValDate.format("YYYYMMDD") : false;
-											let curval = ($(this).data("df-value")) ? $(this).data("df-value") : $(this).text();
-											curval = moment(curval).format("YYYYMMDD");
-											if(filterValDate && curval!=filterValDate) { hide = true; }
-										} else if(type=="daterange") {
-											let id = filterField.attr("id").split("_")[0];
-											let filterValFrom = $("#"+id+"_from").data("DateTimePicker").date();
-											filterValFrom = (filterValFrom) ? filterValFrom.format("YYYYMMDD") : "19700101";
-											let filterValTo = $("#"+id+"_to").data("DateTimePicker").date();
-											filterValTo = (filterValTo) ? filterValTo.format("YYYYMMDD") : "20300101"
-											let curval = ($(this).data("df-value")) ? $(this).data("df-value") : $(this).text();
-											curval = moment(curval).format("YYYYMMDD");
-											if(curval < filterValFrom || curval > filterValTo) { hide = true; }
-										} else if(type=="empty") {
-											if(filterField.prop("checked") && $(this).html().toLowerCase().trim()=="") { hide = true; }
-										} else {
-											let curval = (!params.sensitive) ? $(this).text().toLowerCase() : $(this).text();
-											curval = curval.replace(/[\t\n\r]/ig, "").trim();
-											if(("*"+curval)!=filterVal) { hide = true; }
-										}
-									} else if(splitter) {
-										let curval = (!params.sensitive) ? $(this).text().toLowerCase() : $(this).text();
-										curval = curval.replace(/[\t\n\r]/ig, "").trim();
-
-										if(type=="multiple" && typeof filterVal=="object") {
-											$.each(curval.split(splitter), function(z,w){
-												w = w.trim();
+									$("td:nth-child("+colnum+")", $(this)).each(function(e){
+										if(useSplitter) {
+											if(type=="multiple") {
+												hide = true;
+												let curval = (!params.sensitive) ? $(this).text().toLowerCase() : $(this).text();
+												curval = curval.trim();
 												$.each(filterVal, function(i,j){
 													if(!params.sensitive) { j = j.toLowerCase(); }
-													if(j=="*" || j==w) {
+													if(j=="*" || j==curval) {
 														hide = false;
 														return true;
 													}
 												});
-											});
-										} else {
-											if(!params.sensitive) { filterVal = filterVal.toLowerCase(); }
-											$.each(curval.split(splitter), function(z,w){
-												w = w.trim();
-												if(!params.sensitive) { w = w.toLowerCase(); }
-												if(filterVal=="**" || filterVal=="*"+w) {
-													hide = false;
-													return true;
+											} else if(type=="input") {
+												if(!params.sensitive) { filterVal =  filterVal.toLowerCase(); }
+												let curval = (!params.sensitive) ? $(this).text().toLowerCase() : $(this).text();
+												if(sign!==false) {
+													if(isNaN(filterVal)) {
+														if(!eval('"'+curval+'"'+sign+filterValText)) { hide = true; }
+													} else {
+														if(!eval($.strToNumber(curval)+sign+$.strToNumber(filterVal))) { hide = true; }
+													}
+												} else {
+													if(curval.indexOf(filterVal)==-1) { hide = true; }
 												}
-											});
-										}
-									}
+											} else if(type=="date") {
+												let id = filterField.attr("id");
+												let filterValDate = $("#"+id).data("DateTimePicker").date();
+												filterValDate = (filterValDate) ? filterValDate.format("YYYYMMDD") : false;
+												let curval = ($(this).data("df-value")) ? $(this).data("df-value") : $(this).text();
+												curval = moment(curval).format("YYYYMMDD");
+												if(filterValDate && curval!=filterValDate) { hide = true; }
+											} else if(type=="daterange") {
+												let id = filterField.attr("id").split("_")[0];
+												let filterValFrom = $("#"+id+"_from").data("DateTimePicker").date();
+												filterValFrom = (filterValFrom) ? filterValFrom.format("YYYYMMDD") : "19700101";
+												let filterValTo = $("#"+id+"_to").data("DateTimePicker").date();
+												filterValTo = (filterValTo) ? filterValTo.format("YYYYMMDD") : "20300101"
+												let curval = ($(this).data("df-value")) ? $(this).data("df-value") : $(this).text();
+												curval = moment(curval).format("YYYYMMDD");
+												if(curval < filterValFrom || curval > filterValTo) { hide = true; }
+											} else if(type=="empty") {
+												if(filterField.prop("checked") && $(this).html().toLowerCase().trim()=="") { hide = true; }
+											} else {
+												let curval = (!params.sensitive) ? $(this).text().toLowerCase() : $(this).text();
+												curval = curval.replace(/[\t\n\r]/ig, "").trim();
+												if(("*"+curval)!=filterVal) { hide = true; }
+											}
+										} else if(splitter) {
+											let curval = (!params.sensitive) ? $(this).text().toLowerCase() : $(this).text();
+											curval = curval.replace(/[\t\n\r]/ig, "").trim();
 
-									$this.Toggle($(this).parent(), colnum, hide);
+											if(type=="multiple" && typeof filterVal=="object") {
+												$.each(curval.split(splitter), function(z,w){
+													w = w.trim();
+													$.each(filterVal, function(i,j){
+														if(!params.sensitive) { j = j.toLowerCase(); }
+														if(j=="*" || j==w) {
+															hide = false;
+															return true;
+														}
+													});
+												});
+											} else {
+												if(!params.sensitive) { filterVal = filterVal.toLowerCase(); }
+												$.each(curval.split(splitter), function(z,w){
+													w = w.trim();
+													if(!params.sensitive) { w = w.toLowerCase(); }
+													if(filterVal=="**" || filterVal=="*"+w) {
+														hide = false;
+														return true;
+													}
+												});
+											}
+										}
+									});
+									$this.Toggle($(this), colnum, hide);
 								});
 
 								if(typeof params.afterFilter == "function") {
