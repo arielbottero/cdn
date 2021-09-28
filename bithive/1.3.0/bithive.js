@@ -519,13 +519,13 @@ jQuery.extend({
 						var options = {
 							title: 		$.bithive.lang.confirmTitle, // titulo de la ventana
 							message:	$.bithive.lang.confirmQuestion, // mensaje
-							js:			null,		 // codigo JS que ejecutará en caso afirmativo. Si esta presente NO se ejecutara href
-							href:		null,		 // URL que ejecutará en caso afirmativo. Si esta presente NO se ejecutara js
-													// ---
-							hrefafter:	null,		 // URL que ejecutará en caso afirmativo luego de ejecutar href
-							target:		null,		 // selector jquery donde se cargara href o hrefafter
-													// ---
-							after:		null		 // funcion que se ejecutará en caso afirmativo si no existe href
+							js:			null,	// codigo JS que ejecutará en caso afirmativo. Si esta presente NO se ejecutara href
+							href:		null,	// URL que ejecutará en caso afirmativo. Si esta presente NO se ejecutara js
+												// ---
+							hrefafter:	null,	// URL que ejecutará en caso afirmativo luego de ejecutar href
+							target:		null,	// selector jquery donde se cargara href o hrefafter
+												// ---
+							after:		null	// funcion que se ejecutará en caso afirmativo si no existe href
 						};
 						
 						options = $.extend({}, options, $(this).hyphened("dialog"));
@@ -665,7 +665,6 @@ jQuery.extend({
 						let val = el.attr("toggler-value"); // valor actual del estado (0|1)
 						let url = el.attr("toggler-url"); // url que administra los estados
 						let after = el.attr("toggler-after") || null; // funcion que se ejecuta luego del cambio de estado  funcname(el, state)
-
 						el.removeClass(el.prop("togglerClassOn")+" "+el.prop("togglerClassOff"));
 						el.addClass("fas fa-circle-notch text-light-gray spinRight");
 						jQuery.ajax({

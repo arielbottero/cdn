@@ -1,7 +1,7 @@
 (function(jQuery) {
-		jQuery.fn.extend({ // jQuery.extend || jQuery.fn.extend
+	jQuery.fn.extend({ // jQuery.extend || jQuery.fn.extend
 		tablefilter: function(params) {
-			var $this = this;
+			let $this = this;
 
 			// valores por defecto
 			this.options = {
@@ -46,8 +46,8 @@
 
 			// método principal
 			this.init = function(params) {
-				var table = $($this);
-				var tr = $("<tr>").addClass("filters no-print d-none d-lg-table-row").prependTo($("thead", table));
+				let table = $($this);
+				let tr = $("<tr>").addClass("filters no-print d-none d-lg-table-row").prependTo($("thead", table));
 				if(params.hidden) { tr.css("display", "none"); }
 
 				if(params.cols!==true) {
@@ -60,16 +60,17 @@
 
 				$("thead th", table).each(function(idx, th) {
 					th = $(this);
-					var type = th.data("filter") || "input";
-					var splitter = th.data("filter-splitter") || false;
+					let type = th.data("filter") || "input";
+					let splitter = th.data("filter-splitter") || false;
 
 					if((type!="none" && type!="false" && type!="index") && (params.cols===true || jQuery.inArray((idx+1), params.cols)>=0)) {
-						var colnum = (idx+1);
-						var type = type.toLowerCase();
+						let colnum = (idx+1);
+						type = type.toLowerCase();
+						let filter, div, uid, filterTo;
 						switch(type) {
 							case "select":
 							case "multiple":
-								var values = [];
+								let values = [];
 								$("td:nth-child("+colnum+")", table).each(function(){
 									if($(this).text().indexOf("TODO")!=-1) { $(this).addClass("text-red"); }
 									if(splitter) {
@@ -79,24 +80,24 @@
 									}
 								});
 
-								var clean = [];
+								let clean = [];
 								jQuery.each(values, function(i, e) {
 									e = e.replace(/[\t\n\r]/ig, "").trim();
 									if(jQuery.inArray(e, clean)== -1) { clean.push(e); }
 								});
 								values = clean.sort();
 								
-								var options = "<option value='*' selected>"+params.alltext+"</option>";
+								let options = "<option value='*' selected>"+params.alltext+"</option>";
 								jQuery.each(values, function() {
 									options += "<option value='"+this+"'>"+this+"</option>";
 								});
 
-								var filter = $("<select>", {"data-live-search":"true"}).addClass("custom-select").html(options);
+								filter = $("<select>", {"data-live-search":"true"}).addClass("custom-select").html(options);
 								if(type=="multiple") { filter.attr("multiple", "multiple"); }
-								var div = $("<div class='filter-select'>").append(filter);
+								div = $("<div class='filter-select'>").append(filter);
 								if(jQuery().selectpicker) {
 									filter.removeClass("custom-select").selectpicker().on("hidden.bs.select", function(){
-										var values = filter.selectpicker("val");
+										let values = filter.selectpicker("val");
 										if(!values.length) {
 											filter.selectpicker("val", "*").trigger("change");
 										} else if(values.length > 1) {
@@ -109,8 +110,8 @@
 								break;
 
 							case "date":
-								var uid = jQuery.uid();
-								var filter = $("<input>").addClass("form-control").val(" ").attr("id", uid);;
+								uid = jQuery.uid();
+								filter = $("<input>").addClass("form-control").val(" ").attr("id", uid);;
 								filter.datetimepicker({
 									format: "DD/MM/YYYY",
 									tooltips: params.dplang,
@@ -121,13 +122,13 @@
 								}).on("dp.change", function(e) {
 									if($(this).prop("first")===true) { filter.trigger("paste"); }
 								});
-								var div = $("<div class='input-group filter-date'><div class='input-group-prepend'><div class='input-group-text'><i class='far fa-calendar-alt' aria-hidden='true'></i></div></div></div>").append(filter);
+								div = $("<div class='input-group filter-date'><div class='input-group-prepend'><div class='input-group-text'><i class='far fa-calendar-alt' aria-hidden='true'></i></div></div></div>").append(filter);
 								break;
 
 							case "daterange":
-								var uid = jQuery.uid();
-								var filter = $("<input>").addClass("form-control").val(" ").attr("id", uid+"_from");
-								var filterTo = $("<input>").addClass("form-control").val(" ").attr("id", uid+"_to");
+								uid = jQuery.uid();
+								filter = $("<input>").addClass("form-control").val(" ").attr("id", uid+"_from");
+								filterTo = $("<input>").addClass("form-control").val(" ").attr("id", uid+"_to");
 								filter.datetimepicker({
 									format: "DD/MM/YYYY",
 									tooltips: params.dplang,
@@ -150,7 +151,7 @@
 									if($(this).prop("first")===true) { filter.trigger("paste"); }
 								});
 
-								var div = $("<div class='input-group filter-daterange'></div>")
+								div = $("<div class='input-group filter-daterange'></div>")
 									.append(filter)
 									.append("<div class='input-group-prepend input-group-append'><div class='input-group-text'><i class='far fa-calendar-alt' aria-hidden='true'></i></div></div>")
 									.append(filterTo);
@@ -158,40 +159,37 @@
 								
 							case "text":
 							case "input":
-								var filter = $("<input>").addClass("form-control").attr({
+								filter = $("<input>").addClass("form-control").attr({
 									"data-toggle": "tooltip",
 									"data-placement": "top"
 									//,"title": params.help
 								});
-								var div = $("<div class='filter-input'>").append(filter);
+								div = $("<div class='filter-input'>").append(filter);
 								break;
 
 							case "empty":
-								var uid = jQuery.uid();
-								var filter = $("<input>", {class:"form-onoffswitch-checkbox", type:"checkbox", id:uid});
-								var div = $("<div>", {class:"form-onoffswitch-container filter-switch"})
+								uid = jQuery.uid();
+								filter = $("<input>", {class:"form-onoffswitch-checkbox", type:"checkbox", id:uid});
+								div = $("<div>", {class:"form-onoffswitch-container filter-switch"}).html(
+										$("<div>", {class:"form-onoffswitch-button"})
 											.html(
-												$("<div>", {class:"form-onoffswitch-button"})
-													.html(
-														$("<div>", {class:"form-onoffswitch"})
-															.html(filter)
-															.append($("<label>", {class:"form-onoffswitch-label", for:uid}))
-													)
+												$("<div>", {class:"form-onoffswitch"})
+													.html(filter)
+													.append($("<label>", {class:"form-onoffswitch-label", for:uid}))
 											)
+									)
 								break;
 						}
 
 						filter
 							.prop("filter-type", type)
 							.on("keyup paste change", function() {
-								$("td:nth-child("+colnum+")", $("tbody", table)).parent().show();
-								$("select,input", tr).not($(this)).trigger("filter");
 								$(this).trigger("filter");
 							})
 							.on("filter", function() {
-								var filterField = $(this);
-								var filterVal = $this.GetValue(type, filterField);
-								var sign = false;
+								let filterField = $(this);
+								let filterVal = $this.GetValue(type, filterField);
+								let sign = false;
 								if(typeof filterVal!="object") {
 									if(filterVal.substr(0,1)=="=" || filterVal.substr(0,1)=="<" || filterVal.substr(0,1)==">" || filterVal.substr(0,1)=="!") {
 										if(filterVal.substr(1,1)=="=" || filterVal.substr(1,1)=="<" || filterVal.substr(1,1)==">") {
@@ -206,15 +204,19 @@
 									}
 									filterVal = filterVal.trim();
 									if(!params.sensitive) { filterVal = filterVal.toLowerCase(); }
-									var filterValText = '"'+filterVal+'"';
+									let filterValText = '"'+filterVal+'"';
 									if(!params.sensitive) { filterValText =  filterValText.toLowerCase(); }
 								}
-
+								
+								if(typeof filterVal=="String") { filterVal = filterVal.trim(); }
 								$("td:nth-child("+colnum+")", $("tbody", table)).not(".day").each(function(e){
+									$this.Toggle($(this).parent(), colnum, false); 
+
+									let hide = false;
 									if(!splitter && filterVal!="" && filterVal!="**") {
 										if(type=="multiple") {
-											var hide = true;
-											var curval = (!params.sensitive) ? $(this).text().toLowerCase() : $(this).text();
+											hide = true;
+											let curval = (!params.sensitive) ? $(this).text().toLowerCase() : $(this).text();
 											curval = curval.trim();
 											$.each(filterVal, function(i,j){
 												if(!params.sensitive) { j = j.toLowerCase(); }
@@ -223,48 +225,45 @@
 													return true;
 												}
 											});
-											if(hide) { $(this).parent().hide(); }
 										} else if(type=="input") {
-											filterVal = filterVal.trim();
 											if(!params.sensitive) { filterVal =  filterVal.toLowerCase(); }
-											var curval = (!params.sensitive) ? $(this).text().toLowerCase() : $(this).text();
+											let curval = (!params.sensitive) ? $(this).text().toLowerCase() : $(this).text();
 											if(sign!==false) {
 												if(isNaN(filterVal)) {
-													if(!eval('"'+curval+'"'+sign+filterValText)) { $(this).parent().hide(); }
+													if(!eval('"'+curval+'"'+sign+filterValText)) { hide = true; }
 												} else {
-													if(!eval($.strToNumber(curval)+sign+$.strToNumber(filterVal))) { $(this).parent().hide(); }
+													if(!eval($.strToNumber(curval)+sign+$.strToNumber(filterVal))) { hide = true; }
 												}
 											} else {
-												if(curval.indexOf(filterVal)==-1) { $(this).parent().hide(); }
+												if(curval.indexOf(filterVal)==-1) { hide = true; }
 											}
 										} else if(type=="date") {
-											var id = filterField.attr("id");
-											var filterValDate = $("#"+id).data("DateTimePicker").date();
+											let id = filterField.attr("id");
+											let filterValDate = $("#"+id).data("DateTimePicker").date();
 											filterValDate = (filterValDate) ? filterValDate.format("YYYYMMDD") : false;
-											var curval = ($(this).data("df-value")) ? $(this).data("df-value") : $(this).text();
+											let curval = ($(this).data("df-value")) ? $(this).data("df-value") : $(this).text();
 											curval = moment(curval).format("YYYYMMDD");
-											if(filterValDate && curval!=filterValDate) { $(this).parent().hide(); }
+											if(filterValDate && curval!=filterValDate) { hide = true; }
 										} else if(type=="daterange") {
-											var id = filterField.attr("id").split("_")[0];
-											var filterValFrom = $("#"+id+"_from").data("DateTimePicker").date();
+											let id = filterField.attr("id").split("_")[0];
+											let filterValFrom = $("#"+id+"_from").data("DateTimePicker").date();
 											filterValFrom = (filterValFrom) ? filterValFrom.format("YYYYMMDD") : "19700101";
-											var filterValTo = $("#"+id+"_to").data("DateTimePicker").date();
+											let filterValTo = $("#"+id+"_to").data("DateTimePicker").date();
 											filterValTo = (filterValTo) ? filterValTo.format("YYYYMMDD") : "20300101"
-											var curval = ($(this).data("df-value")) ? $(this).data("df-value") : $(this).text();
+											let curval = ($(this).data("df-value")) ? $(this).data("df-value") : $(this).text();
 											curval = moment(curval).format("YYYYMMDD");
-											if(curval < filterValFrom || curval > filterValTo) { $(this).parent().hide(); }
+											if(curval < filterValFrom || curval > filterValTo) { hide = true; }
 										} else if(type=="empty") {
-											if(filterField.prop("checked") && $(this).html().toLowerCase().trim()=="") { $(this).parent().hide(); }
+											if(filterField.prop("checked") && $(this).html().toLowerCase().trim()=="") { hide = true; }
 										} else {
-											var curval = (!params.sensitive) ? $(this).text().toLowerCase() : $(this).text();
+											let curval = (!params.sensitive) ? $(this).text().toLowerCase() : $(this).text();
 											curval = curval.replace(/[\t\n\r]/ig, "").trim();
-											if(("*"+curval)!=filterVal) { $(this).parent().hide(); }
+											if(("*"+curval)!=filterVal) { hide = true; }
 										}
 									} else if(splitter) {
-										var curval = (!params.sensitive) ? $(this).text().toLowerCase() : $(this).text();
+										let curval = (!params.sensitive) ? $(this).text().toLowerCase() : $(this).text();
 										curval = curval.replace(/[\t\n\r]/ig, "").trim();
 
-										var hide = true;
 										if(type=="multiple" && typeof filterVal=="object") {
 											$.each(curval.split(splitter), function(z,w){
 												w = w.trim();
@@ -287,8 +286,9 @@
 												}
 											});
 										}
-										if(hide) { $(this).parent().hide(); }
 									}
+
+									$this.Toggle($(this).parent(), colnum, hide);
 								});
 
 								if(typeof params.afterFilter == "function") {
@@ -321,7 +321,7 @@
 										.click(function(){
 											if($(this).hasClass("fa fa-hashtag")) {
 												$(this).removeClass("fa fa-hashtag").addClass("fab fa-slack-hash");
-												var x = 0;
+												let x = 0;
 												$("th[scope='row']:visible", table).each(function() {
 													$(this).prop("realscope", $(this).text()).html(++x);
 												});
@@ -329,7 +329,7 @@
 												$(this).removeClass("fab fa-slack-hash").addClass("fa fa-hashtag");
 												$("th[scope='row']:visible", table).each(function() {
 													$(this).html($(this).prop("realscope"));
-												});												
+												});
 											}
 										})
 								)
@@ -350,17 +350,28 @@
 				}
 			};
 
+			this.Toggle = function(row, cell, hide) {
+				if(!row.hasProp("tableFilterCols")) { row.prop("tableFilterCols", {}); }
+				let cols = row.prop("tableFilterCols");
+				cols[cell] = hide ? 1 : 0;
+				if(Object.values(cols).reduce((sum, a) => sum + a,0)) {
+					row.hide();
+				} else {
+					row.show();
+				}
+				row.prop("tableFilterCols", cols);
+			}
+
 			this.GetValue = function(type, field) {
 				switch(type) {
 					case "select": return "*"+field.find("option:selected").val();
 					case "date": return field.val();
 				}
-
 				return field.val();
 			}
 			
 			// disparador
 			this.init(this.options);
 		}
-		});
+	});
 })(jQuery);
