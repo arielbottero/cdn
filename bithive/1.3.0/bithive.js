@@ -3266,10 +3266,13 @@ jQuery.extend({
 		BootstrapSelect: function(elem) {
 			if(jQuery().selectpicker) {
 				let defaultValue = elem.data("default") || false;
+				let onload = elem.data("onload") || false;
 				elem.selectpicker({
 					defaultValue: defaultValue,
 					width: "100%",
 					size: 10
+				}).on("loaded.bs.select", function() {
+					if(onload && typeof window[onload] == "function") { window[onload](this); }
 				}).on("DOMSubtreeModified", function() {
 					elem.selectpicker("refresh");
 				}).on("sort", function(){
@@ -3379,7 +3382,7 @@ jQuery.extend({
 						if(option.class) { opt.addClass(option.class); }
 						if(option.title) { opt.attr("title", option.title); }
 						if(option.info) { opt.attr("data-info", option.info); }
-						if(option.disabled) { opt.attr("disabled", "disabled"); }
+						if(parseInt(option.disabled)) { opt.attr("disabled", "disabled"); }
 						group.append(opt);
 					});
 					args[0].append(group);
@@ -3389,7 +3392,7 @@ jQuery.extend({
 						if(option.class) { opt.addClass(option.class); }
 						if(option.title) { opt.attr("title", option.title); }
 						if(option.info) { opt.attr("data-info", option.info); }
-						if(option.disabled) { opt.attr("disabled", "disabled"); }
+						if(parseInt(option.disabled)) { opt.attr("disabled", "disabled"); }
 						args[0].append(opt);
 					});
 				}
