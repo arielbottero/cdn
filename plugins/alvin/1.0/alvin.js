@@ -41,6 +41,7 @@ vRules["in"]
 		this.name					= sPluginName; // nombre del plugin
 		
 		this.aPatterns				= {};
+		this.aPatterns["code"] 		= "[a-zA-Z0-9\.\_\-]*";
 		this.aPatterns["color"] 	= "#([0-9A-F]{6,8}|[0-9A-F]{3})";
 		this.aPatterns["date"] 		= "[0-9]{4}\-([012][0-9]|3[01])\-([012][0-9]|3[01])";
 		this.aPatterns["datetime"]	= "[0-9]{4}\-([012][0-9]|3[01])\-([012][0-9]|3[01])\ ([01]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])";
@@ -256,6 +257,7 @@ vRules["in"]
 					bValid = true;
 					break;
 
+				case "code":
 				case "color":
 				case "date":
 				case "datetime":
