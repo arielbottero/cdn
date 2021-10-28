@@ -33,7 +33,7 @@
 					throw new Error("Undefined class qcode-decoder.js: https://github.com/cirocosta/qcode-decoder");
 				}
 				$this.decoder = new QCodeDecoder();
-				window.navigator.qrscanner = window.navigator.getUserMedia || window.navigator.webkitGetUserMedia || window.navigator.mozGetUserMedia || window.navigator.msGetUserMedia || window.navigator.mediaDevices.getUserMedia;
+				window.navigator.qrscanner = window.navigator.getUserMedia || window.navigator.webkitGetUserMedia || window.navigator.mozGetUserMedia || window.navigator.msGetUserMedia || (window.navigator.mediaDevices) ? window.navigator.mediaDevices.getUserMedia : null;
 			};
 
 			this.getUserMedia = function(options, successCallback, failureCallback) {

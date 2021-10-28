@@ -110,7 +110,7 @@ body.dark {
 	border-top: solid 1px #224358;
 }
 
-.table-bordered {
+.dark .table-bordered {
 	border: 1px solid #224358;
 }
 	.dark table.table-bordered th, 

@@ -474,6 +474,7 @@ table.table tbody td.dropdown {
 
 table.table tbody td {
 	border-top: solid 1px #D2D3DA;
+	vertical-align: middle;
 }
 
 table.table-hover tbody tr:hover td {
