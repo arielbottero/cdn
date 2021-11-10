@@ -62,34 +62,19 @@ vRules["in"]
 		},
 		
 		check: function() {
-			var node = this.el[0].nodeName.toLowerCase();
-			if(node=="input" && this.el[0].type.toLowerCase()=="hidden") { return true; }
-
+			let val = this.GetValue(this.el)
+			let aRules = this.el.hyphened("alvin") || this.el.parents("div").hyphened("alvin");
+			
 			this.el.prop("alvinerror", false);
 			var div = this.el.closest(".form-group");
 			$(".form-error", div).remove();
-			if(node=="input" && (this.el[0].type.toLowerCase()=="radio" || this.el[0].type.toLowerCase()=="checkbox")) {
-				var aRules = this.el.parents("div").hyphened("alvin");
-				var val = $("input[name='"+this.el.attr("name")+"']:checked").val() || "";
-			} else if(this.el.hasClass("form-date") && this.el.data("linked-with")) {
-				var aRules = this.el.hyphened("alvin");
-				var val = $("[name='"+this.el.data("linked-with")+"']").val();
-			} else if(this.el.hasClass("form-select")) {
-				var aRules = this.el.hyphened("alvin");
-				var val = this.el.val();
-				if(val=="0") { val=""; }
-			} else {
-				var aRules = this.el.hyphened("alvin");
-				var val = this.el.val();
-			}
-			
-			var valid = true;
+
+			let valid = true;
 			if($.map(aRules, function(n, i) { return i; }).length) {
 				valid = this.CheckValue(val, aRules);
 			}
 
 			if(valid!==true) {
-				// var message = ("message" in aRules) ? decodeURIComponent(escape(aRules["message"])) : "error: "+valid;
 				var message = ("message" in aRules) ? aRules["message"] : "error: "+valid;
 				var errspan = $("<span>")
 					.addClass("form-error")
@@ -147,32 +132,43 @@ vRules["in"]
 			}
 		},
 
+		GetValue: function(el) {
+			let val;
+			let node = el[0].nodeName.toLowerCase();
+			if(node=="input" && el[0].type.toLowerCase()=="hidden") { return true; }
+
+			if(node=="input" && (this.el[0].type.toLowerCase()=="radio" || this.el[0].type.toLowerCase()=="checkbox")) {
+				val = $("input[name='"+el.attr("name")+"']:checked").val() || "";
+			} else if(el.hasClass("form-date") && el.data("linked-with")) {
+				val = $("[name='"+el.data("linked-with")+"']").val();
+			} else if(el.hasClass("form-select")) {
+				val = el.val();
+				if(val=="0") { val=""; }
+			} else {
+				val = el.val();
+			}
+
+			return val;
+		},
+
 		CheckValue: function(mSource, vRules) {
 			mValue = mSource;
 
 			// require
-			if("required" in vRules && mValue=="") {
-				return "required";				
-			}
+			if("required" in vRules && mValue=="") { return "required"; }
 			
 			// type
 			if("type" in vRules) {
-				if(!this.ValidateByType(mSource, vRules["type"])) {
-					return "type";
-				}
+				if(!this.ValidateByType(mSource, vRules["type"])) { return "type"; }
 			}
 
 			nLength = mValue.length;
 
 			// minlength
-			if("minlength" in vRules && nLength < parseInt(vRules["minlength"])) {
-				return "minlength";
-			}
+			if("minlength" in vRules && nLength < parseInt(vRules["minlength"])) { return "minlength"; }
 
 			// maxlength
-			if("maxlength" in vRules && nLength > parseInt(vRules["maxlength"])) {
-				return "maxlength";
-			}
+			if("maxlength" in vRules && nLength > parseInt(vRules["maxlength"])) { return "maxlength"; }
 
 			// lessthan y greaterthan
 			let bLess = ("lessthan" in vRules);
@@ -201,9 +197,14 @@ vRules["in"]
 			// in
 			if("in" in vRules) {
 				var aIn = split(",", vRules["in"]);
-				if(!$.inArray(mValue, aIn)) {
-					return "in";
-				}
+				if(!$.inArray(mValue, aIn)) { return "in"; }
+			}
+
+			// match
+			if("match" in vRules) {
+				if(!$(vRules["match"]).length) { console.log("Undefined element: "+vRules["match"]); return "match"; }
+				let matchVal = this.GetValue($(vRules["match"]));
+				if((mValue!="" || matchVal!="") && mValue != matchVal) { return "match"; }
 			}
 
 			return true;

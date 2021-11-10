@@ -33,41 +33,31 @@
 					throw new Error("Undefined class qcode-decoder.js: https://github.com/cirocosta/qcode-decoder");
 				}
 				$this.decoder = new QCodeDecoder();
-				window.navigator.qrscanner = window.navigator.getUserMedia || window.navigator.webkitGetUserMedia || window.navigator.mozGetUserMedia || window.navigator.msGetUserMedia || (window.navigator.mediaDevices) ? window.navigator.mediaDevices.getUserMedia : null;
 			};
 
 			this.getUserMedia = function(options, successCallback, failureCallback) {
-				return window.navigator.qrscanner(options, successCallback, failureCallback);
+				if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+					return window.navigator.mediaDevices.getUserMedia(options, successCallback, failureCallback);
+				} else {
+					$this.options.nocamera();
+				}
 			};
 
 			this.scanner = function(before) {
 				if(before) { before(); }
-
 				var video = $($this.options.viewport);
-
 				var constraints = {video: {width:video.width(), height:video.height(), facingMode:{exact: $this.options.camera}}};
-				$this.getUserMedia(
-					constraints,
-					function(stream) {
-						var mediaControl = video[0];
-						if(window.navigator.mozGetUserMedia) {
-							mediaControl.mozSrcObject = stream;
-						} else {
-							mediaControl.srcObject = stream;
+				$this.getUserMedia(constraints).then(function(stream) {
+					var mediaControl = video[0];
+					mediaControl.srcObject = stream;
+					$this.theStream = stream;
+					$this.decoder.decodeFromVideo(mediaControl, function(er, res){
+						if(res && !$this.stopped) {
+							$this.stopped = true;
+							$this.options.success(res);
 						}
-						$this.theStream = stream;
-
-						$this.decoder.decodeFromVideo(mediaControl, function(er, res){
-							if(res && !$this.stopped) {
-								$this.stopped = true;
-								$this.options.success(res);
-							}
-						});
-					},
-					function(err) {
-						$this.options.nocamera();
-					}
-				);
+					});
+				});
 			};
 
 			this.close = function() {
