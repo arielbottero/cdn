@@ -13,7 +13,7 @@
         <style type="text/css">
             <![CDATA[
                 .eyes {fill:#AB0000}
-                .mouth {fill:#000000;fill-rule:nonzero}
+                .mouth {fill:#FFFFFF;fill-rule:nonzero}
             ]]>
         </style>
     </defs>

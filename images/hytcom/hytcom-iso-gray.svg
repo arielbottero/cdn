@@ -12,8 +12,8 @@
     <defs>
         <style type="text/css">
             <![CDATA[
-                .eyes {fill:#AB0000}
-                .mouth {fill:#000000;fill-rule:nonzero}
+                .eyes {fill:#668899}
+                .mouth {fill:#668899;fill-rule:nonzero}
             ]]>
         </style>
     </defs>

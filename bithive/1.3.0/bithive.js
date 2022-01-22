@@ -928,7 +928,7 @@ jQuery.extend({
 						"colsVisible": ($(this).css("display")!="none" ? true : false)
 					});
 
-					if(jQuery().cookie) {
+					if(jQuery.cookie) {
 						if(typeof $.cookie("col_"+toggler.prop("colsIdx"))!="undefined") {
 							toggler.prop("colsVisible", $.cookie("col_"+toggler.prop("colsIdx")));
 						}
@@ -944,7 +944,7 @@ jQuery.extend({
 							togg.prop("colsVisible", true);
 							$("th:nth-child("+(togg.prop("colsIdx"))+"), td:nth-child("+(togg.prop("colsIdx"))+")", togg.prop("colsTable")).removeClass("d-none").css("display","");
 						}
-						if(jQuery().cookie) { $.cookie("col_"+togg.prop("colsIdx"), togg.prop("colsVisible")); }
+						if(jQuery.cookie) { $.cookie("col_"+togg.prop("colsIdx"), togg.prop("colsVisible")); }
 					});
 
 					if(!toggler.prop("colsVisible")) {
@@ -2186,7 +2186,7 @@ jQuery.extend({
 
 		// FORM VIEW -----------------------------------------------------------
 		formsview: function(form) {
-			let elements = $(".form-view input, .form-view select, .form-view textarea, .form-view select.form-select, .form-view div.squireUI");
+			let elements = $(".form-view input, .form-view select, .form-view textarea, .form-view select.form-select, .form-view div.squireUI, .form-view [data-subform]");
 			elements = elements.not("[type='button']");
 			$.bithive.eachElement(elements, form, true, function() {
 				let el = $(this);
@@ -2205,6 +2205,8 @@ jQuery.extend({
 					obj.prop("value", obj.text());
 					obj.html("");
 					el.prepend(obj);
+				} else if(el.hasAttr("data-subform")) {
+					el.remove();
 				} else {
 					el.prop("readonly", true);
 				}
