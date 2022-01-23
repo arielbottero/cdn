@@ -13,9 +13,9 @@
 	<defs>
 		<style type="text/css">
 			<![CDATA[
-				.weak {fill:#FFFFFF;fill-rule:nonzero}
-				.arrow {fill:#FFFFFF;fill-rule:nonzero}
-				.strong {fill:#FFFFFF;fill-rule:nonzero}
+				.weak {fill:#000000;fill-rule:nonzero}
+				.arrow {fill:#000000;fill-rule:nonzero}
+				.strong {fill:#000000;fill-rule:nonzero}
 			]]>
 		</style>
 	</defs>

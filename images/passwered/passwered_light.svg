@@ -15,7 +15,7 @@
 			<![CDATA[
 				.arrow {fill:#FFFFFF; fill-rule:nonzero}
 				.weak {fill:#FFFFFF; fill-rule:nonzero}
-				.strong {fill:#FFFFFF; fill-rule:nonzero}
+				.strong {fill:#AB0000; fill-rule:nonzero}
 				.passwered {fill:#FFFFFF; fill-rule:nonzero}
 			]]>
 		</style>

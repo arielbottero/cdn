@@ -15,7 +15,7 @@
 			<![CDATA[
 				.weak {fill:#FFFFFF;fill-rule:nonzero}
 				.arrow {fill:#FFFFFF;fill-rule:nonzero}
-				.strong {fill:#FFFFFF;fill-rule:nonzero}
+				.strong {fill:#AB0000;fill-rule:nonzero}
 			]]>
 		</style>
 	</defs>
