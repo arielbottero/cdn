@@ -3453,7 +3453,7 @@ jQuery.extend({
 				} else if(typeof source=="object" && !!source) {
 					clearInterval(loader);
 					func(source, args);
-				} else if(limit==500) {
+				} else if(limit==200) {
 					console.log("Request timeout: "+src);
 					clearInterval(loader);
 				}
