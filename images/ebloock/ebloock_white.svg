@@ -13,9 +13,9 @@
     <defs>
         <style type="text/css">
             <![CDATA[
-                .e { fill:#AB0000; fill-rule:nonzero; }
+                .e { fill:#FFFFFF; fill-rule:nonzero; }
                 .bloock { fill:#FFFFFF; fill-rule:nonzero; }
-                .cover { fill:#AB0000; fill-rule:nonzero; }
+                .cover { fill:#FFFFFF; fill-rule:nonzero; }
                 .pages { fill:#FFFFFF; fill-rule:nonzero; }
                 .padlock { fill:#FFFFFF; fill-rule:nonzero; }
             ]]>

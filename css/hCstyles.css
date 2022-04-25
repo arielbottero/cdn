@@ -54,25 +54,50 @@ nav.navbar {
 
 /* FOOTER */
 footer h4 {
-	color: #AAAAAA;
+	color: #FFFFFF;
+	font-size: 1.2rem;
 }
 
 footer a {
-	color: #FFFFFF;
+	color: #ABABAB;
+	font-size: .9rem;
 }
 
 footer a:hover {
-	color: #FE0000;
+	color: #FFFFFF;
 	text-decoration: none;
 }
 
-footer .iso {
-	width: auto;
-	padding: 20px;
-	background-color: #FFFFFF;
-	border-radius: 100%;
+footer .sign {
 	display: inline-block;
+	align-items: center !important;
+	padding-right: 30px;
+	border-right: solid 1px #ABABABAB;
 }
+	footer .sign .text {
+		display: inline-block;
+		font-size: 12px !important;
+	}
+		footer .sign .text * {
+			font-size: 12px !important;
+		}
+
+	footer .sign .iso {
+		display: inline-block;
+		max-width: 110px;
+		min-width: 110px;
+		width: 110px;
+	}
+		footer .sign .iso .circle {
+			width: auto;
+			padding: 20px;
+			background-color: #FFFFFF;
+			border-radius: 100%;
+			display: inline-block;
+		}
+			footer .sign .iso .circle img {
+				width: 50px;
+			}
 
 @media (max-width: 768px) {
 	.container {
@@ -84,5 +109,31 @@ footer .iso {
 	.carousel-header .carousel-item .carousel-image {
 		min-height: 25vh;
 		max-height: 25vh;
+	}
+
+	footer .sign {
+		border-right: none;
+		border-top: solid 1px #ABABABAB;
+		display: block;
+		margin-top: 30px;
+		padding-top: 30px;
+		text-align: center !important;
+	}
+		footer .sign .iso {
+			display: inline-block;
+			max-width: 80px;
+			min-width: 80px;
+			width: 80px;
+		}
+			footer .sign .iso .circle {
+				padding: 12px;
+			}
+				footer .sign .iso .circle img {
+					width: 32px;
+				}
+
+	footer .projects {
+		margin-bottom: 30px;
+		text-align: center !important;
 	}
 }
