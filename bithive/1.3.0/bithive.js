@@ -614,7 +614,6 @@ jQuery.extend({
 								if(after) { window[after](response); }
 							}
 						});
-
 					});
 				});
 			});
