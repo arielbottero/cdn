@@ -111,5 +111,5 @@ Options +Indexes
 <IfModule mod_rewrite.c>
 	RewriteEngine On
     RewriteBase /
-	RewriteRule ^rel-[0-9a-z]+/(.*)$ $1 [QSA,L]
+	RewriteRule ^rel-[0-9a-z\.\-\_]+/(.*)$ $1 [QSA,L]
 </IfModule>
