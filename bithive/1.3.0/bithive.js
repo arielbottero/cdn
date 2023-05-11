@@ -645,18 +645,23 @@ jQuery.extend({
 
 			// convierte un fa icon en un toggler de estados
 			$.bithive.eachElement("i.link-toggler", elem, itself, function() {
-				let classOn = $(this).attr("toggler-class-on") || "text-green";
+				let classOn = $(this).attr("toggler-class-on").split(",") || ["text-green"];
 				let classOff = $(this).attr("toggler-class-off") || "text-red";
 				let faIcon = $(this).attr("toggler-faicon") || "fa-dot-circle";
 
 				$(this)
 					.prop({
-						"togglerClassOn": "fas "+faIcon+" "+classOn,
+						"togglerClassOn": "fas "+faIcon+" ",
 						"togglerClassOff": "fas "+faIcon+" "+classOff,
-						"togglerOnWhen": (parseInt($(this).attr("toggler-on")) || 1)
+						"togglerOnWhen": ($(this).attr("toggler-on") ? $(this).attr("toggler-on").split(",") : [1])
 					})
 					.addClass(function(){
-						return ($(this).attr("toggler-value")==$(this).prop("togglerOnWhen")) ? $(this).prop("togglerClassOn"): $(this).prop("togglerClassOff");
+						if($(this).prop("togglerOnWhen").includes($(this).attr("toggler-value"))) {
+							let nIndex = $(this).prop("togglerOnWhen").indexOf($(this).attr("toggler-value"));
+							return $(this).prop("togglerClassOn")+classOn[nIndex-1];
+						} else {
+							$(this).prop("togglerClassOff");
+						}
 					})
 					.click(function(){
 						let el = $(this);
@@ -664,7 +669,7 @@ jQuery.extend({
 						let val = el.attr("toggler-value"); // valor actual del estado (0|1)
 						let url = el.attr("toggler-url"); // url que administra los estados
 						let after = el.attr("toggler-after") || null; // funcion que se ejecuta luego del cambio de estado  funcname(el, state)
-						el.removeClass(el.prop("togglerClassOn")+" "+el.prop("togglerClassOff"));
+						el.removeClass(classOn.join(" ") +" "+ el.prop("togglerClassOff"));
 						el.addClass("fas fa-circle-notch text-light-gray spinRight");
 						jQuery.ajax({
 							url: url,
@@ -673,8 +678,9 @@ jQuery.extend({
 							success: function(data) {
 								let nval = parseInt(data);
 								el.attr("toggler-value", nval).removeClass("fas fa-circle-notch text-light-gray spinRight");
-								if(nval==el.prop("togglerOnWhen")) {
-									el.addClass(el.prop("togglerClassOn"));
+								if(el.prop("togglerOnWhen").includes(nval)) {
+									let nIndex = $(this).prop("togglerOnWhen").indexOf(nval);
+									el.addClass($(this).prop("togglerClassOn")+classOn[nIndex-1]);
 								} else {
 									el.addClass(el.prop("togglerClassOff"));
 								}
