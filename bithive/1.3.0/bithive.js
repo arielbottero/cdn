@@ -659,9 +659,8 @@ jQuery.extend({
 						let val = $(this).attr("toggler-value")+"";
 						if($(this).prop("togglerOnWhen").includes(val)) {
 							let nIndex = $(this).prop("togglerOnWhen").indexOf(val);
-							console.log(classOn)
-							console.log(nIndex-1)
-							console.log(classOn[nIndex-1])
+							console.log($(this).prop("togglerOnWhen"))
+							console.log(val)
 							return $(this).prop("togglerClassOn")+classOn[nIndex-1];
 						} else {
 							return $(this).prop("togglerClassOff");
