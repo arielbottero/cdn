@@ -659,13 +659,6 @@ jQuery.extend({
 						let val = $(this).attr("toggler-value").toString();
 						if($(this).prop("togglerOnWhen").includes(val)) {
 							let nIndex = $(this).prop("togglerOnWhen").indexOf(val);
-
-							console.log($(this).prop("togglerOnWhen"))
-							console.log(classOn)
-							console.log(val)
-							console.log(nIndex)
-							console.log(classOn[nIndex])
-
 							return $(this).prop("togglerClassOn")+" "+classOn[nIndex];
 						} else {
 							return $(this).prop("togglerClassOff");
@@ -688,7 +681,7 @@ jQuery.extend({
 								el.attr("toggler-value", val).removeClass("fas fa-circle-notch text-light-gray spinRight");
 								if(el.prop("togglerOnWhen").includes(val)) {
 									let nIndex = el.prop("togglerOnWhen").indexOf(val);
-									el.addClass(el.prop("togglerClassOn")+classOn[nIndex-1]);
+									el.addClass(el.prop("togglerClassOn")+" "+classOn[nIndex]);
 								} else {
 									el.addClass(el.prop("togglerClassOff"));
 								}
