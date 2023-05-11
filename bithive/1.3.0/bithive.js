@@ -656,12 +656,13 @@ jQuery.extend({
 						"togglerOnWhen": ($(this).attr("toggler-on") ? $(this).attr("toggler-on").split(",") : ["1"])
 					})
 					.addClass(function(){
+						console.log(classOn)
 						let val = $(this).attr("toggler-value")+"";
 						if($(this).prop("togglerOnWhen").includes(val)) {
 							let nIndex = $(this).prop("togglerOnWhen").indexOf(val);
 							return $(this).prop("togglerClassOn")+classOn[nIndex-1];
 						} else {
-							$(this).prop("togglerClassOff");
+							return $(this).prop("togglerClassOff");
 						}
 					})
 					.click(function(){
