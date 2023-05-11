@@ -680,8 +680,8 @@ jQuery.extend({
 								let val = data;
 								el.attr("toggler-value", val).removeClass("fas fa-circle-notch text-light-gray spinRight");
 								if(el.prop("togglerOnWhen").includes(val)) {
-									let nIndex = $(this).prop("togglerOnWhen").indexOf(val);
-									el.addClass($(this).prop("togglerClassOn")+classOn[nIndex-1]);
+									let nIndex = el.prop("togglerOnWhen").indexOf(val);
+									el.addClass(el.prop("togglerClassOn")+classOn[nIndex-1]);
 								} else {
 									el.addClass(el.prop("togglerClassOff"));
 								}
