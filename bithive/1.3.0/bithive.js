@@ -653,17 +653,12 @@ jQuery.extend({
 					.prop({
 						"togglerClassOn": "fas "+faIcon+" ",
 						"togglerClassOff": "fas "+faIcon+" "+classOff,
-						"togglerOnWhen": ($(this).attr("toggler-on") ? $(this).attr("toggler-on").split(",") : [1])
+						"togglerOnWhen": ($(this).attr("toggler-on") ? $(this).attr("toggler-on").split(",") : ["1"])
 					})
 					.addClass(function(){
-
-						console.debug($(this).attr("toggler-value"));
-						console.debug($(this).prop("togglerClassOn"));
-						console.debug($(this).prop("togglerClassOff"));
-						console.debug($(this).prop("togglerOnWhen"));
-
-						if($(this).prop("togglerOnWhen").includes($(this).attr("toggler-value"))) {
-							let nIndex = $(this).prop("togglerOnWhen").indexOf($(this).attr("toggler-value"));
+						let val = $(this).attr("toggler-value")+"";
+						if($(this).prop("togglerOnWhen").includes(val)) {
+							let nIndex = $(this).prop("togglerOnWhen").indexOf(val);
 							return $(this).prop("togglerClassOn")+classOn[nIndex-1];
 						} else {
 							$(this).prop("togglerClassOff");
@@ -682,16 +677,16 @@ jQuery.extend({
 							data: {"id":id, "state":val},
 							dataType: "json",
 							success: function(data) {
-								let nval = parseInt(data);
-								el.attr("toggler-value", nval).removeClass("fas fa-circle-notch text-light-gray spinRight");
-								if(el.prop("togglerOnWhen").includes(nval)) {
-									let nIndex = $(this).prop("togglerOnWhen").indexOf(nval);
+								let val = data;
+								el.attr("toggler-value", val).removeClass("fas fa-circle-notch text-light-gray spinRight");
+								if(el.prop("togglerOnWhen").includes(val)) {
+									let nIndex = $(this).prop("togglerOnWhen").indexOf(val);
 									el.addClass($(this).prop("togglerClassOn")+classOn[nIndex-1]);
 								} else {
 									el.addClass(el.prop("togglerClassOff"));
 								}
 
-								if(after) { window[after](el, nval); }
+								if(after) { window[after](el, val); }
 							}
 						});
 					});
