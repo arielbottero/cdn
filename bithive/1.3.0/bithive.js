@@ -645,6 +645,8 @@ jQuery.extend({
 
 			// convierte un fa icon en un toggler de estados
 			$.bithive.eachElement("i.link-toggler", elem, itself, function() {
+				console.log($(this))
+				console.log(elem)
 				let classOn = $(this).attr("toggler-class-on").split(",") || ["text-green"];
 				let classOff = $(this).attr("toggler-class-off") || "text-red";
 				let faIcon = $(this).attr("toggler-faicon") || "fa-dot-circle";
