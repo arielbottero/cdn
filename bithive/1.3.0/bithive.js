@@ -1709,7 +1709,19 @@ jQuery.extend({
                     let placeholder = "0,"+"0".repeat(decimals);
 					$.bithive.InputMask($(this), {
 						mask: "#.##"+zeros,
-						options: {reverse: true, placeholder: placeholder},
+						options: {
+							reverse: true, 
+							placeholder: placeholder,
+							translation: {
+								'#': {
+								  pattern: /-|\d/,
+								  recursive: true
+								}
+							},
+							onChange: function(value, e) {
+								e.target.value = value.replace(/(?!^)-/g, '').replace(/^,/, '').replace(/^-,/, '-');
+							}
+						},
 						unmask: function(el) {
 							let val = parseFloat(el.val().replace(/\./g, "").replace(/\,/g, ".")).toFixed(decimals);
 							if(isNaN(val)) { val = 0; }
